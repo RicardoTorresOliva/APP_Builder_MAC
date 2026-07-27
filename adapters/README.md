@@ -28,3 +28,5 @@ This folder holds the **source copies** of the pointers, used only by:
 
 **Barbell rationale:** the neutral core (`AGENTS.md`, `commands/`) is the stable position; each pointer
 is a small, disposable bet. Delete a platform's pointer and the core is untouched.
+
+| Hermes Agent | `AGENTS.md` (native) + `adapters/hermes/SKILL.md` | read natively — no pointer needed; skill exposes the playbooks |
