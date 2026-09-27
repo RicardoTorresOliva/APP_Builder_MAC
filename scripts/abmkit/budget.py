@@ -9,7 +9,7 @@ def measure(ctx: Ctx):
     rules = cfg(conf, "budgets.files", {}) or {}
     exclude = cfg(conf, "okf.exclude", []) or []
     rows, over = [], []
-    for path, rel in walk_files(root, (".md",), [e for e in exclude if not e.startswith(".claude")]):
+    for path, rel in walk_files(root, (".md",), [e for e in exclude if not e.endswith("SKILL.md")]):
         for pat, limit in rules.items():
             if matches(rel, [pat]):
                 t = est_tokens(path.read_text(encoding="utf-8"))
