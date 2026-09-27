@@ -1,12 +1,15 @@
 ---
-type: docs
-title: Project memory
-status: stub
+type: State
+title: Memoria del proyecto
+description: Estado actual del ADS y punto de reanudación entre sesiones.
+tags: [proyecto, stub]
+status: draft
+generated: { by: process:abm-migration, at: 2026-09-27T23:31:11Z }
 ---
 
 # Project memory
 
-> Template stub. Populated by `init-project` and updated at the end of every session.
+> Plantilla vacía del espacio de trabajo del ADS. Populated by `init-project` and updated at the end of every session.
 
 ## Current state
 - **Phase**: not started
