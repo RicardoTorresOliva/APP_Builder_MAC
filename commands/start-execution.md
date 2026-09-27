@@ -24,12 +24,12 @@ Ejecuta de forma autónoma el plan ya publicado (y aprobado o en cola reversible
 
 ## Pasos
 
-1. [verde] Verifica el readiness: spec completa (user_units, task_tracker, knowledge/index, project_memory, perfil activo); si falta algo, complétalo antes de construir.
+1. [verde] Verifica el readiness con `./abm preflight` (user_units, task_tracker, knowledge/index, project_memory, perfil activo, `ads.yaml`); si falla, completa el plan antes de construir.
 2. [verde] Ejecuta primero todas las FU en el orden del tracker.
 3. [verde] Ejecuta luego las DU por milestone; aplica la regla de completitud y el quality gate del perfil activo (o del `governed_by` de la unidad si el perfil es compuesto).
-4. [amarillo] Tras cada unidad: actualiza `task_tracker.md` y `work_log.md`; registra tokens con `./abm tokens estimate --unit <id> <archivos>`.
+4. [amarillo] Tras cada unidad: `closeout` (actualiza `task_tracker.md` y `work_log.md`, registra tokens con `./abm tokens record` o `estimate`) y verifica con `./abm units`.
 5. [verde] Tras cada milestone: ejecuta `review` con contexto limpio y registra sus hallazgos.
-6. [rojo] Detente y pregunta al humano ante un requisito ambiguo sin default razonable, decisiones contradictorias, una integración que no funciona como se esperaba, complejidad muy por encima de lo planeado, o un cambio de alcance.
+6. [rojo] Detente solo ante un bloqueante de `AGENTS.md` (a–f), p. ej. requisito ambiguo sin default razonable o decisiones contradictorias. Integración que falla, complejidad mayor a la planeada o cambio de alcance → `./abm pending add` con el default aplicado y sigue con lo independiente.
 7. [verde] Antes de entregar: datos de ejemplo realistas, todo renderiza o corre, estados vacíos y de error cubiertos, auditoría final del perfil, riesgos residuales en `work_log.md`.
 
 ## Salidas

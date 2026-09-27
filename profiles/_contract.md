@@ -4,141 +4,77 @@ title: Contrato de perfiles de ADS
 description: Esquema que todo perfil de ADS debe seguir y reglas de composición de perfiles híbridos.
 tags: [perfil, contrato]
 status: stable
-generated: { by: claude-code/web, at: 2026-09-27T23:34:39Z }
+generated: { by: claude-code/web, at: 2026-09-27T23:52:17Z }
 version: "2.0"
 ---
 
-# Asset Profile Contract
+# Contrato de perfiles de ADS
 
-An **Asset Profile** is the pluggable module that tells the APP_Builder core how to produce a specific
-*kind* of digital asset. The core (`AGENTS.md`) is asset-agnostic and constant; the profile carries
-everything that is asset-specific. One project selects exactly one profile at planning time.
+Un **perfil** le dice al núcleo de ABM cómo producir un *tipo* de ADS. El núcleo (`AGENTS.md`) es constante; el perfil trae todo lo específico del tipo. Cada ADS elige un perfil (o uno compuesto) en `init-project` y lo registra en `abm.yaml → active_profile`.
 
-This file defines the schema every profile MUST follow. To create a new profile, copy this contract,
-fill every field, and place it at `profiles/<name>/profile.md`.
+## Reglas de todo perfil
+1. **Sin nombres de productos comerciales**: solo categorías (regla 7; lo verifica `abm lint core`). Los productos aparecen en `stacks/` durante la exploración de stack.
+2. **`stack_candidates` son sugerencias, nunca defaults**: la elección es humana (`stack`).
+3. **`tooling_candidates` se evalúan por costo**: una herramienta se instala solo si ahorra más contexto/tokens del que cuesta.
+4. **`knowledge_bundles` se montan, no se incrustan**: bundles OKF en `knowledge/` o ejemplos etiquetados.
+5. **El perfil declara comportamiento; no repite reglas de `AGENTS.md`.**
 
-## Hard rules for every profile
-
-1. **No commercial product names.** Express *categories* ("containerization", "LLM provider",
-   "design system"), never products. Products surface only as suggestions during stack exploration.
-2. **`stack_candidates` are suggestions, never defaults.** They seed the exploration + human-in-the-loop
-   selection. The agent never fixes a stack without the user's choice.
-3. **`tooling_candidates` are evaluated cost-aware.** A tool is installed only if it saves more
-   context/tokens than it costs.
-4. **`knowledge_bundles` are mounted, not embedded.** They reference OKF bundles under `knowledge/`
-   or `examples/`. Example bundles must be clearly labeled as examples.
-5. **The profile declares behavior; it does not restate `AGENTS.md` rules.** No governance duplication.
-
-## Required fields
-
+## Campos obligatorios
 ```markdown
 ---
 type: Asset Profile
-title: <profile-name>
+title: <nombre-del-perfil>
 description: <una frase>
 tags: [perfil, ads]
 status: stable
 generated: { by: <actor>, at: <ISO 8601 UTC> }
 ads_contract_level: minimo | extendido     # nivel mínimo del Contrato ADS (contract/README.md)
 ---
-# Asset Profile: <profile-name>
+# Perfil: <nombre>
 
-## design_docs
-# Which design documents this asset requires (drives the planning "Design" step).
-- <doc>: <one-line purpose> [detail level: HIGH | MEDIUM | LIGHT]
-
-## foundation_unit_examples
-# Typical FUs for this asset (foundational, not directly consumable).
-- <example FU>
-
-## deliverable_unit_completeness
-# What "done" means for a DU of this asset. This is the completeness rule the
-# core enforces. Must be end-to-end and consumer-facing.
-- <condition 1>
-- <condition 2>
-
-## quality_gate
-# The checklist applied after each unit and at final audit. Replaces the generic
-# software security checklist. List the items, or reference a checklist file.
-- <gate item or reference>
-
-## deliverable_format
-# What is ultimately delivered.
-- <format>
-
-## publication_step      # CATEGORY, never a product
-- <how it is published/deployed, as a category>
-
-## stack_candidates      # categories + suggestions; explored + chosen via HITL
-- <dimension>: [category options to explore]
-
-## tooling_candidates    # skills/plugins/MCPs to evaluate, cost-aware
-- <tool category>: <what it would provide>
-
-## knowledge_bundles     # OKF bundles to mount (examples labeled as such)
-- <bundle reference>
+## design_docs              # documentos de diseño y nivel de detalle [HIGH | MEDIUM | LIGHT]
+## foundation_unit_examples # FU típicas
+## deliverable_unit_completeness  # qué es "hecho" para un DU: de punta a punta, incluida la operación por agentes
+## quality_gate             # checklist por unidad y auditoría final (o referencia a standards/)
+## deliverable_format       # qué se entrega
+## publication_step         # CATEGORÍA, nunca producto
+## stack_candidates         # categorías a explorar + casos de stacks/cases/
+## tooling_candidates       # skills/MCP a evaluar por costo
+## knowledge_bundles        # bundles OKF a montar
 ```
 
-## v5 additions
+## Cómo consume el núcleo un perfil
+- `init-project` lo elige, explora el stack desde `stack_candidates` y crea `ads.yaml` con el nivel de contrato del perfil.
+- `review` aplica `quality_gate` y `deliverable_unit_completeness`.
+- `abm ads-check` exige que `ads.yaml → contract_level` no sea menor que `ads_contract_level`.
+- Cambiar de perfil es una decisión de diseño: regístrala en `docs/decision_log.md`.
 
-- `ads_contract_level` (required): minimum ADS Contract level. A composed profile takes the highest level of its parts.
-- Completeness and quality gate include the agentic surface (`abm ads-check`, `abm agent-conformance`) and the token ledger.
-- Profile text is Spanish (ADR 0008); field keys stay in English.
-
-## How the core consumes a profile
-
-- `AGENTS.md → Asset Profile` reads these fields at planning and execution time.
-- The `init-project` playbook selects the profile (first question) and runs stack exploration from
-  `stack_candidates`.
-- The `review` playbook loads `quality_gate` to verify, and `deliverable_unit_completeness` to check
-  that DUs are truly done.
-- A profile change is a design decision: record it in `docs/decision_log.md`.
-
-## Composition (hybrid profiles)
-
-Hybrid assets do NOT get a monolithic profile that copies fields from others (that re-creates v1
-bloat). Instead, **profiles compose**. Atomic profiles are reusable capabilities; a hybrid is a thin
-manifest that combines them.
-
-A composed profile declares `composes:` and supplies only the *glue* (how the capabilities relate):
+## Composición (híbridos)
+Un híbrido no copia campos: **compone** perfiles atómicos y aporta solo el pegamento.
 
 ```markdown
 ---
 type: Asset Profile
 title: intelligence-product
-ads_contract_level: extendido               # the highest level among composed profiles
-composes: [research-report, data-product]   # references, never duplicates
+ads_contract_level: extendido               # el mayor de los perfiles compuestos
+composes: [research-report, data-product]   # referencias, nunca copias
 ---
-# Glue only: how the parts relate (e.g. the narrative cites the dataset;
-# the dashboard backs the report's claims). No field is restated from the
-# composed profiles — they are inherited by reference.
 ```
 
-Each Deliverable Unit then declares which capability governs it, via `governed_by:`:
+Cada DU declara qué capacidad lo gobierna con `governed_by:` (p. ej. `DU-04 governed_by: research-report`).
 
-```text
-DU-04  "Section: competitive landscape"   governed_by: research-report
-DU-07  "Dashboard: market signals"        governed_by: data-product
-```
+**Resolución:**
+- `design_docs`, `foundation_unit_examples`, `stack_candidates`, `tooling_candidates`, `knowledge_bundles` → **unión** de los compuestos.
+- `deliverable_unit_completeness` y `quality_gate` → **por DU**, según su `governed_by`.
+- `deliverable_format`, `publication_step` → los declara el pegamento.
+- `ads_contract_level` → el **mayor** de los compuestos.
 
-So DU-04's quality_gate applies citation integrity; DU-07's applies schema/PII — each pulled from its
-own capability, with zero duplication. With *n* atomic capabilities you get up to 2ⁿ declarative
-hybrids while authoring only *n* profiles (optionality; via negativa; barbell).
-
-**Resolution rules for a composed profile:**
-
-- `design_docs`, `foundation_unit_examples`, `stack_candidates`, `tooling_candidates`,
-  `knowledge_bundles` → the **union** of the composed profiles' values.
-- `deliverable_unit_completeness` and `quality_gate` → applied **per DU** according to its
-  `governed_by` capability (not unioned).
-- `deliverable_format`, `publication_step` → declared in the glue (a hybrid may ship one bundle).
-
-## Provided profiles
-
-- `software-app` — reference profile; reproduces v3.1 software behavior, categories only, no lock-in.
-- `research-report` — a document that is *read*: synthesized knowledge argued from cited sources.
-- `data-product` — a dataset/dashboard that is *queried*: refined data made consultable.
-- `api-service` — v5: a service/tool consumed by programs or agents (API, CLI, MCP server), no own UI.
-- `automation-integration` — v5: flows between systems (integrations, automations, process agents).
-- `intelligence-product` — **composed** (`research-report` + `data-product`): the consulting hybrid —
-  an argued report backed by a validated dataset/dashboard. Validation case for v4.1 generalization.
+## Perfiles incluidos
+| Perfil | Tipo de ADS | Nivel de contrato |
+|---|---|---|
+| `software-app` | Software con interfaz (web, móvil, escritorio, dashboard, ERP) | extendido |
+| `api-service` | API, CLI o servidor MCP consumido por programas o agentes | extendido |
+| `data-product` | Dataset, pipeline, capa de métricas o dashboard que se consulta | extendido |
+| `automation-integration` | Flujos entre sistemas, automatizaciones, agentes de proceso | extendido |
+| `research-report` | Documento que se lee, argumentado con fuentes | minimo |
+| `intelligence-product` | Compuesto: informe + dataset/dashboard (consultoría) | extendido |

@@ -28,7 +28,7 @@ Planifica un ADS nuevo de punta a punta: perfil, ceremonia, metodología por mó
 ## Pasos
 
 1. [verde] Si es la primera vez en el repo, ejecuta antes `bootstrap`.
-2. [verde] Lee la descripción del proyecto; elige el perfil (`profiles/<name>/profile.md`) o uno compuesto si es híbrido; regístralo como `active_profile` en `docs/project_memory.md`.
+2. [verde] Lee la descripción del proyecto; elige el perfil (`profiles/<name>/profile.md`) o uno compuesto si es híbrido; regístralo en `abm.yaml → active_profile` (lo exige `abm preflight`) y en `docs/project_memory.md`.
 3. [amarillo] Fija la ceremonia en `abm.yaml → ceremony` (prototipo/mvp/producto/enterprise-regulado) según tamaño, riesgo y regulación; explica el porqué en una línea.
 4. [verde] Clasifica el encargo con `./abm methodology classify` (seis dimensiones); vuelca el resultado en `methodology-map.md` (modo por módulo + justificación + nivel de revisión).
 5. [amarillo] Separa preguntas: las bloqueantes (b/c/d/e de AGENTS.md) esperan respuesta; el resto se asume y se registra con `./abm pending add`.
