@@ -1,0 +1,54 @@
+# Ejemplo de OpenTelemetry Collector para el espacio de tokens N3 de ABM.
+# No es un backend real: el receptor OTLP es fijo; el exportador es intercambiable
+# por cualquier backend que hable OTLP (ver /integrations/observability/README.md).
+# Variables de entorno esperadas: OTEL_EXPORTER_ENDPOINT, OTEL_EXPORTER_HEADERS.
+
+receivers:
+  otlp:
+    protocols:
+      grpc:
+        endpoint: 0.0.0.0:4317   # gRPC OTLP, puerto estándar
+      http:
+        endpoint: 0.0.0.0:4318   # HTTP OTLP, puerto estándar
+
+processors:
+  batch: {}                      # agrupa antes de exportar, reduce llamadas de red
+
+  # Elimina los atributos gen_ai.* marcados como PII potencial antes de exportar
+  # (ver /integrations/observability/n3-otel.md y README.md de esta carpeta).
+  attributes/redact_pii:
+    actions:
+      - key: gen_ai.input.messages
+        action: delete
+      - key: gen_ai.output.messages
+        action: delete
+      - key: gen_ai.system_instructions
+        action: delete
+      - key: gen_ai.tool.call.arguments
+        action: delete
+      - key: gen_ai.tool.call.result
+        action: delete
+
+exporters:
+  # Exportador genérico OTLP/HTTP: apunta a cualquier backend de la categoría
+  # elegida (autoalojado, SaaS o gestionado por la nube — ver README.md).
+  otlphttp/backend:
+    endpoint: "${OTEL_EXPORTER_ENDPOINT}"        # p. ej. https://backend-elegido:4318
+    headers:
+      Authorization: "${OTEL_EXPORTER_HEADERS}"  # credencial del backend, por entorno
+
+  # Exportador de depuración local: imprime en consola: útil para verificar el
+  # mapeo de atributos antes de apuntar a un backend real.
+  debug:
+    verbosity: basic
+
+service:
+  pipelines:
+    metrics:
+      receivers: [otlp]
+      processors: [batch, attributes/redact_pii]
+      exporters: [otlphttp/backend]
+    traces:
+      receivers: [otlp]
+      processors: [batch, attributes/redact_pii]
+      exporters: [otlphttp/backend]
