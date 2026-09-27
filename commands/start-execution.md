@@ -1,42 +1,53 @@
-# Playbook: start-execution — Autonomous Execution
+---
+type: Playbook
+title: start-execution — ejecución autónoma
+description: Verifica que el plan esté listo y ejecuta las FU y DU aprobadas hasta la entrega.
+args: ""
+tags: [comando, construir]
+status: stable
+generated: { by: claude-code/web, at: 2026-09-28T00:00:00Z }
+---
 
-The user approved the plan. `AGENTS.md` governs execution. Verify readiness, then build.
+# start-execution
 
-## Pre-flight check
-Run `scripts/preflight_check.sh .` — it verifies the spec is complete (user_units, task_tracker,
-knowledge/index, project_memory, active_profile). If it fails, complete the spec first. Do not build.
+## Propósito
+Ejecuta de forma autónoma el plan ya publicado (y aprobado o en cola reversible): primero las FU, luego las DU por milestone, con el quality gate del perfil en cada unidad.
 
-## Execution order
-1. Complete all **Foundation Units (FU)** first, in tracker order.
-2. Then **Deliverable Units (DU)** in tracker order, grouped by milestone.
-3. For each unit, follow the per-unit workflow in `AGENTS.md`, applying the active profile's
-   completeness rule and quality gate. If the profile is composed, apply the rule/gate named by the
-   unit's `governed_by`.
-4. After each unit: update `task_tracker.md` + `work_log.md`.
-5. After each milestone: run the `review` playbook; record milestone tokens in `docs/run_metadata.md`.
+## Cuándo usarlo
+- El plan está publicado y, según ADR 0014, aprobado o en cola con ejecución reversible habilitada.
 
-## Stop and ask the user when
-- A requirement is ambiguous and you cannot assume reasonably
-- Two design decisions contradict
-- An integration/source does not work as expected
-- Something is significantly more complex than planned
-- A quality or governance concern requires a structural change
-- Scope needs to change
+## Entradas
+- `implementation/task_tracker.md`, `implementation/user_units.md`, `docs/project_memory.md`.
 
-State the issue, the options, and your recommendation.
+## Pasos
+1. [verde] Verifica el readiness: spec completa (user_units, task_tracker, knowledge/index, project_memory, perfil activo); si falta algo, complétalo antes de construir.
+2. [verde] Ejecuta primero todas las FU en el orden del tracker.
+3. [verde] Ejecuta luego las DU por milestone; aplica la regla de completitud y el quality gate del perfil activo (o del `governed_by` de la unidad si el perfil es compuesto).
+4. [amarillo] Tras cada unidad: actualiza `task_tracker.md` y `work_log.md`; registra tokens con `./abm tokens estimate --unit <id> <archivos>`.
+5. [verde] Tras cada milestone: ejecuta `review` con contexto limpio y registra sus hallazgos.
+6. [rojo] Detente y pregunta al humano ante un requisito ambiguo sin default razonable, decisiones contradictorias, una integración que no funciona como se esperaba, complejidad muy por encima de lo planeado, o un cambio de alcance.
+7. [verde] Antes de entregar: datos de ejemplo realistas, todo renderiza o corre, estados vacíos y de error cubiertos, auditoría final del perfil, riesgos residuales en `work_log.md`.
 
-## If a unit is too large for one session
-Split it into verifiable sub-steps inside its definition. Complete each sub-step fully before ending
-the session. Keep the unit `in_progress` until all sub-steps complete. Note progress in `project_memory.md`.
+## Salidas
+- Unidades construidas.
+- `task_tracker.md`, `work_log.md` y ledger de tokens actualizados.
 
-## Before delivery
-1. Create realistic sample content covering all entities/sections of the asset.
-2. Verify every output renders/runs correctly with sample content.
-3. Verify empty states render gracefully.
-4. Final holistic quality audit (the active profile's gate, applied across the whole asset).
-5. Prepare publication per the profile's `publication_step` (a category — confirm the concrete target
-   with the user if not already chosen).
-6. Document findings and residual risks in `work_log.md`.
-7. Update `project_memory.md`: phase = "Delivered".
-8. Present a completion summary: what was built (by milestone), quality results, residual risks, how to
-   publish, known limitations.
+## Gates
+Quality gate del perfil por unidad; auditoría holística antes de entregar; ninguna FU/DU se da por hecha sin uso de punta a punta (regla 5).
+
+## Fallback
+Sigue el mismo orden a mano, verificando cada punto de la lista de readiness antes de construir.
+
+## Reporte
+```text
+[<fase|FU|DU|WU>-<id>] HECHO | BLOQUEADO
+Acciones: <una línea por acción, con archivo o commit>
+Verificado: `./abm check` → <resultado>
+No verificado: <ítem → motivo, o "ninguno">
+Pendientes: <+n nuevos; total n>
+Tokens: <consumo; fuente o "estimado">
+Siguiente: <acción concreta>
+```
+
+## Invocación por agentes
+`./abm tokens estimate --unit <id> <archivos> --json`; "lee y ejecuta este playbook" para el flujo completo.
