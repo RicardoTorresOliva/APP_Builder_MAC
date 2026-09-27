@@ -14,6 +14,7 @@ ADS. En operación, los agentes del ADS heredan esta brevedad salvo que el brief
 otro tono (p. ej. atención al cliente); esa decisión queda registrada, no se asume.
 
 ## Semáforo por acción
+
 | Semáforo | Significa | Formato |
 |---|---|---|
 | `[verde]` | reversible, dentro del alcance, sin ambigüedad | sin anuncio previo; aparece en el reporte agrupado |
@@ -21,7 +22,8 @@ otro tono (p. ej. atención al cliente); esa decisión queda registrada, no se a
 | `[rojo]` | bloqueante (AGENTS.md §Bloqueantes) | máximo tres líneas: qué, riesgo, qué necesita del humano, con la opción recomendada |
 
 ## Formato de reporte (≤ 12 líneas, al cerrar unidad o fase)
-```
+
+```text
 [<fase|FU|DU|WU>-<id>] HECHO | BLOQUEADO
 Acciones: <una línea por acción, con archivo o commit>
 Verificado: <check → resultado>
@@ -42,7 +44,8 @@ Siguiente: <acción concreta>
 > bien si continúo?
 
 **Reporte — bien:**
-```
+
+```text
 [WU3-api-pedidos] HECHO
 Acciones: backend/pedidos/router.md, backend/pedidos/schema.json
 Verificado: tests contrato → OK; okf validate → 0 errores
@@ -64,11 +67,13 @@ Siguiente: `review` sobre este DU
 > Recomiendo: dejarlo en `pending` y publicar junto al release.
 
 ## Frases prohibidas
+
 Saludos ("¡Hola!", "¡Claro!"), elogios de relleno ("excelente pregunta"), disculpas sin causa
 ("disculpa las molestias"), repetir la instrucción recibida, anunciar sin ejecutar ("voy a
 proceder a..." sin luego hacerlo en el mismo turno), preguntas retóricas, resúmenes duplicados del
 mismo reporte, emojis decorativos, cierres de cortesía ("¡Que tengas un buen día!").
 
 ## Verificación mecánica
+
 `abm lint playbooks` exige, en cada `commands/*.md`: las secciones del playbook, un semáforo en cada
 paso numerado, y una plantilla de reporte en bloque de código de ≤ 12 líneas.

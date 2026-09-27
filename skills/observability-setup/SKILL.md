@@ -8,6 +8,7 @@ metadata: { okf_type: Skill, abm_version: "5.0.0" }
 # observability-setup
 
 ## Pasos
+
 1. Lee `standards/observability/README.md` antes de instrumentar.
 2. Agrega logs estructurados (JSON) con id de correlación por solicitud, propagado a cada servicio
    que la solicitud toque; confirma que ningún dato sensible quede en texto plano.
@@ -24,6 +25,7 @@ metadata: { okf_type: Skill, abm_version: "5.0.0" }
    bloqueante correspondiente (AGENTS.md §Bloqueantes, ítem f).
 
 ## Criterios de salida
+
 - Logs, trazas y métricas presentes en la ruta crítica del servicio, verificables en un recorrido real.
 - Evento de tokens emitido (medido o `estimado`) si el servicio invoca un modelo de lenguaje.
 - Alertas de SLO y de presupuesto con acción definida, no solo configuradas.

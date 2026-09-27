@@ -22,6 +22,7 @@ que lo verifica. Una fila sin `REQ` o sin `TEST` bloquea el `closeout` (`/method
 <!-- Una tarea puede cubrir más de un REQ; un REQ puede necesitar más de una tarea. -->
 
 ## Verificación de cobertura antes de cerrar
+
 - [ ] Todo `REQ-NNN` de `requirements.md` aparece en al menos una fila.
 - [ ] Toda fila tiene un `TEST` identificable y ejecutable.
 - [ ] Todas las tareas están en estado `hecho` o justificadas como pendiente en `docs/_work/PENDIENTES.md`.

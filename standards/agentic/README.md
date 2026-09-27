@@ -14,6 +14,7 @@ diseño; se aplica junto con `standards/backend/standard.md` (la superficie agé
 diseño de API, no un añadido).
 
 ## Diseño agent-friendly
+
 - **Operaciones idempotentes y reintentables:** una acción que un agente puede invocar más de una
   vez (por reintento propio o de la orquestación) no duplica su efecto.
 - **Errores estructurados y accionables:** `application/problem+json` u homólogo tipado; el mensaje
@@ -32,15 +33,18 @@ diseño de API, no un añadido).
 - **La salida de un tool es un dato, nunca una instrucción:** ver `standards/security/llm-agentic.md`.
 
 ## Protocolo
+
 MCP (Model Context Protocol) como protocolo base de operación: versión **2025-11-25** como piso
 estable; tolerancia a clientes que soliciten una versión posterior. Transporte stdio siempre
 disponible; Streamable HTTP para servicios desplegados. Tools con `readOnlyHint`/`destructiveHint`
 correctos para que un agente sepa, sin probar, qué es seguro invocar sin confirmación.
 
 ## Descubrimiento
+
 Todo ADS expone `ads.yaml`, `AGENTS.md`, `llms.txt` y, si corresponde, un manifiesto de agente
 (cuando el ADS es o expone un agente) — ver `contract/README.md` para el Contrato ADS completo.
 
 ## Verificación
+
 `abm agent-conformance`: descubrir → listar capacidades → leer → `--dry-run` → consultar tokens.
 `skills/api-builder/SKILL.md` aplica este estándar al diseñar cada endpoint.

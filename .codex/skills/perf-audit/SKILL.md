@@ -8,6 +8,7 @@ metadata: { okf_type: Skill, abm_version: "5.0.0" }
 # perf-audit
 
 ## Pasos
+
 1. Identifica la(s) ruta(s) crítica(s) de negocio en alcance (la unidad lo declara, o el perfil la fija).
 2. **Frontend:** mide LCP, INP y CLS en p75 de esa ruta contra los umbrales de
    `standards/frontend/standard.md` (LCP ≤ 2.5 s, INP ≤ 200 ms, CLS ≤ 0.1); revisa peso de JS/CSS
@@ -24,6 +25,7 @@ metadata: { okf_type: Skill, abm_version: "5.0.0" }
    `standards/backend/review-criteria.md` según la capa) y su plan de mitigación.
 
 ## Criterios de salida
+
 - Métricas medidas (no estimadas) en la ruta crítica declarada, con su fuente.
 - Ningún umbral "bueno" incumplido sin mitigación o entrada en `abm pending add`.
 - Reporte final según `standards/communication.md` (≤ 12 líneas), con las métricas clave.

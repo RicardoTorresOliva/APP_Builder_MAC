@@ -12,6 +12,7 @@ generated: { by: claude-code/web, at: 2026-09-27T23:33:33Z }
 Todo ADS declara un manifiesto `ads.yaml` en su raíz (plantilla: `templates/agentic/ads.yaml`; forma: `/contract/ads.schema.json`). Decisión: `/docs/adr/0009-contrato-ads.md`.
 
 ## Niveles
+
 El perfil fija el mínimo (`ads_contract_level` en su frontmatter); `ads.yaml → contract_level` puede subirlo, nunca bajarlo.
 
 | Requisito | `minimo` (todo ADS) | `extendido` (software, datos, IA) |
@@ -25,9 +26,11 @@ El perfil fija el mínimo (`ads_contract_level` en su frontmatter); `ads.yaml �
 | Documentación | OKF | + manual de operación para personas y agentes |
 
 ## Verificación
+
 - `./abm ads-check [ruta]`: estático; valida `ads.yaml`, niveles y que existan los archivos declarados.
 - `./abm agent-conformance [--server "<cmd>"]`: dinámico; un cliente MCP descubre, lista capacidades, ejecuta una lectura y un `dry-run` y consulta `abm://tokens/summary` o equivalente.
 - Ambos corren en `./abm check` y en CI.
 
 ## Eventos de tokens
+
 Esquema: `/contract/token-event.schema.json`. Mapeo a OpenTelemetry GenAI (estado Development): `input_tokens` → `gen_ai.usage.input_tokens`, `output_tokens` → `gen_ai.usage.output_tokens`, `cache_read_tokens` → `gen_ai.usage.cache_read.input_tokens`, `provider` → `gen_ai.provider.name`, `model` → `gen_ai.request.model`, `command` → `gen_ai.operation.name`.

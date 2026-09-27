@@ -71,6 +71,7 @@ siempre solo lectura. Mínimo exigido: 12 servidores; van 13 para tener margen.
 | Grafana MCP[^grafana-mcp] | Observabilidad | stdio (`uvx mcp-grafana` o binario) | `GRAFANA_SERVICE_ACCOUNT_TOKEN` | Cuenta de servicio con rol `Viewer` |
 
 ## Notas de verificación
+
 - No existe (a la fecha) un servidor MCP oficial documentado para la capa de decisión (Jev/TypeSafe
   AI) — solo API HTTP, SDKs y agent skill; ver `/integrations/decision/typesafe-jev.md`.
 - Varios de estos servidores pasaron de comunitario a oficial durante 2026 y cambian endpoints/flags

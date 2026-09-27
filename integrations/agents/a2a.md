@@ -18,18 +18,21 @@ sources:
 # A2A (Agent2Agent) — cuándo y cómo
 
 ## Cuándo usarlo
+
 Solo si el ADS **es** un agente o **expone** un agente a otros agentes (por ejemplo, un ADS que
 atiende consultas conversacionales de otro sistema). Un ADS que es solo una API o una base de datos
 no necesita A2A — le basta con MCP y/o OpenAPI. No implementar A2A "por si acaso": es superficie
 adicional que auditar y mantener.
 
 ## Qué es
+
 Protocolo para que agentes se descubran y se comuniquen entre sí, gobernado por la **Linux
 Foundation**; integrado en agosto de 2026 a la Agentic AI Foundation (AAIF), el mismo hogar que
 ahora también aloja MCP[^a2a-lf-press]. Versión estable vigente: **1.0**[^a2a-spec], liberada en
 marzo de 2026 con Agent Cards firmadas y una arquitectura alineada a la web[^a2a-lf-press].
 
 ## Descubrimiento: Agent Card
+
 `GET https://{dominio-del-servidor}/.well-known/agent-card.json`, sin autenticar[^a2a-spec].
 Campos obligatorios del `AgentCard`:
 
@@ -46,12 +49,14 @@ Opcionales: `provider`, `documentationUrl`, `securitySchemes`, `securityRequirem
 (JWS sobre JSON canonicalizado, RFC 8785/7515), `iconUrl`[^a2a-spec].
 
 ## Relación con MCP
+
 Declarada explícitamente por el proyecto: **A2A y MCP son complementarios, no alternativos**. MCP
 conecta un agente a herramientas y datos; A2A conecta agentes entre sí[^a2a-lf-press]. Un ADS que es
 un agente típicamente expone ambos: MCP para que otro agente lo opere como herramienta, A2A si
 además debe conversar como par.
 
 ## En ABM
+
 Un ADS que declara A2A lo hace en su `ads.yaml` (nivel "Extendido" del contrato — ver
 `/docs/adr/0009-contrato-ads.md`) y publica el Agent Card junto al resto de la superficie agéntica
 (`AGENTS.md`, `llms.txt`, SKILL.md de operación — `/docs/adr/0010-superficie-agentica.md`).

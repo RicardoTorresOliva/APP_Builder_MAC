@@ -14,17 +14,20 @@ Para cuando no hay MCP oficial (`/integrations/mcp/catalog.md`) ni conviene gene
 propio desde OpenAPI (`/integrations/api/README.md`).
 
 ## SDKs oficiales
+
 Usar el SDK del proveedor cuando no publica OpenAPI pero sí mantiene una librería oficial (maneja
 auth, reintentos y paginación por ti). Fijar la versión exacta en el lockfile del proyecto; un SDK
 sin pin puede introducir un cambio de comportamiento silencioso en la siguiente instalación.
 
 ## Colas y eventos
+
 Para desacoplar sistemas o mover alto volumen sin acoplar a la disponibilidad del otro extremo: el
 productor publica, el consumidor procesa a su ritmo, con reintentos y una cola de mensajes muertos
 (dead-letter) para lo que falla repetidamente. Preferible a un webhook cuando el volumen es alto o
 el consumidor necesita reprocesar histórico.
 
 ## iPaaS (n8n, Make, Zapier)
+
 Plataformas de integración no-code/low-code: conectan dos sistemas con un flujo visual, sin escribir
 un cliente. Útiles para prototipos y equipos sin ingeniería de plataforma dedicada. Riesgo: el flujo
 vive fuera del repo del ADS (no versionado junto al código salvo que la plataforma lo permita
@@ -32,13 +35,16 @@ exportar) y los datos en tránsito pasan por la infraestructura del iPaaS — ev
 datos personales o secretos por esa vía (`/integrations/secrets.md`).
 
 ## Import/export CSV o Excel
+
 Para migraciones puntuales o intercambios con un sistema sin API. Validar el esquema en el borde
 (columnas esperadas, tipos, encoding) antes de cargar — un CSV no tiene contrato como una API
 tipada.
 
 ## SQL directo
+
 Último recurso: acopla al esquema interno de un sistema de terceros, sin contrato ni versión. Solo
 con:
+
 - credenciales de mínimo privilegio, dedicadas a la integración (nunca la credencial de
   administración);
 - preferentemente solo lectura, sobre una réplica o vista, no la base de escritura;

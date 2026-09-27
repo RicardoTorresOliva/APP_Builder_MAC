@@ -44,7 +44,7 @@ Cada nivel y sus palabras clave de detección están en `router.yaml → dimensi
 | 6 | incertidumbre ≥ 1, criticidad ≤ 1 | IDD | MVP o incertidumbre media/alta, riesgo bajo/medio |
 | 7 | criticidad = 1, horizonte = 2 | SDD | Riesgo medio en producto/sistema de largo plazo |
 
-4. Si ninguna regla aplica: `default_mode: IDD`.
+Si ninguna regla aplica: `default_mode: IDD`.
 
 ## Cómo lo ejecuta `abm methodology classify`
 

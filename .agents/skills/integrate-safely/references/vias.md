@@ -18,6 +18,7 @@ generated: { by: claude-code/web, at: 2026-09-28T02:00:00Z }
 | Automatización de navegador / RPA | No existe API ni webhook y la interacción es de bajo volumen | Credencial de usuario humano reutilizada por el agente, acciones difíciles de auditar | Cuenta de servicio dedicada si el proveedor la ofrece; HITL antes de cualquier acción irreversible |
 
 ## Regla de decisión
+
 1. Si existe una API o webhook con scope acotado: úsala antes que automatización de navegador.
 2. Si el ADS mismo debe ser operable por otros agentes: la vía es un servidor MCP, no una API ad
    hoc — así el mínimo privilegio queda declarado por tool (`readOnlyHint`/`destructiveHint`), no
@@ -26,6 +27,7 @@ generated: { by: claude-code/web, at: 2026-09-28T02:00:00Z }
    auditabilidad; documenta explícitamente por qué no alcanzó ninguna otra vía.
 
 ## Fallback ante fallo del proveedor externo
+
 Ninguna integración falla en silencio: reintento acotado con backoff, cola de reintento visible, o
 degradación explícita (el ADS informa que esa función no está disponible) — nunca un error tragado
 que deje al consumidor sin saber qué pasó.

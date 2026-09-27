@@ -12,6 +12,7 @@ El nivel del Contrato ADS (`ads.yaml`, ADR 0009) fija qué exige esta skill: **m
 perfil/`architect`.
 
 ## Nivel mínimo (todo ADS)
+
 1. `ads.yaml` en la raíz: identidad (id, semver, perfil, dueño), capacidades con modo
    read/write/destructive.
 2. `AGENTS.md` propio del ADS (no confundir con el de ABM).
@@ -24,6 +25,7 @@ perfil/`architect`.
 8. Secretos fuera del repo.
 
 ## Nivel extendido (+ sobre el mínimo)
+
 - Servidor MCP: stdio siempre; Streamable HTTP si el ADS se despliega como servicio. Protocolo
   base `2025-11-25`, tolerante a clientes que pidan `2026-07-28`. Tools con `readOnlyHint` y
   `destructiveHint` correctos y descripciones cortas.
@@ -35,14 +37,17 @@ perfil/`architect`.
 - Plan de salida por proveedor, no solo declarado sino ejecutable.
 
 ## A2A (`/.well-known/agent-card.json`, v1.0)
+
 Solo si el ADS **es** un agente o **expone** uno (no todo ADS extendido lo necesita). Si no aplica,
 no lo agregues — agregar superficie que nadie consume es alcance no pedido (regla 4).
 
 ## Verificación
+
 `./abm agent-conformance` corre el guion determinista: descubrir → listar → leer → `dry-run` →
 tokens, contra el propio servidor MCP del ADS. Si el entorno tiene el agente orquestador externo
 instalado, además una prueba con él en modo scripted de un solo turno. Estático: `./abm ads-check`
 contra la forma de `ads.yaml`.
 
 ## Detalle extra
+
 `references/checklist.md`: checklist archivo por archivo, por nivel, con la ruta exacta esperada.

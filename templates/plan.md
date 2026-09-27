@@ -16,11 +16,13 @@ antes de `start-execution`; en `turbo`, la aprobación se acumula en la cola y l
 ## Milestone 1 — `<nombre>`
 
 ### FU-01 — `<nombre de la Foundation Unit>`
+
 - Modo: `<VIBE|IDD|SDD|SPDD|AIDD>` (`methodology-map.md`)
 - Qué entrega: `<base sin salida consumible directa>`
 - Criterio de aceptación: `<verificable>`
 
 ### DU-01 — `<nombre de la Deliverable Unit>`
+
 - Modo: `<...>`
 - Qué entrega: `<algo que un consumidor usa de punta a punta>`
 - Criterio de aceptación: `<verificable, incluye estados vacíos y de error>`
@@ -29,10 +31,13 @@ antes de `start-execution`; en `turbo`, la aprobación se acumula en la cola y l
 <!-- Repetir FU-NN / DU-NN por milestone. Las FU van antes que las DU que dependen de ellas. -->
 
 ## Milestone 2 — `<nombre>`
+
 `<...>`
 
 ## Revisión entre milestones
+
 Tras cada milestone: `review` con un revisor independiente (contexto limpio, nunca quien construyó).
 
 ## Riesgos conocidos al planificar
+
 - `<riesgo>` → `<cómo se mitiga o por qué se acepta>`

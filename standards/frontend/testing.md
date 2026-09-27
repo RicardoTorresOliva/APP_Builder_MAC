@@ -19,6 +19,7 @@ Ver la pirámide general en `standards/testing/README.md`. Aquí, lo específico
 | Visual (opcional) | diferencias de píxel en componentes de design system, si el perfil lo exige | en cambios al design system |
 
 ## Reglas
+
 - Ningún test E2E reemplaza un test unitario: el E2E prueba integración, no lógica de detalle.
 - Un componente sin estado vacío/error definido no tiene test de componente completo.
 - Los mocks de red usan los mismos contratos (`application/problem+json`) que produce el backend,

@@ -11,6 +11,7 @@ verified: { by: process:abm-analysis, at: 2026-09-27T23:13:33Z }
 # Diagnóstico de ABM v4.1
 
 ## Resumen ejecutivo
+
 - ABM v4.1 es una base sólida de **gobernanza neutral**: una sola fuente (`AGENTS.md`, 169 líneas), perfiles de activo componibles, unidades FU/DU, selección de stack con humano en el bucle y regla de "categorías, no productos".
 - Cubre bien el **qué** (gobierno del proceso) y poco el **cómo** (estándares técnicos, metodologías, catálogo de stacks, integraciones).
 - **Brechas críticas** frente al objetivo:
@@ -25,6 +26,7 @@ verified: { by: process:abm-analysis, at: 2026-09-27T23:13:33Z }
 - **Estrategia:** conservar el núcleo y los perfiles; añadir encima el Contrato ADS, la superficie agéntica, el espacio de tokens, el motor metodológico, los estándares, el catálogo y el generador de adaptadores; migrar OKF a v0.2 y el tooling a Python multiplataforma.
 
 ## Scorecard (0–5)
+
 | # | Dimensión | Nota | Evidencia |
 |---|---|---|---|
 | D1 | Inventario y mapa | 3 | Flujo idea → entrega en `QUICKSTART.md:31-56` y 6 playbooks; termina en "Delivered" (`commands/start-execution.md:44`); no existe la fase "operando". |
@@ -47,6 +49,7 @@ verified: { by: process:abm-analysis, at: 2026-09-27T23:13:33Z }
 **Promedio:** 1,75 / 5.
 
 ## Fortalezas que hay que conservar
+
 - Gobernanza en un solo archivo neutral, con adaptadores que solo apuntan (`AGENTS.md:7-11`).
 - Asset Profiles con composición (`profiles/_contract.md:82-117`): n perfiles producen hasta 2ⁿ híbridos sin duplicar.
 - FU/DU con completitud end-to-end definida por perfil (`AGENTS.md:37-42`).
@@ -57,6 +60,7 @@ verified: { by: process:abm-analysis, at: 2026-09-27T23:13:33Z }
 - Adopción temprana de OKF y de Hermes.
 
 ## Brechas, riesgos y deuda
+
 | # | Brecha o riesgo | Severidad | Tratamiento (WU) |
 |---|---|---|---|
 | B1 | Los ADS no son operables por agentes externos | alta | Contrato ADS + superficie agéntica (WU3, WU7) |
@@ -73,6 +77,7 @@ verified: { by: process:abm-analysis, at: 2026-09-27T23:13:33Z }
 | B12 | Documentos legales y de proyecto ausentes | baja | WU16 |
 
 ## Quick wins
+
 1. Corregir `scripts/check_doc_sync.sh:24` (`design` → `design_docs`).
 2. Quitar el texto "milestone M1" de los wrappers de Claude Code.
 3. Arreglar la tabla de `adapters/README.md` (fila de Hermes fuera de lugar).

@@ -21,11 +21,13 @@ Capa de abstracción entre ABM/los ADS y "un proveedor de LLM cualquiera", para 
 proveedor por configuración, no por código (§4.10 del prompt maestro, portabilidad multi-LLM).
 
 ## Interfaz: chat compatible como lingua franca
+
 La interfaz mínima común es la de chat completions con mensajes `{role, content}` y streaming
 opcional — el formato que la mayoría de gateways y proveedores ya hablan. ABM no define un formato
 propio: cualquier endpoint que hable esa interfaz sirve como backend del fallback `llm`.
 
 ## Variables de entorno
+
 El fallback `llm` de `decide()` (`/integrations/decision/README.md`) y cualquier ADS que necesite un
 LLM genérico leen:
 
@@ -39,6 +41,7 @@ Cambiar de proveedor es cambiar estas tres variables — nunca una ruta de códi
 proveedor.
 
 ## Opciones (categoría, con licencia/hosting)
+
 | Tipo | Ejemplo verificado | Licencia / hosting |
 |---|---|---|
 | Proveedores directos | API propia de cada proveedor de modelos frontera | SaaS, propietario |
@@ -48,12 +51,14 @@ proveedor.
 | Modelos abiertos/locales | Runtime de inferencia local para modelos con pesos abiertos | Open-source, autoalojable, sin llamada externa |
 
 ## Cambio de proveedor por configuración
+
 Un ADS declara su proveedor activo en su propia config (no en código); el gateway/proxy traduce la
 interfaz de chat estándar a las particularidades del proveedor real. Migrar de proveedor implica:
 apuntar las tres variables a otro backend, correr los evals mínimos (abajo) y desplegar — sin tocar
 lógica de negocio.
 
 ## Evals mínimos antes de cambiar de modelo
+
 Un cambio de proveedor o de modelo no se despliega sin un set mínimo de evals de regresión: salida
 estructurada (el JSON Schema sigue validando), casos límite conocidos del dominio del ADS, y
 latencia/costo dentro del presupuesto (`/integrations/observability/README.md`). Sin esto, "cambié

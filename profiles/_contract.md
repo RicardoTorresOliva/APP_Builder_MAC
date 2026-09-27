@@ -116,7 +116,7 @@ composes: [research-report, data-product]   # references, never duplicates
 
 Each Deliverable Unit then declares which capability governs it, via `governed_by:`:
 
-```
+```text
 DU-04  "Section: competitive landscape"   governed_by: research-report
 DU-07  "Dashboard: market signals"        governed_by: data-product
 ```
@@ -126,6 +126,7 @@ own capability, with zero duplication. With *n* atomic capabilities you get up t
 hybrids while authoring only *n* profiles (optionality; via negativa; barbell).
 
 **Resolution rules for a composed profile:**
+
 - `design_docs`, `foundation_unit_examples`, `stack_candidates`, `tooling_candidates`,
   `knowledge_bundles` → the **union** of the composed profiles' values.
 - `deliverable_unit_completeness` and `quality_gate` → applied **per DU** according to its

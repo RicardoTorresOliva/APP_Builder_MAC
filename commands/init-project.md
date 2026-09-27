@@ -11,18 +11,22 @@ generated: { by: claude-code/web, at: 2026-09-28T00:00:00Z }
 # init-project
 
 ## Propósito
+
 Planifica un ADS nuevo de punta a punta: perfil, ceremonia, metodología por módulo, requisitos, stack elegido con el humano, design docs, unidades de trabajo, Contrato ADS y conocimiento montado. Termina en un plan publicado, no en código.
 
 ## Cuándo usarlo
+
 - Al arrancar un ADS nuevo, con `START_PROJECT.md` o una descripción en la conversación.
 
 ## Entradas
+
 - `START_PROJECT.md` o la conversación.
 - `profiles/<name>/profile.md`.
 - `stacks/README.md`, `stacks/cases/*.md`.
 - `templates/agentic/ads.yaml`.
 
 ## Pasos
+
 1. [verde] Si es la primera vez en el repo, ejecuta antes `bootstrap`.
 2. [verde] Lee la descripción del proyecto; elige el perfil (`profiles/<name>/profile.md`) o uno compuesto si es híbrido; regístralo como `active_profile` en `docs/project_memory.md`.
 3. [amarillo] Fija la ceremonia en `abm.yaml → ceremony` (prototipo/mvp/producto/enterprise-regulado) según tamaño, riesgo y regulación; explica el porqué en una línea.
@@ -37,6 +41,7 @@ Planifica un ADS nuevo de punta a punta: perfil, ceremonia, metodología por mó
 12. [amarillo] Publica el plan (perfil, ceremonia, modo por módulo, stack, FU/DU, riesgos). En turbo, "Aprobar plan" entra en la cola y lo reversible sigue; en checkpoint o Enterprise-Regulado, espera aprobación explícita.
 
 ## Salidas
+
 - `docs/project_memory.md`, `methodology-map.md`, `planning/{requirements,scope,risks}.md`.
 - `implementation/{user_units,task_tracker}.md`.
 - `ads.yaml`.
@@ -44,12 +49,15 @@ Planifica un ADS nuevo de punta a punta: perfil, ceremonia, metodología por mó
 - Plan publicado.
 
 ## Gates
+
 Todo requisito mapea a una FU/DU; el stack fue elegido por el humano o encolado según ceremonia; `ads.yaml` está al nivel del perfil; `knowledge/index.md` enlaza los design docs.
 
 ## Fallback
+
 Sigue el mismo flujo a mano: clasifica con la tabla de dimensiones de `methodology/router.md` y copia `templates/agentic/ads.yaml` para el manifiesto.
 
 ## Reporte
+
 ```text
 [<fase|FU|DU|WU>-<id>] HECHO | BLOQUEADO
 Acciones: <una línea por acción, con archivo o commit>
@@ -61,4 +69,5 @@ Siguiente: <acción concreta>
 ```
 
 ## Invocación por agentes
+
 `./abm methodology classify --json`, `./abm pending add --json`; sin orden CLI única para todo el flujo — "lee y ejecuta este playbook".

@@ -1,30 +1,41 @@
-# Start Project
-
-Replace the placeholders below with your project, then run `init-project` (or point your agent at
-`commands/init-project.md`). The agent will pick the Asset Profile, explore the stack, ask you to
-choose it, plan the work, and wait for your approval before producing anything.
-
+---
+type: Intent
+title: Encargo del ADS
+description: Descripción inicial del ADS que lee init-project; reemplaza los textos entre corchetes.
+tags: [encargo, init-project]
+status: draft
+generated: { by: human:tu-id, at: 2026-01-01T00:00:00Z }
 ---
 
-## What I want to produce
-**Asset type**: [software app / research report / data product / intelligence-product (report + data) / other]
-**Description**: [what it is, who consumes it, what problem it solves]
+# Encargo del ADS
 
-**Key elements**:
-- [element 1]
-- [element 2]
-- [element 3]
+Completa lo que sepas; lo demás lo pregunta `init-project` (o lo encola con un default si estás en modo turbo).
 
-**Consumers / roles**: [who uses or reads it]
-**Sources / integrations**: [data sources, APIs, references to draw on]
-**Constraints**: [budget, timeline, hosting, tooling preferences, compliance, house style, etc.]
+## Qué quiero producir
 
----
+**Tipo de ADS:** [app web / app móvil / API / dashboard / ERP / automatización / app con IA / informe / producto de datos / híbrido]
+**Descripción:** [qué es, quién lo usa, qué problema resuelve]
 
-## What happens next
-1. The agent selects the Asset Profile (and confirms it with you).
-2. It asks any blocking questions.
-3. It explores stack options suited to this asset and presents 2–3 with trade-offs — **you choose**.
-4. It plans the work (Foundation Units + Deliverable Units, grouped into milestones).
-5. It presents the plan for your approval.
-6. Only after you approve does production begin.
+## Módulos o elementos clave
+
+- [módulo 1: qué hace]
+- [módulo 2: qué hace]
+- [módulo 3: qué hace]
+
+## Usuarios y roles
+
+[quién lo usa y con qué permisos]
+
+## Sistemas existentes e integraciones
+
+[sistemas corporativos, bases de datos, APIs, archivos; si hay legacy, se inventaría con `assess`]
+
+## Restricciones
+
+[presupuesto, plazos, nube o on-prem, proveedor LLM, normativa, datos personales o de salud, estilo de la casa]
+
+## Qué pasa después
+
+1. `init-project` elige perfil y ceremonia y clasifica la metodología por módulo.
+2. Te presenta 2–3 opciones de stack con trade-offs: **tú eliges**.
+3. Publica el plan (FU/DU por milestone). En modo `checkpoint` espera tu aprobación; en `turbo` avanza con lo reversible y encola la aprobación.

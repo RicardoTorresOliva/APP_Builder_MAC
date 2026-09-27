@@ -14,6 +14,7 @@ orden del CLI. El nombre sustituye espacios/subcomandos por guiones bajos: `abm 
 `abm_<a>_<b>`.
 
 ## Tools de lectura (`readOnlyHint: true`)
+
 | Tool | Orden equivalente | Notas |
 |---|---|---|
 | `abm_okf_validate` | `okf validate [paths]` | Acepta rutas; sin rutas valida todo el bundle. |
@@ -31,6 +32,7 @@ orden del CLI. El nombre sustituye espacios/subcomandos por guiones bajos: `abm 
 | `abm_decide` | `decide` | Capa System One; ver skill `system-one`. |
 
 ## Tools de escritura (`destructiveHint` según corresponda, `dry_run=true` por defecto)
+
 | Tool | Orden equivalente | Qué escribe |
 |---|---|---|
 | `abm_okf_index` | `okf index` | `index.md` raíz. |
@@ -49,10 +51,12 @@ orden del CLI. El nombre sustituye espacios/subcomandos por guiones bajos: `abm 
 regeneran contenido derivado.
 
 ## Recurso
+
 `abm://tokens/summary` — resumen de consumo de solo lectura, sin credenciales de escritura,
 pensado para que un agente orquestador externo lea presupuesto restante sin invocar una tool.
 
 ## Flujo de ejemplo (agente externo operando un ADS hecho con ABM)
+
 1. Descubrir: listar tools del servidor MCP del ADS (no de ABM).
 2. Listar: `abm_pending_list` / equivalente del ADS para ver qué falta.
 3. Leer: `abm_okf_validate` o el recurso de tokens, sin escribir nada.

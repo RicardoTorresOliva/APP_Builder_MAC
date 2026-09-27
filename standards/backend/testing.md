@@ -19,6 +19,7 @@ Ver la pirámide general en `standards/testing/README.md`. Aquí, lo específico
 | Carga (según perfil) | comportamiento bajo el SLO declarado (latencia, throughput) en los endpoints críticos | antes de un hito de escalamiento o release mayor |
 
 ## Reglas
+
 - Un test de integración que solo repite lo que ya cubre el unitario se recorta; el objetivo es
   cubrir el punto de integración, no duplicar cobertura.
 - Idempotencia se prueba explícitamente: la misma solicitud, dos veces, produce el mismo efecto.

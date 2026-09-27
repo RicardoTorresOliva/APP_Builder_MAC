@@ -11,17 +11,21 @@ generated: { by: claude-code/web, at: 2026-09-28T00:00:00Z }
 # connect
 
 ## Propósito
+
 Da al ADS la superficie agéntica completa que exige su nivel del Contrato ADS, para que otro agente lo descubra y opere sin integración a medida.
 
 ## Cuándo usarlo
+
 - Al cerrar la primera DU operativa del ADS.
 - Cada vez que su superficie agéntica cambia.
 
 ## Entradas
+
 - `ads.yaml`, `AGENTS.md` del ADS.
 - `templates/agentic/` (manifiesto, skill, servidor MCP, `llms.txt`).
 
 ## Pasos
+
 1. [verde] Confirma que existen `ads.yaml`, `AGENTS.md`, `llms.txt` e índice OKF (mínimo del Contrato ADS).
 2. [verde] Genera o actualiza la skill `operate-<id>` desde `templates/agentic/` para que un agente externo sepa operar el ADS.
 3. [amarillo] Si el nivel es extendido: añade servidor MCP (stdio; Streamable HTTP si está desplegado), CLI `--json`/`--dry-run`, y OpenAPI si expone HTTP; errores en formato `problem+json`.
@@ -30,15 +34,19 @@ Da al ADS la superficie agéntica completa que exige su nivel del Contrato ADS, 
 6. [verde] Verifica con `./abm ads-check` y `./abm agent-conformance` (descubrir → listar → leer → dry-run → tokens).
 
 ## Salidas
+
 - `ads.yaml`, skill `operate-<id>`, servidor MCP o API según nivel, `llms.txt`.
 
 ## Gates
+
 `./abm ads-check` y `./abm agent-conformance` sin errores antes de cerrar.
 
 ## Fallback
+
 Arma el manifiesto y la skill a mano copiando `templates/agentic/`; documenta en `integrations/agents/hermes.md` cómo un gateway de mensajería lo operaría.
 
 ## Reporte
+
 ```text
 [<fase|FU|DU|WU>-<id>] HECHO | BLOQUEADO
 Acciones: <una línea por acción, con archivo o commit>
@@ -50,4 +58,5 @@ Siguiente: <acción concreta>
 ```
 
 ## Invocación por agentes
+
 `./abm ads-check --json`, `./abm agent-conformance --json`.

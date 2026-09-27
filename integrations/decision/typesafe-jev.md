@@ -43,6 +43,7 @@ contra un `state` y devuelve valores tipados con probabilidades que el código c
 sin parsear lenguaje natural[^ts-coding-agents].
 
 ## Endpoint y auth
+
 `POST https://api.typesafe.ai/v1/systemone`, header `Authorization: Bearer <API_KEY>`,
 `Content-Type: application/json`[^ts-api]. Listado de modelos: `GET
 https://api.typesafe.ai/v1/models`[^ts-models]. La clave se lee de `TYPESAFE_API_KEY` (el SDK
@@ -50,8 +51,10 @@ Python la toma sola si no se pasa `api_key`)[^ts-quickstart] — nunca en códig
 `/integrations/secrets.md`.
 
 ## Forma de la llamada
+
 Request: `{state, model, questions: {<id>: Question}}`; `state` es string, objeto o
 array[^ts-api]. Tres tipos de `Question`:
+
 - **`choice`**: `criteria` mapa de hasta 255 opciones → `{choice, probabilities, confidence}`.
 - **`score`**: `criteria` array ordenado de 2 a 10 niveles → `{score, legend, probabilities,
   confidence}`.
@@ -61,6 +64,7 @@ Response: `{model, answers, usage: {input_tokens, output_tokens}}`; la salida no
 cobra[^ts-api][^ts-models].
 
 ## Modelos, precio y límites (re-verificar antes de `stale_after`)
+
 - Modelo vigente: `jev-1.13.0`; alias `jev-latest`/`jev-preview` apuntan a él[^ts-models].
 - Precio: **$0,042 por Mtok de entrada**, salida gratis[^ts-models].
 - Límites: 250 000 tokens/s, 1 200 requests/min (ajustables, sin SLA de estabilidad)[^ts-models].
@@ -70,25 +74,30 @@ cobra[^ts-api][^ts-models].
   defecto[^ts-api].
 
 ## SDKs y agent skill
+
 `typesafe-sdk` (Python ≥3.10) y `@typesafe-ai/sdk` (JS/TS), ambos exponen `usage` en cada
 respuesta[^ts-python-sdk]. Agent skill oficial instalable vía `claude plugin marketplace add
 typesafe-ai/skills` o `npx skills add typesafe-ai/skills --skill typesafe-ai` (compatible con el
 estándar agentskills.io)[^ts-skill].
 
 ## Qué NO es
+
 **No es un modelo de chat/código**: no genera texto, no reemplaza al LLM de un coding agent — se
 llama *desde* código para decisiones tipadas (routing, scoring, guardrails)[^ts-coding-agents].
 
 ## Limitaciones conocidas ("jaggedness", jev-1.13, revisado 2026-09-17)
+
 Lectura literal de instrucciones; débil en aritmética, conteo y comparación de fechas; se degrada
 con indirección o ruido irrelevante en `state` (context rot); vulnerable a contenido adversarial en
 `state`; sin invariantes garantizadas entre tipos equivalentes; no genera texto[^ts-jaggedness].
 
 ## Datos
+
 No se entrena con requests/responses de clientes; DPA, Privacy Policy y zero data retention (ZDR)
 disponibles para enterprise, previo contacto comercial[^ts-legal][^ts-models].
 
 ## Recetas para ADS (con fallback)
+
 1. **Intent routing** de solicitudes a handler determinista / LLM barato / LLM potente / humano —
    *fallback*: LLM con salida estructurada tras el mismo umbral de confianza.
 2. **Guardrails de entrada/salida de LLM** (patrón oficial `llm_guardrails`) — *fallback*: reglas
@@ -105,6 +114,7 @@ disponibles para enterprise, previo contacto comercial[^ts-legal][^ts-models].
    único con rúbrica combinada (menos auditable).
 
 ## Usos en ABM (≥3, ver detalle en [README.md](README.md))
+
 Router metodológico, semáforo de riesgo, filtro de prompt injection en la salida de tools, triage de
 hallazgos de `review`, sugerencia de comando/skill (patrón oficial de sugerencia sobre un catálogo
 de comandos).

@@ -10,14 +10,17 @@ generated: { by: claude-code/web, at: 2026-09-28T00:00:00Z }
 # Plantilla de playbook de comando
 
 ## Propósito
+
 Esqueleto que copian `init-project` y cualquier nuevo comando en `commands/`. Fija el frontmatter
 OKF y las nueve secciones que exige `./abm lint playbooks` (ADR 0015).
 
 ## Cuándo usarlo
+
 - Al crear un comando nuevo en `commands/`.
 - Al revisar que un comando existente conserva el formato.
 
 ## Uso
+
 Copia el bloque siguiente a `commands/<name>.md`, sustituye los valores entre `< >` y borra
 esta nota. `<name>` es el nombre exacto del comando (ADR 0007); `<fase>` es una de: arranque,
 descubrir, construir, asegurar, medir, entregar.
@@ -73,6 +76,7 @@ Siguiente: <acción concreta>
 ```
 
 ## Reglas del esqueleto
+
 - Cada paso numerado lleva exactamente una etiqueta de semáforo entre corchetes.
 - El bloque de `## Reporte` es un único fenced code block de ≤ 12 líneas.
 - Las nueve secciones (`Propósito` … `Invocación por agentes`) son obligatorias y en este orden.

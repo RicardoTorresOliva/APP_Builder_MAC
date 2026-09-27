@@ -10,6 +10,7 @@ generated: { by: claude-code/web, at: 2026-09-28T02:00:00Z }
 # Modos metodológicos — detalle
 
 ## Señales de clasificación
+
 | Señal en el encargo/módulo | Modo sugerido |
 |---|---|
 | "prueba rápido", "no importa si se descarta", sin consumidor aguas abajo | VIBE |
@@ -20,17 +21,20 @@ generated: { by: claude-code/web, at: 2026-09-28T02:00:00Z }
 | Alcance amplio o ambiguo, hace falta explorar antes de comprometerse | AIDD |
 
 ## Matriz de escalamiento (nunca hacia abajo sin humano)
-```
+
+```text
 VIBE → IDD → SDD
         ↑      ↑
       AIDD ────┘   (AIDD desemboca en SDD si lo explorado resulta de riesgo)
 SPDD es ortogonal: se combina con SDD cuando el prompt versionado además tiene
 contrato consumido por otros (p. ej. un endpoint que envuelve el prompt).
 ```
+
 Una vez que un módulo escaló a SDD por riesgo (pagos/auth/PII/salud/regulación), bajarlo de nivel
 es una decisión que solo toma un humano y se registra en `docs/decision_log.md`.
 
 ## `methodology-map.md` de ejemplo
+
 ```markdown
 | Módulo | Modo | Justificación | Revisión |
 |---|---|---|---|
@@ -42,6 +46,7 @@ es una decisión que solo toma un humano y se registra en `docs/decision_log.md`
 ```
 
 ## Umbrales de confianza (`integrations/decision/thresholds.yaml`)
+
 Igual que el resto de usos de la capa System One: actuar automáticamente en confianza alta (más
 estricta en Enterprise-Regulado), zona gris revisa un humano o el fallback de modelo de lenguaje,
 confianza baja siempre humano. Ver la skill `system-one` para el detalle de la cadena de

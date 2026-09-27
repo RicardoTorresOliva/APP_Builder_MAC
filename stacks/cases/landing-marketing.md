@@ -113,9 +113,9 @@ agente pueda enviarlo sin credenciales.
 [^cf-pages]: Cloudflare Pages Functions — Pricing
 [^cf-workers]: Cloudflare Workers — Pricing
 [^sanity-pricing]: Sanity — Pricing
-[^framer-pricing]: Framer — Pricing
 [^webflow-pricing]: Webflow Help Center — Updated pricing (May 2026)
 [^amplify-pricing]: AWS Amplify — Pricing
 [^cloudrun-pricing]: Google Cloud Run — Pricing
 [^astro]: Astro
 [^nextjs]: Next.js — Blog (versión vigente)
+[^framer-pricing]: Framer — Pricing

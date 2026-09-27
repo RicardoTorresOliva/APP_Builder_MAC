@@ -99,6 +99,7 @@ sources:
 ## Referentes
 
 ### 1. GitHub Spec Kit
+
 - **Qué es:** CLI `specify` (`github/spec-kit`) que impone el flujo `constitution` → `/speckit.specify` → `/speckit.plan` → `/speckit.tasks` → `/speckit.implement`, con artefactos Markdown en `.specify/` y soporte multi-agente vía `--integration`.[^speckit-gh]
 - **Vigencia:** v1.0.6 (10 sep 2026), llegó a 1.0 el 21 ago 2026, +180 tags desde v0.0.17 (sep 2025). Cadencia muy alta, proyecto activo.[^speckit-releases]
 - **Licencia:** MIT.[^speckit-gh]
@@ -106,6 +107,7 @@ sources:
 - **Qué NO copiar:** acoplamiento a GitHub Issues (`/speckit.taskstoissues`, en camino a extensión aparte); nomenclatura de comandos ligada a la marca GitHub.
 
 ### 2. AWS Kiro
+
 - **Qué es:** IDE agéntico (fork de Code OSS) donde cada feature genera `requirements.md` (notación EARS: "WHEN [condición] THE SYSTEM SHALL..."), `design.md` y `tasks.md`; el contexto persistente vive en `.kiro/steering/` con tres modos de inclusión por front-matter: `always`, `fileMatch` (+ `fileMatchPattern`) y `manual` (más un modo `auto` no configurable).[^kiro-specs][^kiro-steering]
 - **Vigencia:** GA desde el 7 may 2026, sucesor oficial de Amazon Q Developer (retirado; altas nuevas bloqueadas desde el 15 may 2026). Activo, con planes de precio por créditos verificados jul 2026.[^kiro-pricing]
 - **Licencia:** producto propietario de AWS (free tier + planes Pro/Pro+/Pro Max/Power); el formato de specs/steering no es un estándar independiente.[^kiro-pricing]
@@ -113,6 +115,7 @@ sources:
 - **Qué NO copiar:** dependencia de IDE propietario y de Bedrock/Claude como único backend; modelo de créditos de pago.
 
 ### 3. BMAD Method
+
 - **Qué es:** framework de agentes de rol (PM, Architect, Dev, QA, etc.) que organiza el desarrollo como un equipo ágil con handoffs explícitos y "story files" como unidad de contexto; se distribuye en módulos (BMM y otros) más una capa "BMad Builder".[^bmad-repo]
 - **Vigencia:** BMM v6.8.0 y BMad Method v6.2.1 (may 2026); organización `bmad-code-org` activa.[^bmad-repo]
 - **Licencia:** MIT.[^bmad-license]
@@ -120,6 +123,7 @@ sources:
 - **Qué NO copiar:** paquete monolítico de ceremonial ágil completo; bundles web específicos por proveedor (Gemini/ChatGPT) como mecanismo de portabilidad.
 
 ### 4. Agent OS (Builder Methods)
+
 - **Qué es:** sistema que extrae y "inyecta" estándares del propio código (brownfield) y ayuda a redactar mejores specs; en v3 dejó de orquestar implementación, delegándola al agente/modelo frontera.[^agentos-repo]
 - **Vigencia:** v3.0.0 (20 ene 2026); alcance reenfocado solo a `standards/` + `specs/` + `product/`.[^agentos-v3]
 - **Licencia:** MIT.[^agentos-repo]
@@ -127,6 +131,7 @@ sources:
 - **Qué NO copiar:** el recorte de alcance de v3 (ya no cubre implementación/orquestación) — ABM sí necesita ese tramo end-to-end.
 
 ### 5. AGENTS.md (estándar abierto)
+
 - **Qué es:** archivo Markdown plano (sin frontmatter obligatorio; v1.1 propone `description`/`tags` opcionales) que documenta a un agente cómo trabajar en el repo; en monorepos se anida por paquete y aplica precedencia "closest file wins" (el más profundo se combina y prevalece sobre el raíz).[^agentsmd-site]
 - **Vigencia:** formalizado ago 2025 (OpenAI, Google, Cursor, Factory); donado en dic 2025 a la Agentic AI Foundation (Linux Foundation); +60 000 proyectos adoptantes a esa fecha, sigue activo en 2026.[^linuxfoundation-aaif]
 - **Licencia:** MIT (`agentsmd/agents.md`).[^agentsmd-repo]
@@ -134,6 +139,7 @@ sources:
 - **Qué NO copiar:** nada — es el estándar neutral que ABM adopta directamente como fuente única.
 
 ### 6. Agent Skills (agentskills.io)
+
 - **Qué es:** estándar abierto para "skills": carpeta con `SKILL.md` (solo `name` y `description` obligatorios) más scripts/referencias/assets opcionales, cargados en tres etapas — *discovery* (metadata, ~30-50 tokens por skill), *activation* (cuerpo completo al coincidir la tarea) y *execution* (recursos bajo demanda).[^agentskills-repo][^simonwillison-skills]
 - **Vigencia:** publicado por Anthropic el 18 dic 2025, cedido a la Agentic AI Foundation; adopción rápida (Microsoft/OpenAI en 48h; ~40 productos compatibles a jun 2026: Codex, Copilot, Cursor, Gemini CLI, VS Code).[^agentskills-site][^simonwillison-skills]
 - **Licencia:** especificación abierta (`agentskills/agentskills`).[^agentskills-repo]
@@ -141,6 +147,7 @@ sources:
 - **Qué NO copiar:** nada — es la base que ABM adopta directamente para su capa `skills/`.
 
 ### 7. Cursor rules y GitHub Copilot custom instructions (solo ideas de diseño)
+
 - **Qué es:** (a) Cursor: `.cursor/rules/*.mdc` con frontmatter (`description`, `alwaysApply`, `globs`) y cuatro modos de activación — Always / Auto Attached (por glob) / Agent Requested (por descripción) / Manual — que reemplazó al `.cursorrules` legado (ignorado en modo Agent).[^cursor-rules-docs] (b) Copilot: `.github/copilot-instructions.md` (siempre cargado) más "prompt files" reutilizables invocables por comando, con referencias `@ruta` a otros archivos incluido `AGENTS.md`/`CLAUDE.md`.[^copilot-instructions-docs]
 - **Vigencia:** ambas activas en 2026 como features de producto (no versionan como estándar independiente).
 - **Licencia:** no aplica (funciones propietarias de cada IDE).
@@ -148,6 +155,7 @@ sources:
 - **Qué NO copiar:** fragmentación de formato por editor (`.mdc` vs `.md` vs `copilot-instructions.md`) — ABM mantiene fuente única y genera adaptadores.
 
 ### 8. anthropics/skills y openai/skills
+
 - **Qué es:** repos públicos de ejemplos de skills. `anthropics/skills`: ejemplos (algorithmic-art, brand-guidelines, internal-comms, etc.) más las skills de documentos (docx/pdf/pptx/xlsx) que usa Claude en producción. `openai/skills`: catálogo instalable para Codex vía `skill-installer`.[^anthropic-skills-repo][^openai-skills-repo]
 - **Vigencia:** `anthropics/skills` activo. **`openai/skills` está marcado como deprecated en su propio README**, con migración recomendada a `openai/plugins`; sigue instalable en 2026 pero ya no es la vía canónica (Codex migra a `~/.agents/skills`).[^openai-codex-issue]
 - **Licencia:** `anthropics/skills`: repo Apache-2.0, pero las skills de documentos son *source-available* (no libres para redistribuir sin revisar cada carpeta). `openai/skills`: licencia individual por skill (`LICENSE.txt` en cada carpeta).[^anthropic-skills-repo][^openai-skills-repo]
@@ -155,6 +163,7 @@ sources:
 - **Qué NO copiar:** `openai/skills` como referencia de arquitectura activa — está en migración/obsolescencia declarada.
 
 ### 9. Categoría de LLM gateway (multi-LLM)
+
 - **Qué ofrece la categoría:** capa de abstracción entre la app y varios proveedores LLM: API unificada (formato compatible OpenAI), enrutamiento y fallback entre modelos/proveedores, rate limiting, caché, observabilidad y control de costo — la pieza que sostiene portabilidad multi-LLM y multinube.[^gw-requesty]
 - **3 opciones representativas:**
   - **LiteLLM** — proxy/SDK open source, autoalojado; núcleo MIT, carpeta enterprise bajo licencia comercial aparte; TCO real de autoalojar no es trivial (infraestructura + operación).[^gw-requesty]

@@ -8,6 +8,7 @@ metadata: { okf_type: Skill, abm_version: "5.0.0" }
 # security-hardening
 
 ## Pasos
+
 1. Si la unidad expone una superficie web o de API, recorre `standards/security/web-api.md`
    (OWASP Top 10:2025 + ASVS del nivel que el perfil exige) y registra hallazgo → severidad → mitigación.
 2. Si la unidad invoca un modelo de lenguaje o tiene un agente con herramientas, recorre
@@ -26,6 +27,7 @@ metadata: { okf_type: Skill, abm_version: "5.0.0" }
    capa correspondiente) y su mitigación o su entrada en `abm pending add`.
 
 ## Criterios de salida
+
 - Ningún hallazgo bloqueante sin mitigar antes de release.
 - SBOM, lockfile y secret scanning limpios o con hallazgo documentado y mitigado.
 - Reporte final según `standards/communication.md` (≤ 12 líneas), con severidades explícitas.

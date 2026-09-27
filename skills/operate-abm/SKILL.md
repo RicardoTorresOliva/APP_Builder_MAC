@@ -11,12 +11,14 @@ ABM es un CLI de Python sin dependencias: `./abm <orden>` (Windows: `abm.cmd`). 
 `--json` (salida máquina) y, si escribe, `--dry-run` (informa qué haría sin tocar disco).
 
 ## Al empezar una sesión
+
 1. `./abm session-start` (o lee `docs/project_memory.md` + `implementation/task_tracker.md`) para
    saber dónde retomar.
 2. `./abm doctor` si algo del entorno falla.
 3. `./abm pending list` para ver la cola antes de decidir un default por tu cuenta.
 
 ## Órdenes que usarás seguido
+
 - `okf validate [rutas]` / `okf index` — conformidad OKF y mapa del repo.
 - `check` — auditoría agregada (usar antes de cerrar una unidad).
 - `lint core|playbooks|manual` — regla 7 (sin productos), estructura de playbooks, paridad manual.
@@ -34,6 +36,7 @@ Cada orden imprime líneas terse por defecto; con `--json` devuelve un objeto `{
 o rows }`. Confía en su salida — no la repitas a mano ni la reinterpretes en prosa larga.
 
 ## Servidor MCP
+
 `./abm mcp` levanta un servidor stdio con una tool por orden, nombrada `abm_<orden>` con guiones
 bajos (`abm_okf_validate`, `abm_ads_check`, `abm_tokens_report`, `abm_pending_list`,
 `abm_methodology_classify`, `abm_decide`, `abm_agent_conformance`…). Las tools de escritura traen
@@ -42,9 +45,11 @@ Recurso de solo lectura: `abm://tokens/summary`. Prefiere el servidor MCP sobre 
 shell cuando tu cliente ya habla MCP: evita parsear texto y respeta mejor el mínimo privilegio.
 
 ## Antes de terminar cualquier unidad
+
 Corre `./abm check`; si tocaste `.md` del núcleo, además `okf validate`, `lint core`,
 `token-budget -v` y `links` sobre tus rutas. Corrige hasta que todo pase. Registra el consumo con
 `tokens record` (o `estimate` si no hay medición) antes de cerrar el reporte de la unidad.
 
 ## Detalle extra
+
 `references/mcp-server.md`: inventario completo de tools `abm_*`, sus hints y un flujo de ejemplo.

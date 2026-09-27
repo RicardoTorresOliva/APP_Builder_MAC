@@ -22,6 +22,8 @@ okf:
     - ".clinerules/**"
     - ".junie/**"
     - ".hermes/**"
+    - ".devin/**"
+    - ".vscode/**"
     - "CLAUDE.md"
     - "GEMINI.md"
     - "skills/**/SKILL.md"

@@ -19,6 +19,7 @@ Ver la pirámide general en `standards/testing/README.md`. Aquí, lo específico
 | Restauración (según perfil) | un backup reciente restaura y el dato resultante es consistente | en el ciclo que el perfil de backups declare |
 
 ## Reglas
+
 - Los tests de migraciones corren contra una base efímera, nunca contra un ambiente compartido.
 - Un test de datos que solo verifica que una fila se insertó no basta: debe verificar la integridad
   (relaciones, constraints) que la unidad introdujo.

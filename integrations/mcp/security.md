@@ -62,6 +62,7 @@ presupuesto (ADR 0013).
 
 `stdio` usa credenciales de entorno (sin OAuth). Para `Streamable HTTP`, la especificación MCP
 exige[^mcp-auth]:
+
 - **OAuth 2.1** (draft vigente) como base;
 - **OAuth 2.0 Protected Resource Metadata (RFC 9728)**, obligatorio, para que el cliente descubra
   el authorization server correcto;

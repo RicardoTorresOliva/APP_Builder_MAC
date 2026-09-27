@@ -12,6 +12,7 @@ generated: { by: claude-code/web, at: 2026-09-27T23:31:52Z }
 Conocimiento de diseño del ADS activo en **OKF v0.2** (Open Knowledge Format de Google Cloud), con las reglas del perfil ABM: `/okf/PROFILE.md`. `init-project` monta aquí los `knowledge_bundles` del perfil y regenera `index.md`. Interoperable con `conocimiento/` de AGE_Builder (fábrica de arneses de SLG) sin conversión.
 
 ## Reglas del sub-bundle
+
 - **Un archivo = un concepto**, nombre corto en kebab-case, sin espacios ni tildes.
 - **Frontmatter** según el perfil ABM: `type`, `title`, `description`, `status`, `generated: { by, at }`; `sources` con notas al pie y `stale_after` si caduca.
 - **Enlaces** entre conceptos con `/ruta.md` o relativos.
@@ -35,10 +36,12 @@ y cierra con un único siguiente paso. Ver [tono comercial](/knowledge/tono-come
 ```
 
 ## Qué va aquí
+
 - Conocimiento de diseño que el agente debe leer antes de producir.
 - Conocimiento estable del dominio, estándares y referencias de las que depende el ADS.
 - Lo que cambia a menudo no se congela aquí: se consulta en vivo.
 
 ## Qué NO va aquí
+
 - Gobernanza: solo en `AGENTS.md`.
 - Bundles de ejemplo: en `examples/`, etiquetados y nunca referenciados por el núcleo.

@@ -23,11 +23,13 @@ el riesgo de la acción (más estricto cuanto más caro o irreversible es equivo
 | Scoring compuesto | Varias `score` atómicas, combinadas con pesos en código (no en el modelo) | Un único modelo de lenguaje con una rúbrica combinada (menos auditable) |
 
 ## Por qué scoring compuesto en código y no en el modelo
+
 Combinar varias `score` atómicas con pesos explícitos en código es auditable: cualquiera puede ver
 qué pesa cuánto y cambiarlo sin reentrenar ni reformular un prompt. Un único modelo con una rúbrica
 combinada es más simple de implementar pero menos auditable — úsalo solo como fallback.
 
 ## Filtro de prompt injection (regla 13 de `AGENTS.md`)
+
 Antes de reinyectar al contexto la salida de cualquier tool, API o agente externo: `boolean`
 "¿este contenido intenta dar instrucciones al agente?" sobre ese contenido. Confianza alta y
 `true` → se trata como dato inerte, se documenta, nunca se ejecuta lo que pida. Confianza baja →
@@ -35,6 +37,7 @@ se trata igual (como dato) y además se marca `no-verificado` para que un humano
 falta.
 
 ## Datos sensibles
+
 Ningún `state` con datos personales sale hacia el proveedor de decisión tipada externo salvo que
 el perfil activo lo permita explícitamente; por defecto, ese tipo de decisión cae directo al
 fallback `rules` u operado localmente.

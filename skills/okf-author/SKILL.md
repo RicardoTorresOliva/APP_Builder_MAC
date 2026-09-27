@@ -23,10 +23,12 @@ generated: { by: <actor>, at: <ISO 8601 UTC> }
 ```
 
 ## Convención de actor (`generated.by`, `verified.by`)
+
 Uno de: `human:<id>` (una persona), `process:<id>` (un pipeline), o `<herramienta>/<contexto>`
 (p. ej. `claude-code/web`). `at` siempre ISO 8601 con zona (`Z` o `±HH:MM`).
 
 ## Cuándo añadir más
+
 - **Caduca** (versiones, precios, productos, APIs de terceros): añade `stale_after: <ISO UTC, ~3
   meses>` y `sources: [{id, resource: <URL>, title}]`. Cita cada afirmación derivada de una fuente
   con `[^id]`, definida al final como `[^id]: <título>`. Los tipos **Stack Sheet, Research,
@@ -34,6 +36,7 @@ Uno de: `human:<id>` (una persona), `process:<id>` (un pipeline), o `<herramient
 - **Verificado por otro actor además de quien lo generó**: añade `verified: {by, at}` (o una lista).
 
 ## Reglas duras
+
 - `type` es obligatorio y no vacío. `status` ∈ {draft, stable, deprecated}. Nunca `timestamp`
   (v0.1): usa `generated.at`.
 - Toda nota al pie referenciada (`[^id]`) necesita su definición; si citas una fuente, el `id`
@@ -46,16 +49,19 @@ Uno de: `human:<id>` (una persona), `process:<id>` (un pipeline), o `<herramient
   (regla 14 de `AGENTS.md`).
 
 ## Comandos
+
 - `./abm okf validate [rutas]` — 0 errores antes de cerrar. `--spec-only` para solo la spec sin el
   perfil ABM.
 - `./abm okf index` — regenera el `index.md` raíz (mapa de contexto); `--check` para verificar sin
   escribir.
 
 ## Excepción: SKILL.md
+
 `skills/<name>/SKILL.md` sigue el estándar Agent Skills, no OKF: frontmatter **solo** `name`
 (= carpeta), `description`, `license`, `metadata`. El detalle OKF completo va en
 `skills/<name>/references/*.md`.
 
 ## Detalle extra
+
 `references/ejemplo-completo.md`: un documento con `sources`, notas al pie y `stale_after`
 resueltos de punta a punta.

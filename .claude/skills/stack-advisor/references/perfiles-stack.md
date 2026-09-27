@@ -22,6 +22,7 @@ hacerlo (regla 7: los productos solo en `stacks/`, `integrations/`, `examples/` 
 | Observabilidad exigida | mínima | completa desde el día uno | básica | la que exija el proveedor homologado |
 
 ## Cómo usarlo
+
 1. Puntúa el proyecto en cada fila (una marca por columna que más calce).
 2. La columna con más marcas es el perfil candidato; si hay empate entre dos, presenta ambos
    `stacks/<caso>.md` al humano en vez de decidir por él.
@@ -29,6 +30,7 @@ hacerlo (regla 7: los productos solo en `stacks/`, `integrations/`, `examples/` 
    gobernanza pesa más que la de presupuesto en ese perfil — sigue siendo corporativo.
 
 ## Portabilidad (ADR 0012)
+
 Todo perfil, incluido vibe coder, documenta un plan de salida del proveedor elegido antes de
 entregar, aunque sea breve. La ausencia de plan de salida es más grave en corporativo (puede ser
 bloqueante e) que en vibe coder (se anota como pendiente).

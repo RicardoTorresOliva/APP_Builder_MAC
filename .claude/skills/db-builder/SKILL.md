@@ -8,6 +8,7 @@ metadata: { okf_type: Skill, abm_version: "5.0.0" }
 # db-builder
 
 ## Pasos
+
 1. Lee `standards/database/standard.md` (rango relevante) antes de tocar el esquema.
 2. Actualiza el ERD en Mermaid si la unidad agrega o cambia entidades o relaciones.
 3. Decide normalización vs. desnormalización; si desnormalizas, documenta el motivo medido, no
@@ -27,6 +28,7 @@ metadata: { okf_type: Skill, abm_version: "5.0.0" }
 12. Corre `standards/database/checklist-dod.md` completo antes de reportar la unidad como hecha.
 
 ## Criterios de salida
+
 - Migración aplica y revierte limpio contra una base efímera.
 - Todas las casillas de `standards/database/checklist-dod.md` marcadas o justificadas.
 - RLS probado con al menos dos tenants/roles cuando aplica.

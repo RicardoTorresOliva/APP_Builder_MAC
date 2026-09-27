@@ -11,6 +11,7 @@ El **modo metodológico** se asigna por módulo, no por proyecto entero: un mism
 módulo en VIBE y otro en SDD.
 
 ## Pasos
+
 1. Clasifica: `./abm methodology classify` (o la tool `abm_methodology_classify`) con el módulo y
    su descripción. Devuelve el modo sugerido y su confianza.
 2. Si la confianza está en zona alta (según `integrations/decision/thresholds.yaml`, más estricta
@@ -22,6 +23,7 @@ módulo en VIBE y otro en SDD.
    quién revisa.
 
 ## Los cinco modos (cuándo usar cada uno)
+
 - **VIBE** — exploración desechable: prototipo descartable, sin contrato que otro módulo consuma.
 - **IDD** — intención mínima viable: se conoce el objetivo, no hace falta spec formal previa.
 - **SDD** — spec → diseño → tareas: módulo con contrato que otros consumen, o con riesgo (pagos,
@@ -32,19 +34,23 @@ módulo en VIBE y otro en SDD.
   necesita descubrimiento antes de comprometerse a una spec.
 
 ## Mezcla y escalamiento
+
 Un módulo puede mezclar modos en fases distintas (p. ej. AIDD para descubrir, luego SDD para
 construir la parte con riesgo). El escalamiento nunca es automático hacia abajo: una vez en SDD
 por riesgo, solo un humano lo puede bajar de nivel.
 
 ## Deriva
+
 La deriva entre intención, spec, contratos y código se controla con `drift`; el `closeout` de cada
 unidad los sincroniza. Si `drift` encuentra desalineación en un módulo SDD/SPDD, no se autocorrige
 en silencio: se reporta y se resuelve con quien tenga contexto.
 
 ## Comando
+
 `./abm methodology classify` — admite `--json` y no escribe nada por sí solo; quien escribe el
 `methodology-map.md` es quien invoca la skill (`architect` u `orchestrator`).
 
 ## Detalle extra
+
 `references/modos.md`: criterios de clasificación completos, matriz de escalamiento y ejemplos de
 `methodology-map.md`.

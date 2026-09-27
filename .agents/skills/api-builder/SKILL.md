@@ -8,6 +8,7 @@ metadata: { okf_type: Skill, abm_version: "5.0.0" }
 # api-builder
 
 ## Pasos
+
 1. Lee `standards/backend/standard.md` (rango relevante) antes de escribir el endpoint.
 2. Escribe o actualiza el contrato (OpenAPI/schema) primero; la implementación sigue al contrato,
    no al revés.
@@ -29,6 +30,7 @@ metadata: { okf_type: Skill, abm_version: "5.0.0" }
 12. Corre `standards/backend/checklist-dod.md` completo antes de reportar la unidad como hecha.
 
 ## Criterios de salida
+
 - Contrato publicado coincide con la implementación; tests de contrato en verde.
 - Todas las casillas de `standards/backend/checklist-dod.md` marcadas o justificadas.
 - Sin secreto ni dato sensible en logs, errores o respuestas.

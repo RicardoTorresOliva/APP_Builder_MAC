@@ -13,6 +13,7 @@ Modo: SDD (`/methodology/sdd.md`). Responde a `requirements.md`; cada decisión 
 que satisface. Decisiones de arquitectura no triviales van a `/templates/adr.md`.
 
 ## Resumen de la solución
+
 `<2-3 frases: qué se construye y cómo satisface los requisitos, sin detalle de implementación>`
 
 ## Componentes
@@ -22,17 +23,22 @@ que satisface. Decisiones de arquitectura no triviales van a `/templates/adr.md`
 | `<componente>` | `<qué hace>` | `REQ-001, REQ-002` |
 
 ## Datos
+
 `<modelo de datos relevante, o referencia a un ERD si existe en design_docs del perfil>`
 
 ## Interfaces
+
 `<contratos de entrada/salida entre componentes o hacia afuera — endpoints, eventos, colas>`
 
 ## Casos límite y errores
+
 - `<caso límite>` → `<comportamiento esperado>` (`REQ-NNN`)
 
 ## Decisiones registradas
+
 - `<decisión no trivial>` → `/templates/adr.md#<slug>`
 
 ## Trazabilidad
+
 Todo `REQ-NNN` de `requirements.md` debe aparecer aquí al menos una vez. Lo que este diseño cubre pasa
 a `tasks.md` como tareas concretas.

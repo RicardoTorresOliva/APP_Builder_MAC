@@ -14,6 +14,7 @@ nunca completo: cada skill o comando indica qué archivo abrir. Sigue AGENTS.md 
 regla 7 (sin lock-in): categorías, nunca productos.
 
 ## Paridad Frontend / Backend / Database
+
 Misma forma en `standards/frontend/`, `standards/backend/`, `standards/database/`:
 
 | Archivo | Contenido | Lo usa |
@@ -25,6 +26,7 @@ Misma forma en `standards/frontend/`, `standards/backend/`, `standards/database/
 | `testing.md` | qué tests, qué cubren, cuándo corren | `test-strategy`, CI |
 
 ## Transversales
+
 | Ruta | Cuándo se carga |
 |---|---|
 | `standards/security/` | toda superficie web/API (`web-api.md`), toda superficie con LLM o agentes (`llm-agentic.md`), toda dependencia externa (`supply-chain.md`) |
@@ -37,10 +39,12 @@ Misma forma en `standards/frontend/`, `standards/backend/`, `standards/database/
 | `standards/cross-cutting.md` | entornos, CI/CD, feature flags, costo |
 
 ## Cómo se carga (contexto mínimo)
+
 1. Identifica la tarea (frontend, backend, database, seguridad, tests…).
 2. Abre solo el archivo de esa tarea; usa grep antes de leer completo.
 3. El nivel del Contrato ADS activo puede exigir un subconjunto adicional de `checklist-dod.md`.
 4. Presupuesto: cada archivo de `standards/**/*.md` ≤ 3200 tokens (`abm token-budget`).
 
 ## Verificación
+
 `./abm okf validate standards`, `./abm lint core`, `./abm token-budget -v`, `./abm links`.

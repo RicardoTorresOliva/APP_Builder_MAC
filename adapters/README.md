@@ -12,6 +12,7 @@ generated: { by: claude-code/web, at: 2026-09-27T23:46:03Z }
 La gobernanza vive solo en `AGENTS.md`. Cada herramienta la encuentra con archivos **generados** por `./abm sync` desde fuentes neutrales (`commands/`, `skills/`, `agents/`, `AGENTS.md`). Decisión: `/docs/adr/0002-fuente-unica-generador-adaptadores.md`. Rutas y formatos verificados: `/docs/compat-matrix.md`.
 
 ## Contenido
+
 | Archivo | Para qué |
 |---|---|
 | `tools.yaml` | Herramientas habilitadas, servidor MCP de ABM, patrones de ignore y listas turbo |
@@ -20,6 +21,7 @@ La gobernanza vive solo en `AGENTS.md`. Cada herramienta la encuentra con archiv
 | `turbo/` | Plantillas de permisos por herramienta (ADR 0014); no se activan solas |
 
 ## Qué se genera
+
 | Herramienta | Salidas |
 |---|---|
 | Claude Code | `CLAUDE.md` (importa `@AGENTS.md`), `.claude/commands/`, `.claude/skills/`, `.claude/agents/`, `.mcp.json` |
@@ -34,6 +36,7 @@ La gobernanza vive solo en `AGENTS.md`. Cada herramienta la encuentra con archiv
 | Otras (Zed, Junie, Cline, OpenCode, Amp…) | `AGENTS.md` como fallback universal |
 
 ## Uso
+
 - `./abm sync` — regenera todo. `./abm sync --check` — falla en CI si algo está desfasado o editado a mano.
 - `./abm sync --apply-turbo` — instala las plantillas de `turbo/` en las rutas activas (Claude Code, Codex, Gemini CLI, VS Code). Cambia permisos del agente: decisión humana.
 - Añadir una herramienta: entrada en `tools.yaml` + emisor en `scripts/abmkit/sync.py` + fila en `docs/compat-matrix.md`.

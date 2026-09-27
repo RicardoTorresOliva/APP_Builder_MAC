@@ -13,6 +13,7 @@ Verificar con `./abm ads-check` (estático) y `./abm agent-conformance` (dinámi
 un ítem como hecho — no basta con que el archivo exista, tiene que responder correctamente.
 
 ## Nivel mínimo (todo ADS)
+
 - [ ] `ads.yaml` en la raíz del ADS: id, semver, perfil, dueño, capacidades con modo
       read/write/destructive declarado por capacidad.
 - [ ] `AGENTS.md` propio del ADS, no el de ABM.
@@ -24,6 +25,7 @@ un ítem como hecho — no basta con que el archivo exista, tiene que responder 
 - [ ] Sin secretos en el repo, logs, errores ni UI; `.env.example` presente si hay credenciales.
 
 ## Nivel extendido (+ sobre el mínimo)
+
 - [ ] Servidor MCP (stdio; + Streamable HTTP si se despliega como servicio), protocolo
       `2025-11-25`, tolerante a `2026-07-28`.
 - [ ] Cada tool del servidor MCP tiene `readOnlyHint`/`destructiveHint` correctos y una
@@ -38,6 +40,7 @@ un ítem como hecho — no basta con que el archivo exista, tiene que responder 
       ausente y sin marcar como pendiente si no aplica, nunca agregado "por si acaso" (regla 4).
 
 ## Errores frecuentes que `agent-conformance` detecta
+
 - Tool de escritura sin `dry_run` por defecto en `true`.
 - `destructiveHint` en `false` para una tool que en realidad borra o sobrescribe.
 - `llms.txt` con más de un H1, o sin el blockquote de resumen.

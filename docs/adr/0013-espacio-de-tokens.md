@@ -12,9 +12,11 @@ generated: { by: claude-code/web, at: 2026-09-27T23:23:32Z }
 **Estado:** aceptado · **Fecha:** 2026-09-27
 
 ## Contexto
+
 Solo existía una tabla manual por milestone. OTel GenAI está en estado "Development".
 
 ## Decisión
+
 - **Evento** (`contract/token-event.schema.json`): `ts`, `phase` (build/run), `source` (telemetry/provider-usage/estimate), tokens de entrada/salida/caché, proveedor, modelo, herramienta, actor, unidad, comando, funcionalidad, tenant, costo. Mapeo 1:1 a atributos `gen_ai.*`.
 - **Ledger** JSONL en la ruta de `ads.yaml → tokens.ledger` (por defecto `ops/tokens/ledger.jsonl`).
 - **Precios** en `integrations/observability/pricing.yaml` con fuente y fecha; sin precio, el costo es "n/d" (nunca inventado).
@@ -24,7 +26,9 @@ Solo existía una tabla manual por milestone. OTel GenAI está en estado "Develo
 - Expuesto a agentes: recurso MCP `abm://tokens/summary`.
 
 ## Consecuencias
+
 - Toda WU y todo DU registran su consumo (medido o `estimate`).
 
 ## Alternativas descartadas
+
 - Solo telemetría de la herramienta: no existe en todas; el estimado explícito es mejor que nada.

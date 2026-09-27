@@ -21,6 +21,7 @@ consistente entre formatos. Sustituye el token por una variable de entorno o el 
 de la plataforma (`/integrations/secrets.md`); nunca lo escribas literal en el archivo.
 
 ## Claude Code — `.mcp.json` (raíz del proyecto)
+
 ```json
 {
   "mcpServers": {
@@ -36,6 +37,7 @@ de la plataforma (`/integrations/secrets.md`); nunca lo escribas literal en el a
 ```
 
 ## VS Code / GitHub Copilot — `.vscode/mcp.json`
+
 ```json
 {
   "servers": {
@@ -51,6 +53,7 @@ de la plataforma (`/integrations/secrets.md`); nunca lo escribas literal en el a
 ```
 
 ## Cursor — `.cursor/mcp.json`
+
 ```json
 {
   "mcpServers": {
@@ -66,6 +69,7 @@ de la plataforma (`/integrations/secrets.md`); nunca lo escribas literal en el a
 ```
 
 ## Gemini CLI — `.gemini/settings.json`
+
 ```json
 {
   "mcpServers": {
@@ -82,6 +86,7 @@ de la plataforma (`/integrations/secrets.md`); nunca lo escribas literal en el a
 ```
 
 ## Google Antigravity — `.agents/mcp_config.json` (workspace)
+
 ```json
 {
   "mcpServers": {
@@ -97,6 +102,7 @@ de la plataforma (`/integrations/secrets.md`); nunca lo escribas literal en el a
 ```
 
 ## Kiro — `.kiro/settings/mcp.json`
+
 ```json
 {
   "mcpServers": {
@@ -116,6 +122,7 @@ de la plataforma (`/integrations/secrets.md`); nunca lo escribas literal en el a
 ```
 
 ## Codex — `.codex/config.toml` (solo si el proyecto es *trusted*)
+
 ```toml
 [mcp_servers.abm]
 command = "python3"
@@ -130,6 +137,7 @@ enabled_tools = ["get_file_contents", "search_code"]
 ```
 
 ## Hermes — `~/.hermes/config.yaml`
+
 ```yaml
 mcp_servers:
   abm:
@@ -148,6 +156,7 @@ mcp_servers:
 ```
 
 ## Windsurf (global) — `~/.codeium/windsurf/mcp_config.json`
+
 ```json
 {
   "mcpServers": {
@@ -163,6 +172,7 @@ mcp_servers:
 ```
 
 ## Notas
+
 - Las claves y rutas exactas de cada herramienta están verificadas en `/docs/compat-matrix.md`
   (sección MCP de cada herramienta, con su fuente oficial).
 - El servidor `abm` es siempre stdio y de solo lectura por defecto (sus tools de escritura llevan

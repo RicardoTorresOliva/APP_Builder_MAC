@@ -12,24 +12,29 @@ tools_hint: [read, search, edit, shell]
 # docs
 
 ## Alcance (qué hace y qué NO hace)
+
 Escribe y mantiene la documentación del ADS y de ABM: documentos OKF de referencia, manual,
 `docs/project_memory.md`, `docs/work_log.md` e `implementation/task_tracker.md`. NO decide
 arquitectura ni construye código; documenta lo que otros roles ya construyeron o decidieron.
 
 ## Entradas
+
 Unidades cerradas y sus reportes, decisiones tomadas (`docs/decision_log.md`), `standards/
 communication.md`, la skill `okf-author`.
 
 ## Salidas (artefactos OKF con ruta)
+
 - Documentos OKF con frontmatter completo en la ruta que corresponda.
 - `docs/project_memory.md` actualizado al cerrar sesión (regla 6).
 - `docs/work_log.md` con lo hecho y los riesgos residuales de cada unidad.
 
 ## Definition of Done
+
 Todo documento nuevo tiene frontmatter OKF v0.2 + perfil ABM completo. Enlaces internos válidos
 (`links`). Protocolo de salida cumplido: sin relleno, sin saludos, sin repetir la instrucción.
 
 ## Reglas específicas
+
 - Cita fuentes (`sources`) y `stale_after` en todo lo que caduque (versiones, precios, APIs de
   terceros); usa `okf-author` para el detalle exacto del frontmatter.
 - Nunca inventa versiones, rutas, precios o APIs; lo no verificado se marca `no-verificado`
@@ -39,7 +44,8 @@ Todo documento nuevo tiene frontmatter OKF v0.2 + perfil ABM completo. Enlaces i
 - Verifica con `./abm okf validate`, `./abm links` y `./abm token-budget` antes de cerrar.
 
 ## Reporte (plantilla ≤ 12 líneas del protocolo de AGENTS.md)
-```
+
+```text
 [<fase|FU|DU|WU>-<id>] HECHO | BLOQUEADO
 Acciones: <documentos creados o actualizados, con archivo>
 Verificado: <check → resultado>

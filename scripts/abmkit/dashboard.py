@@ -28,11 +28,13 @@ PAGE = r"""<!doctype html>
 main{max-width:1100px;margin:0 auto}
 h1{font-size:20px;margin:0 0 4px}h2{font-size:15px;margin:0 0 12px}
 .sub{color:var(--text-secondary);margin:0 0 16px}
-.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-bottom:16px}
-.card{background:var(--surface-1);border-radius:10px;padding:16px}
-.kpi .v{font-size:32px;font-weight:650;letter-spacing:-.01em}.kpi .l{color:var(--text-secondary)}
-.hero .v{font-size:48px}
-.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:12px;margin-bottom:12px}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(200px,100%),1fr));gap:12px;margin-bottom:16px}
+.card{background:var(--surface-1);border-radius:10px;padding:16px;min-width:0;overflow-x:auto}
+.kpi{min-width:0}.kpi .v{font-size:clamp(22px,2.6vw,32px);font-weight:650;letter-spacing:-.01em;overflow-wrap:anywhere;line-height:1.15}.kpi .l{color:var(--text-secondary)}
+.hero{grid-column:span 2}.hero .v{font-size:clamp(34px,5vw,48px)}
+.kpi .v .st{font-size:18px;font-weight:600}
+@media (max-width:640px){.hero{grid-column:auto}}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(320px,100%),1fr));gap:12px;margin-bottom:12px}
 svg{display:block;width:100%;height:auto;overflow:visible}
 .axis{fill:var(--text-muted);font-size:12px}.lbl{fill:var(--text-secondary);font-size:12px}.val{fill:var(--text-primary);font-size:12px}
 .bar{fill:var(--series-1);cursor:default}.bar:hover,.bar:focus{fill:var(--series-1-hover);outline:none}
@@ -72,7 +74,7 @@ const NS='http://www.w3.org/2000/svg';
 function el(n,a,p){const e=document.createElementNS(NS,n);for(const k in a)e.setAttribute(k,a[k]);if(p)p.appendChild(e);return e;}
 function kpi(label,value,hero){const c=document.createElement('div');c.className='card kpi'+(hero?' hero':'');const v=document.createElement('div');v.className='v';v.textContent=value;const l=document.createElement('div');l.className='l';l.textContent=label;c.append(v,l);return c;}
 const K=document.getElementById('kpis');
-K.append(kpi('tokens totales',fmt(D.total),true),kpi('costo USD',D.cost_known?('$'+D.cost.toFixed(2)):(D.cost?('≥ $'+D.cost.toFixed(2)):'n/d')),kpi('eventos estimados',D.estimated+' de '+D.events));
+K.append(kpi('tokens totales',fmt(D.total),true),kpi('costo USD (según pricing.yaml)',D.cost_known?('$'+D.cost.toFixed(2)):(D.cost?('≥ $'+D.cost.toFixed(2)):'n/d')),kpi('eventos estimados',D.estimated+' de '+D.events));
 const worst=D.budgets.reduce((w,b)=>({ok:0,soft:1,hard:2}[b.state]>{ok:0,soft:1,hard:2}[w]?b.state:w),'ok');
 const bc=kpi('presupuestos','');const lab={ok:'✔ dentro',soft:'⚠ umbral blando',hard:'✖ tope duro superado'};const st=document.createElement('span');st.className='st '+worst;const dot=document.createElement('i');st.append(dot,document.createTextNode(lab[worst]));bc.querySelector('.v').replaceChildren(st);K.append(bc);
 function hbar(id,rows){const host=document.getElementById(id);if(!rows.length){host.innerHTML='<p class="empty">Sin datos todavía.</p>';return;}

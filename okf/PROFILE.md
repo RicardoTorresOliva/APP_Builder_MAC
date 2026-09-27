@@ -20,12 +20,14 @@ sources:
 Norma base: OKF v0.2[^okf-spec]. Este perfil añade requisitos; no contradice la spec. Decisión: `/docs/adr/0004-okf.md`. Validación: `./abm okf validate` (nivel spec con `--spec-only`).
 
 ## Bundle
+
 - La raíz del repo es la raíz del bundle. `index.md` raíz lo genera `./abm okf index` (lleva `okf_version: "0.2"`) y es el mapa de contexto del repo.
 - `log.md` raíz: encabezados `## YYYY-MM-DD`, entradas más recientes primero, sin frontmatter.
 - `knowledge/` es un sub-bundle montable con su propio `index.md` y `log.md`.
 - **Fuera del bundle** (`abm.yaml → okf.exclude`): salidas generadas de adaptadores (`.claude/`, `.agents/`, `.github/`, `CLAUDE.md`…) y los `SKILL.md` (el estándar Agent Skills no admite claves extra de primer nivel; su tipo va en `metadata.okf_type`).
 
 ## Frontmatter
+
 | Campo | Spec | Perfil ABM |
 |---|---|---|
 | `type` | obligatorio | obligatorio (Title Case: `Playbook`, `Standard`, `ADR`…) |
@@ -45,9 +47,11 @@ Norma base: OKF v0.2[^okf-spec]. Este perfil añade requisitos; no contradice la
 - **Cifras sancionadas:** concepto `type: Attested Computation` (spec §10) con `runtime`, `parameters`, `executor` y `attester` deterministas (p. ej. costos de tokens: `./abm tokens attest`).
 
 ## Subconjunto YAML
+
 El CLI usa un parser sin dependencias (`scripts/abmkit/yamlmini.py`): mapas y listas por indentación, listas `[a, b]` y mapas `{k: v}` en línea, escalares con o sin comillas, bloques `|` y `>`, comentarios. Las fechas se leen como texto. No uses anclas, etiquetas ni varios documentos.
 
 ## Migración desde la convención v4.1
+
 - `timestamp` → `generated.at` · `status: stub` → `status: draft` + etiqueta `stub` · lista de citas → `sources` + notas al pie.
 - Interoperabilidad con `conocimiento/` de AGE_Builder: un consumidor v0.2 acepta bundles v0.1[^okf-blog-v02].
 

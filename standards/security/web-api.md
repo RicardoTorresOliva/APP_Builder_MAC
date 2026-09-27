@@ -14,6 +14,7 @@ sources:
 # Seguridad web y de API
 
 ## OWASP Top 10 (web)[^owasp-top10]
+
 Vigente: **OWASP Top 10:2025** (sucesora de la edición 2021). Toda superficie web o de API se revisa
 contra sus diez categorías antes de un release:
 
@@ -33,6 +34,7 @@ contra sus diez categorías antes de un release:
 `A03:2025` (cadena de suministro) se cubre en detalle en `standards/security/supply-chain.md`.
 
 ## OWASP ASVS[^owasp-asvs]
+
 Vigente: **ASVS 5.0**. Catálogo de requisitos de verificación organizado en niveles crecientes de
 rigor (L1: higiene mínima aplicable a todo; L2: la mayoría de aplicaciones con datos sensibles; L3:
 alto valor o alta exposición) sobre autenticación, gestión de sesión, control de acceso,
@@ -40,6 +42,7 @@ criptografía, validación de entrada, protección de datos y configuración. El
 el perfil del ADS (`profiles/<name>/profile.md`); un ADS con datos personales o de pagos no baja de L2.
 
 ## Prácticas obligatorias por capa
+
 - **Frontend:** ningún secreto ni token de larga vida en código de cliente; cabeceras de seguridad
   (CSP, `X-Content-Type-Options`, etc.) configuradas por defecto; entrada de usuario nunca se
   interpola sin escapar en HTML/SQL/shell.
@@ -50,8 +53,9 @@ el perfil del ADS (`profiles/<name>/profile.md`); un ADS con datos personales o 
   ningún dato de producción al alcance del agente sin necesidad explícita.
 
 ## Verificación
+
 `skills/security-hardening/SKILL.md` recorre esta lista contra el ADS antes de cada release; el
 resultado (hallazgo → severidad → mitigación) queda en el reporte de la unidad.
 
-[^owasp-top10]: OWASP Top 10:2025 — https://owasp.org/Top10/2025/
-[^owasp-asvs]: OWASP Application Security Verification Standard (ASVS) 5.0 — https://owasp.org/www-project-application-security-verification-standard/
+[^owasp-top10]: OWASP Top 10:2025 — <https://owasp.org/Top10/2025/>
+[^owasp-asvs]: OWASP Application Security Verification Standard (ASVS) 5.0 — <https://owasp.org/www-project-application-security-verification-standard/>

@@ -19,11 +19,13 @@ sobre la pila de observabilidad elegida, para ADS enterprise o regulados que ya 
 real.
 
 ## Qué resuelve N3 que N1/N2 no
+
 N1 (`TOKENS.md`) y N2 (dashboard HTML estático) sirven para construcción y para un producto en
 operación con bajo volumen. N3 es para cuando el volumen exige alertas en tiempo real, presupuesto
 por tenant/funcionalidad y series históricas que un archivo estático no sostiene.
 
 ## Backends posibles (categoría, con ejemplos)
+
 | Categoría | Ejemplos |
 |---|---|
 | Backend de trazas/métricas autoalojado | Jaeger, Prometheus + Grafana |
@@ -35,17 +37,20 @@ un backend específico. Detalle técnico y config de ejemplo: [n3-otel.md](n3-ot
 `otel-collector.example.yaml`.
 
 ## Presupuestos y alertas
+
 Definidos en `ads.yaml → tokens.budgets`, por sesión, FU/DU/WU y funcionalidad (ADR 0013). Umbral
 blando → entra a la cola de pendientes; tope duro → `abm tokens budget` falla y bloquea CI. En N3,
 el mismo umbral dispara una alerta en el backend de observabilidad, no solo en CI — un tenant que se
 dispara en producción se detecta sin esperar al próximo build.
 
 ## Chargeback
+
 Con el ledger etiquetado por tenant y funcionalidad (esquema del evento en ADR 0013), N3 permite
 atribuir costo real (cuando hay precio en `pricing.yaml`) o consumo medido (cuando no) a quien lo
 generó — insumo para chargeback interno, no solo para observar tendencia.
 
 ## Qué NO capturar por PII
+
 Los siguientes campos de las convenciones GenAI de OpenTelemetry están marcados explícitamente como
 posible información sensible y no se capturan por defecto sin control de redacción:
 `gen_ai.input.messages`, `gen_ai.output.messages`, `gen_ai.system_instructions`,

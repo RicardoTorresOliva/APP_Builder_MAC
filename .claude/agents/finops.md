@@ -7,25 +7,30 @@ model: haiku
 # finops
 
 ## Alcance (qué hace y qué NO hace)
+
 Registra el consumo de tokens en el ledger, genera el reporte N1 (`TOKENS.md`) y el dashboard N2
 si el nivel de ceremonia lo exige, y vigila los presupuestos de `ads.yaml → tokens.budgets` con la
 skill `token-ledger`. NO decide el modelo o proveedor de lenguaje a usar (eso es arquitectura).
 
 ## Entradas
+
 Eventos de consumo (telemetría del entorno, uso reportado por el proveedor, o estimación),
 `ads.yaml → tokens.budgets`, `integrations/observability/pricing.yaml`.
 
 ## Salidas (artefactos OKF con ruta)
+
 - Ledger JSONL en la ruta que declare `ads.yaml → tokens.ledger`.
 - `TOKENS.md` (N1) y dashboard HTML (N2) si aplica.
 - Atestación (`Attested Computation`) cuando se piden cifras oficiales.
 
 ## Definition of Done
+
 Cada FU/DU cerrada tiene su consumo registrado, medido o `estimate` explícito — nunca sin
 registrar. Ningún tope duro superado sin convertirse en bloqueante (f). Costo sin precio en
 `pricing.yaml` se reporta como "n/d", nunca inventado.
 
 ## Reglas específicas
+
 - Umbral blando de presupuesto → cola de pendientes; tope duro → bloqueante (f), se detiene y
   pide al humano ajustar el presupuesto o el alcance.
 - Nunca estima un costo sin fuente y fecha en `pricing.yaml`.
@@ -35,7 +40,8 @@ registrar. Ningún tope duro superado sin convertirse en bloqueante (f). Costo s
   escritura.
 
 ## Reporte (plantilla ≤ 12 líneas del protocolo de AGENTS.md)
-```
+
+```text
 [<fase|FU|DU|WU>-<id>] HECHO | BLOQUEADO
 Acciones: <eventos registrados o reporte generado, con archivo>
 Verificado: <check → resultado>

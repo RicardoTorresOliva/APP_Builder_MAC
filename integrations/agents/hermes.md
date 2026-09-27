@@ -39,10 +39,12 @@ sources:
 # Hermes Agent — integración con ABM
 
 ## Instalación
+
 `curl -fsSL https://hermes-agent.nousresearch.com/install.sh | bash`[^hermes-skills]. Open-source,
 self-hosted, licencia MIT[^hermes-home][^hermes-license].
 
 ## Carga nativa de `AGENTS.md`
+
 Confirmado por el proveedor: Hermes carga el `AGENTS.md` del directorio de trabajo en el system
 prompt al iniciar sesión, sin flag ni configuración, recorriendo la cadena de directorios (raíz del
 repo git → cwd) — el más específico prevalece[^hermes-context-files]. Esto es lo que permite que
@@ -50,10 +52,12 @@ repo git → cwd) — el más específico prevalece[^hermes-context-files]. Esto
 gobernanza.
 
 ## Skills
+
 Fuente de verdad: `~/.hermes/skills/` (global). Proyecto: `.hermes/skills/` (nativo) o
 `.agents/skills/` (alias cross-tool, el que usa el generador de ABM)[^hermes-skills].
 
 ## Plantilla `mcp_servers`
+
 En `~/.hermes/config.yaml`, para el servidor propio de ABM y un ADS con `tools.include`
 acotado[^hermes-mcp-config]:
 
@@ -72,11 +76,12 @@ mcp_servers:
 ```
 
 ## Modo one-shot para CI
+
 `hermes chat -q "<prompt>"` o `hermes -z "<prompt>"` — scriptable, sin interacción, código de
 salida `1` en fallo/parcial/presupuesto excedido[^hermes-cli-commands]. Con `--usage-file
 usage.json` escribe costo/tokens/modelo/llamadas al terminar, incluso si falla[^hermes-cli-commands]:
 
-```
+```text
 hermes -z "revisa el último PR" --usage-file usage.json
 ./abm tokens record --source telemetry --file usage.json
 ```
@@ -85,17 +90,20 @@ hermes -z "revisa el último PR" --usage-file usage.json
 — así el consumo de una sesión Hermes en CI queda en el mismo ledger que el resto de fuentes.
 
 ## `approvals.mode`
+
 `smart` (default recomendado) \| `manual` \| `off`, en `config.yaml`. Capa adicional:
 `security.tirith_enabled`, un escáner de comandos peligrosos pre-ejecución[^hermes-config]
 [^hermes-security].
 
 ## Delegación
+
 `delegate_task` lanza subagentes sin visión de la conversación — `goal`/`context` deben ser
 autocontenidos[^hermes-repo]. Confirmado en `/adapters/hermes/SKILL.md`: un subagente que produjo
 una unidad no debe revisarla él mismo, y una delegación no es durable (si la sesión padre cierra
 antes de que el hijo responda, el trabajo se pierde en silencio).
 
 ## Limitaciones conocidas
+
 - No hay un formato de reglas con `globs` separado de `AGENTS.md` (no-verificado en la
   documentación revisada).
 - No hay un directorio `agents/<role>.md` versionable — la delegación es un mecanismo de runtime

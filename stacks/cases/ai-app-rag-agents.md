@@ -114,7 +114,6 @@ como una base de datos más con su propio plan de salida si usas una feature pro
 
 [^vercel-pricing]: Vercel — Hobby plan
 [^pinecone-pricing]: Pinecone — Pricing
-[^langfuse-pricing]: Langfuse — Pricing
 [^anthropic-pricing]: Claude Platform Docs — Pricing
 [^openai-pricing]: OpenAI API — Pricing
 [^typesafe-models]: TypeSafe AI — Models

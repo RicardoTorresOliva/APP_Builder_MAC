@@ -162,10 +162,12 @@ sources:
 - Transportes: `stdio` y `Streamable HTTP` (JSON-RPC 2.0 sobre ambos)[^mcp-spec-2025-11].
 - Autorización (HTTP únicamente; stdio usa credenciales de entorno, no OAuth): basada en **OAuth 2.1** (draft-ietf-oauth-v2-1-13) + OAuth 2.0 Protected Resource Metadata (RFC 9728, obligatorio) + Authorization Server Metadata (RFC 8414) o OpenID Connect Discovery + PKCE obligatorio con `S256` + Resource Indicators (RFC 8707)[^mcp-auth]. Client ID Metadata Documents (CIMD) es el mecanismo preferido sobre Dynamic Client Registration (RFC 7591, mantenido por compatibilidad)[^mcp-auth].
 - Handshake `initialize` (request mínimo):
+
   ```json
   {"jsonrpc":"2.0","id":1,"method":"initialize",
    "params":{"protocolVersion":"2025-11-25","capabilities":{},"clientInfo":{"name":"MyClient","version":"1.0.0"}}}
   ```
+
   Response: `{"jsonrpc":"2.0","id":1,"result":{"protocolVersion":"2025-11-25","capabilities":{...},"serverInfo":{"name":"MyServer","version":"1.0.0"}}}`. Luego el cliente envía `{"jsonrpc":"2.0","method":"notifications/initialized"}`[^mcp-lifecycle].
 - `tools/list` → `{"result":{"tools":[{"name","description","inputSchema","icons?","execution?"}],"nextCursor"}}`. `tools/call` con `{"name","arguments"}` → `{"result":{"content":[...],"isError":false,"structuredContent"?}}`[^mcp-tools].
 - Anotaciones de tool (`ToolAnnotations`, no obligatorias, tratar como no confiables salvo servidor de confianza): `readOnlyHint` (default `false`), `destructiveHint` (default `true`), `idempotentHint` (default `false`), `openWorldHint` (default `true`)[^mcp-annotations-blog][^mcp-tools].
@@ -181,10 +183,12 @@ sources:
 - `AgentInterface` (transporte): `{url, protocolBinding, protocolVersion, tenant?}`; bindings soportados: `JSONRPC`, `GRPC`, `HTTP+JSON`[^a2a-spec].
 - `AgentSkill`: `{id, name, description, tags[]}` obligatorios; `examples`, `inputModes`, `outputModes`, `securityRequirements` opcionales[^a2a-spec].
 - Ejemplo mínimo real de fetch (fragmento de respuesta):
+
   ```json
   {"capabilities":{"extendedAgentCard":true},
    "securitySchemes":{"google":{"openIdConnectSecurityScheme":{"openIdConnectUrl":"https://accounts.google.com/.well-known/openid-configuration"}}}}
   ```
+
   obtenido vía `GET /.well-known/agent-card.json`[^a2a-spec].
 - Agent Cards pueden firmarse con JWS (RFC 7515) sobre JSON canonicalizado (RFC 8785); campo `signatures`[^a2a-spec].
 - A2A se declara **complementario a MCP, no un reemplazo**: MCP conecta un agente a herramientas/datos; A2A conecta agentes entre sí[^a2a-lf-press].
@@ -244,6 +248,7 @@ sources:
 ## Implicaciones para ABM
 
 **Puntos de integración de Jev en ABM (≥3):**
+
 1. **Router metodológico y de comando** (`intent`/`decide`): al iniciar `init-project`, una llamada `choice` clasifica el encargo (greenfield/brownfield, tipo de ADS) para elegir playbook y perfil sin heurísticas frágiles en prompt. Fallback: LLM con salida JSON Schema equivalente.
 2. **Semáforo de riesgo de cada acción (verde/amarillo/rojo, §4.17)**: una `score` de 3 niveles sobre la acción propuesta decide si requiere HITL. Fallback: reglas deterministas explícitas + LLM si no matchean.
 3. **Triage de hallazgos de `review`**: `choice` (bug real / falso positivo / mejora) + `noul` de severidad alta, para priorizar antes de que un humano mire. Fallback: heurística de severidad en código + LLM.
@@ -251,6 +256,7 @@ sources:
 5. **Selección de skill/comando** (patrón oficial "skill suggestion" de TypeSafe, ya usado con el catálogo de Hermes): `choice` sobre el catálogo de comandos/skills de ABM para sugerir el siguiente paso. Fallback: matching por palabras clave + LLM.
 
 **Recetas Jev para ADS (≥5, cada una con fallback):**
+
 1. **Intent routing** de solicitudes de usuario a handler determinista/LLM barato/LLM potente/humano — fallback: LLM con salida estructurada tras el mismo umbral de confianza.
 2. **Guardrails de entrada/salida de LLM** (screening de cada mensaje, patrón oficial `llm_guardrails`) — fallback: reglas regex/deny-list + LLM juez.
 3. **Filtrado/scoring de pasajes RAG** antes de pasarlos al modelo de respuesta (patrón oficial `classifying_rag_passages`) — fallback: reranker clásico o LLM scorer.
@@ -262,6 +268,7 @@ sources:
 En todas: el **umbral de confianza escala con el riesgo de la acción** (§4.9, confidence-gated routing)[^ts-routing]; confianza baja → cola de pendientes o humano, nunca "adivinar"[^ts-confidence]. El `state` puede llevar PII → pasa por el gate de gobernanza de datos del perfil antes de llamar a Jev; la clave (`TYPESAFE_API_KEY`) solo vive en variables de entorno/gestor de secretos, nunca en código[^ts-quickstart][^ts-legal].
 
 **Qué necesita un ADS para ser operable por Hermes sin fricción:**
+
 - `AGENTS.md` en la raíz (Hermes lo autocarga; no requiere flag ni configuración)[^hermes-context-files].
 - Un `SKILL.md` de operación del ADS con frontmatter mínimo (`name`+`description`, sin claves extra de primer nivel no estándar) en `<repo>/.agents/skills/<nombre>/` para que Hermes y otros agentes lo descubran por la convención cross-tool[^hermes-skills][^agentskills-spec].
 - Servidor MCP propio (o al menos CLI con `--json`/`--dry-run`) con tools de descripción corta, `readOnlyHint`/`destructiveHint` correctos, y plantilla lista para `mcp_servers` de Hermes (`tools.include` acotado, `trust: untrusted` si el ADS no es first-party)[^mcp-tools][^hermes-mcp-config].
@@ -303,7 +310,6 @@ En todas: el **umbral de confianza escala con el riesgo de la acción** (§4.9, 
 [^hermes-context-files]: Context Files (AGENTS.md) — Hermes Agent
 [^hermes-skills]: Skills System — Hermes Agent
 [^hermes-creating-skills]: Creating Skills — Hermes Agent
-[^hermes-config]: Configuration — Hermes Agent
 [^hermes-home]: Hermes Agent — Nous Research
 [^hermes-license]: LICENSE — NousResearch/hermes-agent
 [^hermes-adapter-local]: Adaptador Hermes de ABM (repo local)

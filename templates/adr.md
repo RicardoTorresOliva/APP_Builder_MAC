@@ -12,15 +12,19 @@ generated: { by: human:tu-id, at: 2026-01-01T00:00:00Z }
 Unidad: `<FU/DU-id>` · Modo: `<IDD|SDD|SPDD|AIDD>` · Fecha: `<ISO 8601>`
 
 ## Contexto
+
 `<qué pregunta técnica había que responder; en 1-3 frases>`
 
 ## Decisión
+
 `<qué se decidió, sin relleno>`
 
 ## Alternativas consideradas
+
 - `<alternativa>` — descartada porque `<motivo>`
 
 ## Consecuencias
+
 `<qué implica esta decisión para el resto del módulo o del ADS>`
 
 <!--

@@ -13,6 +13,7 @@ ads_contract_level: extendido
 Software que una persona **usa** a través de una interfaz. Categorías, sin productos ni stack por defecto: el stack se elige con `stack` (catálogo en `stacks/`).
 
 ## design_docs
+
 - data_model: entidades, campos, relaciones, índices (ERD) — [HIGH]
 - api_contracts: endpoints, métodos, esquemas, auth, errores problem+json — [HIGH]
 - ui_wireframes: navegación, pantallas clave, flujos, estados vacíos y de error — [MEDIUM]
@@ -20,6 +21,7 @@ Software que una persona **usa** a través de una interfaz. Categorías, sin pro
 - style_guide: design system, tokens, tipografía, componentes — [LIGHT]
 
 ## foundation_unit_examples
+
 - Scaffolding (backend + frontend + contenedores) con CLIs de scaffolding
 - Capa de datos (modelos, migraciones reversibles, seeds)
 - Identidad (según la categoría elegida)
@@ -27,7 +29,9 @@ Software que una persona **usa** a través de una interfaz. Categorías, sin pro
 - Superficie agéntica base (`ads.yaml`, skill `operate-<id>`, servidor MCP) y ledger de tokens
 
 ## deliverable_unit_completeness
+
 Un DU está hecho solo si:
+
 - el backend soporta la funcionalidad y el frontend la expone;
 - el consumidor completa la acción de punta a punta, con estados vacíos y de error;
 - las capacidades nuevas están en `ads.yaml` y son operables por agentes (MCP o CLI `--json`);
@@ -35,6 +39,7 @@ Un DU está hecho solo si:
 - el consumo de tokens de la unidad está en el ledger.
 
 ## quality_gate
+
 - Estándares y checklists de `standards/frontend/`, `standards/backend/` y `standards/database/`
 - Seguridad: `standards/security/` (OWASP web, LLM y agéntico); sin secretos ni datos sensibles en código, logs, errores o UI
 - Validación de entradas, authN/authZ en rutas protegidas, consultas parametrizadas, escape de contenido
@@ -43,12 +48,15 @@ Un DU está hecho solo si:
 - `./abm ads-check` y `./abm agent-conformance` en verde
 
 ## deliverable_format
+
 - Repositorio desplegable de forma independiente, con `ads.yaml`, `AGENTS.md` y adaptadores generados
 
 ## publication_step
+
 - Build en contenedores y despliegue en la plataforma elegida en planificación (categoría)
 
 ## stack_candidates
+
 - backend: [lenguaje + framework web + acceso a datos + herramienta de migraciones]
 - frontend: [framework + lenguaje + design system + gestión de estado]
 - database: [relacional | documental | otra — según el modelo de datos]
@@ -58,13 +66,16 @@ Un DU está hecho solo si:
 - Catálogo: `stacks/cases/` (saas-web-app, internal-dashboard-bi, e-commerce, mobile-app, desktop-app, erp-crm-backoffice)
 
 ## tooling_candidates
+
 - skill de diseño de esquema: validar el modelo de datos antes de implementar
 - skill de design system: acelerar la UI
 - servidor MCP de base de datos (solo lectura por defecto)
 - servidor MCP de navegador para verificación visual
 
 ## knowledge_bundles
+
 - stack-patterns/<stack-elegido> (se crea por proyecto y se reutiliza)
 
 ## profile-specific rule
+
 - Superficie de administración/operación (logs, credenciales, ciclo de vida) **cuando los usuarios del ADS la necesitan**, no por defecto.

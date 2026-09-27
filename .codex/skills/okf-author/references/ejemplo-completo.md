@@ -37,6 +37,7 @@ propiedad a 12 meses[^benchmark-2026].
 ```
 
 ## Qué valida `abm okf validate` en este ejemplo
+
 - `type`, `title`, `description`, `status`, `generated` presentes → pasa `abm.required`.
 - `stale_after` presente porque `Stack Sheet` está en `okf.stale_required_types` → pasa
   `abm.stale_after`.
@@ -48,6 +49,7 @@ propiedad a 12 meses[^benchmark-2026].
   `abm.stale`.
 
 ## Errores comunes que esto evita
+
 - Olvidar `stale_after` en un tipo que lo exige → `abm.stale_after`.
 - Citar `[^id]` sin definirlo al final → `abm.footnote` (error).
 - Definir un `id` en `sources` y no citarlo, o citar un `id` que no está en `sources` →

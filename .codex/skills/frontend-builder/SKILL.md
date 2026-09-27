@@ -8,6 +8,7 @@ metadata: { okf_type: Skill, abm_version: "5.0.0" }
 # frontend-builder
 
 ## Pasos
+
 1. Lee `standards/frontend/standard.md` (rango relevante a la tarea) antes de escribir código.
 2. Revisa si el componente ya existe en el design system del ADS; compón antes de crear uno nuevo.
 3. Define los tokens de diseño a usar (color, tipografía, espaciado); nunca hardcodees un valor de
@@ -28,6 +29,7 @@ metadata: { okf_type: Skill, abm_version: "5.0.0" }
 11. Corre `standards/frontend/checklist-dod.md` completo antes de reportar la unidad como hecha.
 
 ## Criterios de salida
+
 - Todas las casillas de `standards/frontend/checklist-dod.md` marcadas o justificadas como
   `no-verificado` en el reporte.
 - Tests de `standards/frontend/testing.md` en verde.

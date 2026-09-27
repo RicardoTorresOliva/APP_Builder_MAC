@@ -13,6 +13,7 @@ Definido en `contract/token-event.schema.json` (ADR 0013); mapea 1:1 a atributos
 OpenTelemetry (estado "Development": ninguno es aún "Stable").
 
 ## Campos del evento
+
 | Campo | Tipo | Notas |
 |---|---|---|
 | `ts` | ISO 8601 UTC | Momento del evento. |
@@ -24,10 +25,12 @@ OpenTelemetry (estado "Development": ninguno es aún "Stable").
 | `cost` | número o `"n/d"` | Solo si hay precio en `pricing.yaml` con fuente y fecha. |
 
 ## Ruta del ledger
+
 `ads.yaml → tokens.ledger`, por defecto `ops/tokens/ledger.jsonl`. Un evento por línea (JSONL),
 nunca se reescribe una línea existente — un evento incorrecto se corrige con uno nuevo que lo anote.
 
 ## Niveles de reporte
+
 - **N1** — `TOKENS.md`, generado por `abm tokens report`: tabla agregada legible, para todo ADS.
 - **N2** — dashboard HTML estático (`abm tokens dashboard`), con presupuestos visibles; para
   ceremonia `producto` y `enterprise-regulado`.
@@ -35,15 +38,18 @@ nunca se reescribe una línea existente — un evento incorrecto se corrige con 
   ejecuta, solo documenta cómo conectarla.
 
 ## Regla de costo "n/d"
-```
+
+```text
 Si integrations/observability/pricing.yaml no tiene una fila para (provider, model)
 con fuente y fecha  →  cost: "n/d"
 Nunca: estimar un precio de memoria o por analogía con otro modelo.
 ```
+
 Esto es deliberado (ADR 0013): un "n/d" visible es preferible a un costo inventado que alguien
 podría tomar como cifra real.
 
 ## Presupuestos y bloqueante
+
 `ads.yaml → tokens.budgets` declara umbral blando y tope duro por sesión, unidad o funcionalidad.
 `abm tokens budget` falla (exit ≠ 0) si algún tope duro está superado; ese fallo es el bloqueante
 (f) de `AGENTS.md`, no una sugerencia.

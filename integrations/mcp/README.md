@@ -21,6 +21,7 @@ sources:
 # MCP en ABM — principios
 
 ## Qué es MCP, en una frase
+
 Protocolo abierto JSON-RPC 2.0 para que un agente descubra y use *tools*, *resources* y *prompts*
 de un servidor, sobre `stdio` o `Streamable HTTP`[^mcp-spec-2025-11]. ABM fija como base de
 compatibilidad la versión **2025-11-25** (la más desplegada) y tolera clientes que negocien
@@ -49,12 +50,14 @@ compatibilidad la versión **2025-11-25** (la más desplegada) y tolera clientes
    es de confianza, no bastan para decidir el nivel de riesgo[^mcp-annotations-blog][^mcp-tools].
 
 ## Cómo se activa un servidor en ABM
+
 `/integrate <plataforma>` busca primero en [catalog.md](catalog.md); si existe, genera la entrada
 en la plantilla de la herramienta activa (ver [config-by-tool.md](config-by-tool.md)) con
 `tools.include` acotado al caso de uso declarado. Si no existe, cae a la siguiente vía del orden
 de preferencia (`/integrations/README.md`).
 
 ## Servidor MCP propio de ABM
+
 ABM expone su propio servidor MCP (`python3 scripts/abm.py mcp`, stdio, biblioteca estándar) sobre
 el CLI — tools de lectura y `dry_run=true` por defecto en las de escritura, recurso
 `abm://tokens/summary` (ADR 0010). Se documenta en `config-by-tool.md` junto a un servidor de

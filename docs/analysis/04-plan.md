@@ -12,12 +12,14 @@ generated: { by: claude-code/web, at: 2026-09-27T23:24:13Z }
 Base: [diagnóstico](/docs/analysis/01-diagnostico.md), [benchmark](/docs/analysis/02-benchmark.md), [investigación agéntica](/docs/analysis/03-investigacion-agentica.md) y los ADR 0001–0016 en [docs/adr/](/docs/adr/0001-nomenclatura-abm-ads.md).
 
 ## Resumen de una pantalla
+
 - **Diagnóstico:** 1,75/5. Núcleo de gobernanza sólido; faltan contrato y superficie agéntica de los ADS, espacio de tokens, generador de adaptadores, metodologías, paridad FE/BE/DB, catálogo, turbo y CI.
 - **Decisiones clave:** ABM v5.0.0 produce ADS con `ads.yaml` (ADR 0009); tooling Python stdlib con `--json` (ADR 0003); adaptadores generados para 9 herramientas (ADR 0002); OKF v0.2 en todo (ADR 0004); MCP 2025-11-25 y servidor MCP propio (ADR 0010); capa System One con Jev → LLM → reglas (ADR 0011); turbo por defecto con cola de pendientes (ADR 0014); núcleo sin productos, verificado por lint (ADR 0016).
 - **Roadmap:** 16 WU; núcleo y contrato primero, contenido en paralelo, verificación al final.
 
 ## Arquitectura objetivo
-```
+
+```text
 AGENTS.md                 # canónico (≤ 150 líneas): identidad, reglas, turbo, protocolo de salida, punteros
 abm.yaml                  # configuración de ABM/ADS: modo, OKF, presupuestos, lint, decisión
 ads.yaml                  # manifiesto del Contrato ADS de ABM (perfil api-service, nivel extendido)
@@ -48,6 +50,7 @@ planning/ implementation/ design_docs/ deliverables/ knowledge/   # espacio de t
 ```
 
 ## Plan de migración
+
 | Antes (v4.1) | Después (v5) | Compatibilidad |
 |---|---|---|
 | `scripts/*.sh` | `abm <orden>` (Python) | los `.sh` quedan como shims |
@@ -60,6 +63,7 @@ planning/ implementation/ design_docs/ deliverables/ knowledge/   # espacio de t
 | 6 comandos | 36 comandos | los 6 conservan nombre |
 
 ## Roadmap de WU
+
 | WU | Objetivo | Archivos | Aceptación | Verificación |
 |---|---|---|---|---|
 | WU1 | Núcleo | `AGENTS.md`, `abm.yaml`, `okf/`, `scripts/abmkit/`, `abm`, `abm.cmd`, `docs/glossary.md`, `index.md`, `log.md`, frontmatter de todo `.md` | `AGENTS.md` ≤ 150 líneas; todo `.md` conforme | `abm okf validate`, `abm token-budget` |
@@ -80,6 +84,7 @@ planning/ implementation/ design_docs/ deliverables/ knowledge/   # espacio de t
 | WU16 | Documentos de proyecto | README, CHANGELOG, MIGRATION, CONTRIBUTING, SECURITY, LICENSE | completos | OKF + enlaces |
 
 ## Paralelización
+
 - Secuencial: WU1 → WU3 (el contenido depende del perfil OKF y del contrato).
 - En paralelo con subagentes (rutas disjuntas): WU4, WU5, WU6, WU10+WU9, WU11; el orquestador hace WU2, WU7, WU8, WU12, WU13.
 - Después: WU14 (depende de WU5), WU15, WU16, Fase 4.

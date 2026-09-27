@@ -16,23 +16,29 @@ reclasifica a SDD (`/methodology/router.md`) antes de continuar.
 ## Árbol de intención
 
 ### Propósito
+
 `<por qué existe este módulo; qué problema real resuelve, en una frase>`
 
 ### Usuario
+
 - Para quién: `<rol o persona concreta, no "todos"`
 - Situación en la que lo necesita: `<contexto de uso>`
 
 ### Medios
+
 - `<qué capacidad concreta lo logra — no la implementación, la capacidad>`
 - `<otra capacidad, si aplica>`
 
 ## Restricciones
+
 - `<técnica, de negocio o de plazo que el agente no puede cruzar>`
 
 ## Criterios de éxito (medibles)
+
 - `<criterio verificable, no "funciona bien" — p. ej. "el usuario completa X en menos de Y pasos">`
 
 ## No-objetivos
+
 - `<algo que explícitamente NO se construye ahora, para evitar alcance implícito>`
 
 ## Estado

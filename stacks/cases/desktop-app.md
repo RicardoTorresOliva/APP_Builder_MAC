@@ -91,4 +91,3 @@ directamente.
 [^electron-timeline]: Electron — Release timelines
 [^flyio-pricing]: Fly.io — Resource pricing
 [^apple-dev-fee]: Apple Developer Program
-[^coolify]: Coolify — Self-hosted

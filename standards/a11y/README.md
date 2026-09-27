@@ -13,6 +13,7 @@ Piso mínimo: **WCAG 2.2 nivel AA**, en toda interfaz con usuario humano (web, d
 con framework de componentes).
 
 ## Checklist
+
 - [ ] Contraste de texto normal ≥ 4.5:1; texto grande (≥ 18pt o 14pt negrita) ≥ 3:1.
 - [ ] Todo control interactivo es operable por teclado, sin trampas de foco; orden de tabulación
       sigue el orden visual.
@@ -28,5 +29,6 @@ con framework de componentes).
 - [ ] Verificado con al menos un lector de pantalla y navegación 100 % por teclado en la ruta crítica.
 
 ## Verificación
+
 `skills/a11y-audit/SKILL.md` recorre este checklist; el resultado (ítem → pasa/falla → evidencia) va
 en `standards/frontend/checklist-dod.md` de la unidad auditada.

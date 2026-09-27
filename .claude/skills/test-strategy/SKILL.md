@@ -8,6 +8,7 @@ metadata: { okf_type: Skill, abm_version: "5.0.0" }
 # test-strategy
 
 ## Pasos
+
 1. Lee `standards/testing/README.md` y el `testing.md` de la(s) capa(s) que toca la unidad
    (`standards/frontend/testing.md`, `standards/backend/testing.md`, `standards/database/testing.md`).
 2. Identifica qué de la unidad es lógica pura (candidata a unitario), qué es integración entre
@@ -25,6 +26,7 @@ metadata: { okf_type: Skill, abm_version: "5.0.0" }
 8. Registra el resultado por nivel (verde/rojo, cuántos) en el reporte de cierre.
 
 ## Criterios de salida
+
 - Cobertura de lógica crítica dentro del mínimo que el perfil activo exige.
 - Ningún nivel de la pirámide vacío si la unidad tiene lógica, integración y ruta crítica que lo
   ameriten.
