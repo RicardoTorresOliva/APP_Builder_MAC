@@ -1,7 +1,7 @@
 ---
 name: okf-author
 description: Cómo escribir un documento Markdown conforme a OKF v0.2 + perfil ABM — frontmatter, sources y notas al pie, stale_after, la convención generated/verified, index.md y log.md. Actívala cada vez que vayas a crear o editar un .md fuera de un SKILL.md (que sigue Agent Skills, no OKF).
-license: MIT
+license: "Propietaria SLG (ver LICENSE)"
 metadata: { okf_type: Skill, abm_version: "5.0.0" }
 ---
 

@@ -1,7 +1,7 @@
 ---
 name: operate-abm
 description: Cómo cualquier agente externo (CLI de agentes, IDE con agente, orquestador) opera ABM directamente — CLI `./abm` con --json, servidor MCP `abm mcp` y sus tools abm_*, cola de pendientes y tokens. Actívala cuando el agente vaya a ejecutar una orden de ABM, verificar antes de terminar una unidad, o cuando otro agente pregunte cómo trabajar con este repo. Es la skill operate-abm que el Contrato ADS exige para el propio ABM.
-license: MIT
+license: "Propietaria SLG (ver LICENSE)"
 metadata: { okf_type: Skill, abm_version: "5.0.0" }
 ---
 

@@ -1,7 +1,7 @@
 ---
 name: methodology-router
 description: Cómo clasificar un encargo y sus módulos en un modo metodológico (VIBE, IDD, SDD, SPDD, AIDD) con ./abm methodology classify, escribir el methodology-map.md del ADS y saber cuándo escalar a revisión humana. Actívala al iniciar un ADS, al añadir un módulo nuevo, o cuando el módulo toque pagos, auth o datos personales/de salud.
-license: MIT
+license: "Propietaria SLG (ver LICENSE)"
 metadata: { okf_type: Skill, abm_version: "5.0.0" }
 ---
 

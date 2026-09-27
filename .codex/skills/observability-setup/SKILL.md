@@ -1,7 +1,7 @@
 ---
 name: observability-setup
 description: Instrumenta logs estructurados, trazas y métricas OpenTelemetry en un servicio, y conecta el ledger de tokens/costo, siguiendo standards/observability/ y standards/finops/. Úsala al construir un servicio nuevo o al agregar una integración con un modelo de lenguaje.
-license: MIT
+license: "Propietaria SLG (ver LICENSE)"
 metadata: { okf_type: Skill, abm_version: "5.0.0" }
 ---
 

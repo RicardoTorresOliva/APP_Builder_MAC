@@ -1,7 +1,7 @@
 ---
 name: perf-audit
 description: Mide rendimiento contra los umbrales de standards/ — Core Web Vitals en frontend, SLO/latencia en backend, plan de consultas en database. Úsala antes de un release o cuando se sospecha una regresión de rendimiento.
-license: MIT
+license: "Propietaria SLG (ver LICENSE)"
 metadata: { okf_type: Skill, abm_version: "5.0.0" }
 ---
 

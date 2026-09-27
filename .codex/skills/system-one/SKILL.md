@@ -1,7 +1,7 @@
 ---
 name: system-one
 description: Cómo formular una decisión corta como preguntas tipadas atómicas (choice, score, boolean) con confianza y fallback, y llamarla con ./abm decide. Actívala para triage de riesgo, clasificación, enrutamiento de intención o cualquier decisión chica que hoy resolverías con un párrafo de razonamiento en el prompt.
-license: MIT
+license: "Propietaria SLG (ver LICENSE)"
 metadata: { okf_type: Skill, abm_version: "5.0.0" }
 ---
 

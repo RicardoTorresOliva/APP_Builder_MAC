@@ -1,7 +1,7 @@
 ---
 name: review-independent
 description: Cómo hacer una revisión adversarial independiente de un milestone o DU ya construido — contexto limpio, ./abm check, hallazgos con evidencia archivo:línea y severidad, nunca "parece bien" sin más. Actívala al cierre de cada milestone, o cuando alguien pida una segunda opinión sobre trabajo ya hecho.
-license: MIT
+license: "Propietaria SLG (ver LICENSE)"
 metadata: { okf_type: Skill, abm_version: "5.0.0" }
 ---
 

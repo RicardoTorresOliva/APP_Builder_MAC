@@ -1,7 +1,7 @@
 ---
 name: api-builder
 description: Diseña o modifica un endpoint de API (REST/OpenAPI, GraphQL o RPC tipado) aplicando el estándar de backend de ABM — contrato primero, errores problem+json, authN/authZ, idempotencia, observabilidad y superficie agéntica. Úsala en cualquier FU/DU que agregue o cambie una API.
-license: MIT
+license: "Propietaria SLG (ver LICENSE)"
 metadata: { okf_type: Skill, abm_version: "5.0.0" }
 ---
 

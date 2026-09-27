@@ -1,7 +1,7 @@
 ---
 name: test-strategy
 description: Decide qué tests escribir y en qué nivel de la pirámide (unitario, integración/componente, E2E/contrato) para una FU/DU, siguiendo standards/testing/. Úsala al planificar la cobertura de una unidad antes de construirla, o al auditar por qué una unidad no tiene evidencia suficiente.
-license: MIT
+license: "Propietaria SLG (ver LICENSE)"
 metadata: { okf_type: Skill, abm_version: "5.0.0" }
 ---
 

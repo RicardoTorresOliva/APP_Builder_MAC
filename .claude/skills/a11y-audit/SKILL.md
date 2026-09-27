@@ -1,7 +1,7 @@
 ---
 name: a11y-audit
 description: Audita una interfaz existente contra el checklist WCAG 2.2 AA de standards/a11y/README.md — contraste, teclado, foco, nombres accesibles, zoom. Úsala antes de un release de UI o cuando se reporta un problema de accesibilidad.
-license: MIT
+license: "Propietaria SLG (ver LICENSE)"
 metadata: { okf_type: Skill, abm_version: "5.0.0" }
 ---
 

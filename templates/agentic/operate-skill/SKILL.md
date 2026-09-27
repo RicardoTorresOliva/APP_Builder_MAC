@@ -1,7 +1,7 @@
 ---
 name: operate-<id>
 description: Opera el ADS <Nombre> — consulta su estado, ejecuta sus capacidades y revisa su consumo de tokens. Úsala cuando un agente deba usar, diagnosticar o automatizar <Nombre>.
-license: MIT
+license: "<licencia del ADS>"
 metadata: { okf_type: Skill, abm_version: "5.0.0" }
 ---
 # Operar <Nombre>

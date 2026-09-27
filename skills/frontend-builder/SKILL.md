@@ -1,7 +1,7 @@
 ---
 name: frontend-builder
 description: Construye o modifica una interfaz de usuario (componentes, páginas, formularios) aplicando el estándar de frontend de ABM — design system y tokens, accesibilidad WCAG 2.2 AA, responsive, Core Web Vitals, i18n/SEO y estados vacíos/error. Úsala en cualquier FU/DU de UI, antes de dar por hecho un componente o pantalla.
-license: MIT
+license: "Propietaria SLG (ver LICENSE)"
 metadata: { okf_type: Skill, abm_version: "5.0.0" }
 ---
 

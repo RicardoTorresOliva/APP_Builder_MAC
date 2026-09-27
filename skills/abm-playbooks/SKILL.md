@@ -1,7 +1,7 @@
 ---
 name: abm-playbooks
 description: Catálogo de los playbooks de ABM (comandos) para herramientas sin slash commands. Úsala al empezar o retomar un proyecto ABM, o cuando necesites planificar, construir, revisar, medir tokens o iterar un ADS.
-license: MIT
+license: "Propietaria SLG (ver LICENSE)"
 metadata: { okf_type: Skill, abm_version: "5.0.0", generated: "abm sync" }
 ---
 <!-- GENERADO por abm sync desde commands/*.md. No editar. -->

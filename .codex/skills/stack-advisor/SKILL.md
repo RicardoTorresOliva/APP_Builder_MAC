@@ -1,7 +1,7 @@
 ---
 name: stack-advisor
 description: Cómo recomendar un stack para un ADS usando el catálogo de stacks/, respetando que la elección final es humano-en-el-bucle (HITL), consciente de costo, y sabiendo cuándo NO recomendar nada. Actívala en init-project/stack, o cuando alguien pida "qué tecnología uso" para una parte del ADS.
-license: MIT
+license: "Propietaria SLG (ver LICENSE)"
 metadata: { okf_type: Skill, abm_version: "5.0.0" }
 ---
 

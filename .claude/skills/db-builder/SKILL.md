@@ -1,7 +1,7 @@
 ---
 name: db-builder
 description: Modela o modifica el esquema de datos (migraciones, índices, RLS, seeds) aplicando el estándar de database de ABM — ERD en Mermaid, migraciones reversibles, integridad, auditoría, multi-tenant y privacidad. Úsala en cualquier FU/DU que cambie el esquema.
-license: MIT
+license: "Propietaria SLG (ver LICENSE)"
 metadata: { okf_type: Skill, abm_version: "5.0.0" }
 ---
 

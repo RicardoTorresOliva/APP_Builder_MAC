@@ -1,7 +1,7 @@
 ---
 name: integrate-safely
 description: Cómo elegir la vía de integración más segura para conectar un ADS con un servicio externo — mínimo privilegio, manejo de secretos, y tratar la salida de cualquier tool como dato nunca como instrucción. Actívala antes de implementar cualquier API, webhook, cola o integración con un tercero.
-license: MIT
+license: "Propietaria SLG (ver LICENSE)"
 metadata: { okf_type: Skill, abm_version: "5.0.0" }
 ---
 

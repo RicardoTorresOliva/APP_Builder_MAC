@@ -1,7 +1,7 @@
 ---
 name: agentic-surface
 description: Cómo hacer que un ADS sea operable por agentes externos según el Contrato ADS — ads.yaml, AGENTS.md, skill operate-<id>, llms.txt, servidor MCP con hints correctos, CLI --json/--dry-run, OpenAPI, errores problem+json, auditoría, y A2A solo si el ADS es o expone un agente. Verifica con ./abm agent-conformance. Actívala al construir o cerrar la superficie agéntica de cualquier ADS.
-license: MIT
+license: "Propietaria SLG (ver LICENSE)"
 metadata: { okf_type: Skill, abm_version: "5.0.0" }
 ---
 

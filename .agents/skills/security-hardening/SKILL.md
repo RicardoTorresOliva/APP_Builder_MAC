@@ -1,7 +1,7 @@
 ---
 name: security-hardening
 description: Revisa una superficie web/API o un diseño de agente/LLM contra OWASP Top 10, ASVS, OWASP GenAI LLM Top 10 y OWASP Top 10 for Agentic Applications, y contra la cadena de suministro (lockfiles, SBOM, secretos). Úsala antes de un release, al otorgar una herramienta nueva a un agente, o cuando se agrega una dependencia.
-license: MIT
+license: "Propietaria SLG (ver LICENSE)"
 metadata: { okf_type: Skill, abm_version: "5.0.0" }
 ---
 

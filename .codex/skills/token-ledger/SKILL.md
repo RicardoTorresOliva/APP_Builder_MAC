@@ -1,7 +1,7 @@
 ---
 name: token-ledger
 description: Cómo registrar consumo de tokens con ./abm tokens record|estimate, generar el reporte N1 y el dashboard N2, vigilar presupuestos y atestar cifras oficiales. Actívala al cerrar cualquier FU/DU, al iniciar sesión para leer el resumen, o cuando un presupuesto de ads.yaml esté cerca del tope.
-license: MIT
+license: "Propietaria SLG (ver LICENSE)"
 metadata: { okf_type: Skill, abm_version: "5.0.0" }
 ---
 
