@@ -1,0 +1,18 @@
+# Precios de modelos LLM y de la capa System One, en USD por millón de tokens (Mtok).
+# Fuentes oficiales verificadas el 2026-09-27: platform.claude.com (Anthropic), developers.openai.com
+# (OpenAI), ai.google.dev (Google), docs.typesafe.ai (TypeSafe AI / Jev). Consumida por
+# scripts/abmkit/tokens.py (`load_pricing`) para calcular costo en `abm tokens report`.
+# Clave = "<provider>/<model-id>" exactamente como el id de API. Sin precio verificado → se omite
+# aquí y la ficha de stack correspondiente dice "n/d (no-verificado)".
+reviewed: "2026-09-27"
+stale_after: "2026-12-28T00:00:00Z"
+models:
+  "anthropic/claude-sonnet-5": { input_per_mtok: 2, output_per_mtok: 10, source: "https://platform.claude.com/docs/en/about-claude/pricing" }
+  "anthropic/claude-opus-5-5": { input_per_mtok: 4, output_per_mtok: 20, source: "https://platform.claude.com/docs/en/about-claude/pricing" }
+  "anthropic/claude-haiku-4-5-20251001": { input_per_mtok: 1, output_per_mtok: 5, source: "https://platform.claude.com/docs/en/about-claude/pricing" }
+  "openai/gpt-6-sol": { input_per_mtok: 2, output_per_mtok: 10, source: "https://developers.openai.com/api/docs/pricing" }
+  "openai/gpt-6-luna": { input_per_mtok: 0.10, output_per_mtok: 0.50, source: "https://developers.openai.com/api/docs/pricing" }
+  "openai/gpt-6-astra": { input_per_mtok: 10, output_per_mtok: 50, source: "https://developers.openai.com/api/docs/pricing" }
+  "google/gemini-3.1-pro-preview": { input_per_mtok: 2, output_per_mtok: 12, source: "https://ai.google.dev/gemini-api/docs/pricing" }
+  "google/gemini-3-flash-preview": { input_per_mtok: 0.50, output_per_mtok: 3, source: "https://ai.google.dev/gemini-api/docs/pricing" }
+  "typesafe/jev-latest": { input_per_mtok: 0.042, output_per_mtok: 0, source: "https://docs.typesafe.ai/models" }
