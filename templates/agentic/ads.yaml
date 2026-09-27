@@ -1,0 +1,52 @@
+# ads.yaml — Contrato ADS (contract/README.md). Reemplaza los valores entre <>. Verifica con ./abm ads-check.
+id: <id-kebab-case>
+name: <Nombre del ADS>
+version: 0.1.0
+profile: <software-app | api-service | data-product | research-report | intelligence-product | automation-integration>
+contract_level: <minimo | extendido>        # nunca menor que el del perfil
+owner: <equipo o persona>
+description: <una frase: qué es y para quién>
+
+capabilities:                               # lo que un agente puede hacer con el ADS
+  - { id: status, description: "Estado del ADS", mode: read, cli: "python3 ops/mcp_server.py --cli status", mcp_tool: status }
+  # - { id: <accion>, description: "<...>", mode: write, mcp_tool: <accion> }
+  # - { id: <borrar-algo>, description: "<...>", mode: destructive, mcp_tool: <borrar_algo> }   # exige hitl_actions
+
+endpoints:
+  agents_md: AGENTS.md
+  skill: skills/operate-<id>/SKILL.md
+  llms_txt: llms.txt
+  mcp: { transport: stdio, command: "python3 ops/mcp_server.py", protocol: "2025-11-25" }   # extendido
+  cli: { command: "python3 ops/mcp_server.py --cli", json_flag: "(siempre JSON)", dry_run_flag: "--dry-run" }  # extendido (o api)
+  # api: { openapi: api/openapi.yaml, errors: application/problem+json }
+  # a2a_card: .well-known/agent-card.json                                                   # solo si el ADS es un agente
+
+docs:
+  okf_index: index.md
+  manual: docs/manual/
+
+auth: { type: <none | api-key | oauth2 | mtls>, agent_scopes: [<scope-minimo>] }
+limits: { rate: "<n req/min>", max_payload_kb: 512 }
+
+tokens:
+  level: <N1 | N2 | N3>
+  ledger: ops/tokens/ledger.jsonl
+  report: TOKENS.md
+  dashboard: ops/tokens/dashboard.html
+  budgets:
+    unit: { soft: 200000, hard: 800000 }
+    feature: { soft: 100000, hard: 500000 }
+    total: { soft: 3000000, hard: 6000000 }
+
+portability:
+  languages: [<lenguaje>]
+  llm_providers: [<proveedor | none>]
+  llm_gateway: "<gateway o none>"
+  clouds: [<nube | on-prem | none>]
+  iac: <herramienta IaC | none>
+  exit_plan: docs/exit-plan.md
+
+security:
+  secrets: env                              # env | secret-manager
+  agent_audit_log: ops/audit/agent-actions.jsonl
+  hitl_actions: []                          # ids de capacidades destructive

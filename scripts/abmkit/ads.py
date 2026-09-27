@@ -107,6 +107,9 @@ def check_manifest(root: Path, manifest: Path):
             err("ads.ext.audit", "nivel extendido exige `security.agent_audit_log`")
         if not port.get("exit_plan"):
             warn("ads.ext.exit_plan", "nivel extendido: documenta `portability.exit_plan`")
+    import json as _json
+    if re.search(r"<[^<>\n]{2,60}>", _json.dumps(m, ensure_ascii=False)):
+        warn("ads.placeholder", "quedan valores de plantilla <...> en ads.yaml: complétalos en init-project")
     destructive = [c.get("id") for c in m.get("capabilities") or [] if isinstance(c, dict) and c.get("mode") == "destructive"]
     hitl = set(sec.get("hitl_actions") or [])
     for d in destructive:

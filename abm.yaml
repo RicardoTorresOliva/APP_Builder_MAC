@@ -25,6 +25,7 @@ okf:
     - "CLAUDE.md"
     - "GEMINI.md"
     - "skills/**/SKILL.md"
+    - "templates/agentic/**/SKILL.md"
     - "examples/**/node_modules/**"
     - "deliverables/**"
   index_order: ["(raíz)", docs, commands, skills, agents, methodology, standards, stacks, integrations, templates, profiles, contract, okf, knowledge, examples]

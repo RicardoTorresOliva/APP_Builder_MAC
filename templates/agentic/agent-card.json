@@ -1,0 +1,16 @@
+{
+  "name": "<Nombre del ADS>",
+  "description": "<Qué hace el agente y para quién>",
+  "version": "0.1.0",
+  "supportedInterfaces": [
+    { "url": "https://<dominio>/a2a", "protocolBinding": "JSONRPC", "protocolVersion": "1.0" }
+  ],
+  "capabilities": { "streaming": false, "pushNotifications": false },
+  "defaultInputModes": ["text/plain", "application/json"],
+  "defaultOutputModes": ["application/json"],
+  "skills": [
+    { "id": "<skill-id>", "name": "<Nombre de la habilidad>", "description": "<Qué hace>", "tags": ["<etiqueta>"] }
+  ],
+  "provider": { "organization": "<organización>", "url": "https://<dominio>" },
+  "documentationUrl": "https://<dominio>/llms.txt"
+}

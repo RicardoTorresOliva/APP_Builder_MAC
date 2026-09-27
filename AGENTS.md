@@ -84,7 +84,7 @@ Detalle y ejemplos: `standards/communication.md`.
 | Metodologías y plantillas | `methodology/`, `templates/` |
 | Estándares FE/BE/DB, seguridad, tests, agentes, finops | `standards/` |
 | Stacks, nubes, LLMs, legacy | `stacks/` |
-| MCP, APIs, Hermes, capa System One, observabilidad | `integrations/` |
+| MCP, APIs, agentes externos, capa System One, observabilidad | `integrations/` |
 | Contrato ADS y esquemas | `contract/`, `okf/` |
 | Estado del proyecto | `docs/project_memory.md`, `implementation/task_tracker.md`, `docs/_work/PENDIENTES.md` |
 | CLI | `./abm --help` (Windows: `abm.cmd`); toda orden admite `--json` y `--dry-run` si escribe |
