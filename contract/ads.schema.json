@@ -1,0 +1,43 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://abm.local/contract/ads.schema.json",
+  "title": "Manifiesto ads.yaml — Contrato ADS",
+  "description": "Documenta la forma de ads.yaml. El validador ejecutable es `abm ads-check`.",
+  "type": "object",
+  "required": ["id", "name", "version", "profile", "owner", "description", "capabilities", "endpoints", "tokens", "portability", "security"],
+  "properties": {
+    "id": {"type": "string", "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"},
+    "name": {"type": "string"},
+    "version": {"type": "string", "pattern": "^\\d+\\.\\d+\\.\\d+(-[0-9A-Za-z.-]+)?(\\+[0-9A-Za-z.-]+)?$"},
+    "profile": {"type": "string"},
+    "contract_level": {"enum": ["minimo", "extendido"]},
+    "owner": {"type": "string"},
+    "description": {"type": "string"},
+    "capabilities": {
+      "type": "array", "minItems": 1,
+      "items": {"type": "object", "required": ["id", "description", "mode"], "properties": {
+        "id": {"type": "string"}, "description": {"type": "string"},
+        "mode": {"enum": ["read", "write", "destructive"]},
+        "cli": {"type": "string"}, "mcp_tool": {"type": "string"}, "http": {"type": "string"}}}
+    },
+    "endpoints": {"type": "object", "required": ["agents_md", "skill", "llms_txt"], "properties": {
+      "agents_md": {"type": "string"}, "skill": {"type": "string"}, "llms_txt": {"type": "string"},
+      "mcp": {"type": "object", "properties": {"transport": {"enum": ["stdio", "http"]}, "command": {"type": "string"}, "url": {"type": "string"}, "protocol": {"type": "string"}}},
+      "cli": {"type": "object", "properties": {"command": {"type": "string"}, "json_flag": {"type": "string"}, "dry_run_flag": {"type": "string"}}},
+      "api": {"type": "object", "properties": {"openapi": {"type": "string"}, "errors": {"const": "application/problem+json"}}},
+      "a2a_card": {"type": "string"}}},
+    "docs": {"type": "object", "properties": {"okf_index": {"type": "string"}, "manual": {"type": "string"}}},
+    "auth": {"type": "object"},
+    "limits": {"type": "object"},
+    "tokens": {"type": "object", "required": ["level", "ledger", "report"], "properties": {
+      "level": {"enum": ["N1", "N2", "N3"]}, "ledger": {"type": "string"}, "report": {"type": "string"}, "dashboard": {"type": "string"},
+      "budgets": {"type": "object", "additionalProperties": {"oneOf": [{"type": "integer"}, {"type": "object", "properties": {"soft": {"type": "integer"}, "hard": {"type": "integer"}}}]}}}},
+    "portability": {"type": "object", "required": ["languages", "llm_providers"], "properties": {
+      "languages": {"type": "array", "items": {"type": "string"}}, "llm_providers": {"type": "array", "items": {"type": "string"}},
+      "llm_gateway": {"type": "string"}, "clouds": {"type": "array", "items": {"type": "string"}}, "iac": {"type": "string"}, "exit_plan": {"type": "string"}}},
+    "security": {"type": "object", "required": ["secrets"], "properties": {
+      "secrets": {"enum": ["env", "secret-manager"]}, "agent_audit_log": {"type": "string"}, "hitl_actions": {"type": "array", "items": {"type": "string"}}}},
+    "slo": {"type": "object"},
+    "environments": {"type": "array", "items": {"type": "string"}}
+  }
+}

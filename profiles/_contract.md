@@ -1,7 +1,11 @@
 ---
-type: asset-profile-contract
-title: Asset Profile Contract
-version: 1.0
+type: Profile Contract
+title: Contrato de perfiles de ADS
+description: Esquema que todo perfil de ADS debe seguir y reglas de composición de perfiles híbridos.
+tags: [perfil, contrato]
+status: stable
+generated: { by: claude-code/web, at: 2026-09-27T23:34:39Z }
+version: "2.0"
 ---
 
 # Asset Profile Contract
@@ -29,8 +33,13 @@ fill every field, and place it at `profiles/<name>/profile.md`.
 
 ```markdown
 ---
-type: asset-profile
+type: Asset Profile
 title: <profile-name>
+description: <una frase>
+tags: [perfil, ads]
+status: stable
+generated: { by: <actor>, at: <ISO 8601 UTC> }
+ads_contract_level: minimo | extendido     # nivel mínimo del Contrato ADS (contract/README.md)
 ---
 # Asset Profile: <profile-name>
 
@@ -70,6 +79,12 @@ title: <profile-name>
 - <bundle reference>
 ```
 
+## v5 additions
+
+- `ads_contract_level` (required): minimum ADS Contract level. A composed profile takes the highest level of its parts.
+- Completeness and quality gate include the agentic surface (`abm ads-check`, `abm agent-conformance`) and the token ledger.
+- Profile text is Spanish (ADR 0008); field keys stay in English.
+
 ## How the core consumes a profile
 
 - `AGENTS.md → Asset Profile` reads these fields at planning and execution time.
@@ -89,8 +104,9 @@ A composed profile declares `composes:` and supplies only the *glue* (how the ca
 
 ```markdown
 ---
-type: asset-profile
+type: Asset Profile
 title: intelligence-product
+ads_contract_level: extendido               # the highest level among composed profiles
 composes: [research-report, data-product]   # references, never duplicates
 ---
 # Glue only: how the parts relate (e.g. the narrative cites the dataset;
@@ -121,5 +137,7 @@ hybrids while authoring only *n* profiles (optionality; via negativa; barbell).
 - `software-app` — reference profile; reproduces v3.1 software behavior, categories only, no lock-in.
 - `research-report` — a document that is *read*: synthesized knowledge argued from cited sources.
 - `data-product` — a dataset/dashboard that is *queried*: refined data made consultable.
+- `api-service` — v5: a service/tool consumed by programs or agents (API, CLI, MCP server), no own UI.
+- `automation-integration` — v5: flows between systems (integrations, automations, process agents).
 - `intelligence-product` — **composed** (`research-report` + `data-product`): the consulting hybrid —
   an argued report backed by a validated dataset/dashboard. Validation case for v4.1 generalization.

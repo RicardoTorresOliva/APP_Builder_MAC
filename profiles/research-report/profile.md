@@ -1,58 +1,61 @@
 ---
-type: asset-profile
+type: Asset Profile
 title: research-report
+description: Documento que se lee: conocimiento sintetizado y argumentado desde fuentes citadas.
+tags: [perfil, ads]
+status: stable
+generated: { by: claude-code/web, at: 2026-09-27T23:34:39Z }
+ads_contract_level: minimo
 ---
 
-# Asset Profile: research-report
+# Perfil: research-report
 
-A digital asset that is **read**: synthesized knowledge argued from cited sources (market analysis,
-due diligence, strategy white paper, literature review). The consumer reads it.
+ADS que se **lee**: análisis de mercado, due diligence, white paper de estrategia, revisión de literatura.
 
 ## design_docs
-- outline: the argument structure, section by section — [HIGH]
-- thesis: the central claim and what would prove/disprove it — [HIGH]
-- source_map: catalog of sources with credibility notes — [MEDIUM]
-- evidence_table: claim → supporting source(s) → strength — [MEDIUM]
-- style_guide: voice, citation format, formatting conventions — [LIGHT]
+- outline: estructura del argumento por sección — [HIGH]
+- thesis: tesis central y qué la probaría o refutaría — [HIGH]
+- source_map: catálogo de fuentes con notas de credibilidad (`sources` OKF) — [MEDIUM]
+- evidence_table: afirmación → fuente(s) → fuerza — [MEDIUM]
+- style_guide: voz, formato de citas, convenciones — [LIGHT]
 
 ## foundation_unit_examples
-- Frame the research question and scope
-- Gather and vet sources; build the evidence base
-- Define the argument skeleton (outline + thesis)
+- Encuadrar la pregunta de investigación y el alcance
+- Reunir y validar fuentes; construir la base de evidencia
+- Esqueleto del argumento (outline + tesis)
 
 ## deliverable_unit_completeness
-A DU (a section/chapter) is done only when:
-- It is written and reads coherently end-to-end
-- Every claim is sourced (no orphan assertions)
-- It is fact-checked against the sources
-- It fits the overall argument (no contradiction with thesis/other sections)
-- Open questions are flagged, not hidden
+Un DU (sección o capítulo) está hecho solo si:
+- se lee con coherencia de principio a fin;
+- toda afirmación tiene fuente (nota al pie ligada a `sources`), sin afirmaciones huérfanas;
+- está contrastado con las fuentes y encaja con la tesis;
+- las preguntas abiertas están señaladas, no ocultas;
+- el documento es OKF y lo puede navegar un agente (índice + `llms.txt`).
 
 ## quality_gate
-Apply after each section and at final audit:
-- Citation integrity — every claim traceable to a real, cited source
-- Source credibility — sources vetted, no low-quality/circular sourcing
-- No fabrication — no invented facts, quotes, or statistics
-- Balance — major counter-positions represented fairly
-- Factual accuracy — figures and names verified
-- Internal consistency — no claim contradicts another
+- Integridad de citas: cada afirmación trazable a una fuente real
+- Credibilidad de fuentes: sin fuentes circulares o de baja calidad
+- Cero invención: ni datos, ni citas, ni estadísticas inventadas
+- Balance: contraposiciones relevantes representadas
+- Exactitud de cifras y nombres; consistencia interna
 
 ## deliverable_format
-- A document (markdown / docx / pdf); optionally a summary deck
+- Documento (markdown / procesador de texto / PDF) en OKF; opcionalmente un resumen ejecutivo
 
-## publication_step      # CATEGORY, not a product
-- Export to the chosen document format + editorial review pass
+## publication_step
+- Exportar al formato elegido + pasada de revisión editorial
 
-## stack_candidates      # categories; chosen via human-in-the-loop
-- authoring: [markdown-first | word-processor-first]
-- citation system: [inline | footnote | reference manager]
-- output rendering: [doc generator category]
+## stack_candidates
+- autoría: [markdown primero | procesador de texto primero]
+- citas: [en línea | notas al pie | gestor de referencias]
+- render: [generador de documentos]
+- Catálogo: `stacks/cases/intelligence-product.md`
 
-## tooling_candidates    # cost-aware
-- web-search/research MCP: gather and verify sources
-- citation/fact-check skill: enforce sourcing and verify claims
-- document-generation skill: render the final format
+## tooling_candidates
+- servidor MCP de búsqueda/investigación web
+- skill de citas y verificación de hechos
+- skill de generación de documentos
 
 ## knowledge_bundles
-- editorial-standards/<house-style> (citation format, voice, structure conventions)
-- domain-context/<topic> (background knowledge for the subject area)
+- editorial-standards/<estilo-de-la-casa>
+- domain-context/<tema>

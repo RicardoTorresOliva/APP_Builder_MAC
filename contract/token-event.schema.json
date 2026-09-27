@@ -1,0 +1,27 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://abm.local/contract/token-event.schema.json",
+  "title": "Evento del ledger de tokens",
+  "description": "Una línea JSON del ledger (ads.yaml → tokens.ledger). Alineado con OpenTelemetry GenAI (gen_ai.*, estado Development).",
+  "type": "object",
+  "required": ["ts", "phase", "source", "input_tokens", "output_tokens"],
+  "properties": {
+    "ts": {"type": "string", "description": "ISO 8601 UTC"},
+    "phase": {"enum": ["build", "run"], "description": "build = construir el ADS; run = el ADS en operación"},
+    "source": {"enum": ["telemetry", "provider-usage", "estimate"], "description": "estimate = caracteres/4, sin telemetría"},
+    "input_tokens": {"type": "integer", "minimum": 0, "description": "gen_ai.usage.input_tokens"},
+    "output_tokens": {"type": "integer", "minimum": 0, "description": "gen_ai.usage.output_tokens"},
+    "cache_read_tokens": {"type": "integer", "minimum": 0, "description": "gen_ai.usage.cache_read.input_tokens"},
+    "provider": {"type": "string", "description": "gen_ai.provider.name"},
+    "model": {"type": "string", "description": "gen_ai.request.model"},
+    "tool": {"type": "string", "description": "herramienta de desarrollo o runtime"},
+    "actor": {"type": "string", "description": "convención de actores OKF"},
+    "unit": {"type": "string", "description": "FU/DU/WU"},
+    "command": {"type": "string", "description": "gen_ai.operation.name o comando ABM"},
+    "feature": {"type": "string"},
+    "tenant": {"type": "string"},
+    "cost_usd": {"type": "number", "minimum": 0},
+    "note": {"type": "string"}
+  },
+  "additionalProperties": false
+}

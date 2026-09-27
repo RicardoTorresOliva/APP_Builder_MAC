@@ -1,0 +1,58 @@
+# ads.yaml — Contrato ADS de ABM. ABM es su propio primer ADS (ADR 0001, 0009).
+id: abm
+name: APP_Builder_MAC
+version: 5.0.0
+profile: api-service
+contract_level: extendido
+owner: SLG
+description: Fábrica agent-native de Activos Digitales SLG (ADS) — gobernanza, CLI y servidor MCP.
+
+capabilities:
+  - { id: doctor, description: "Diagnóstico del entorno", mode: read, cli: "abm doctor --json", mcp_tool: abm_doctor }
+  - { id: check, description: "Ejecuta todos los validadores", mode: read, cli: "abm check --json", mcp_tool: abm_check }
+  - { id: okf-validate, description: "Valida OKF v0.2 + perfil ABM", mode: read, cli: "abm okf validate --json", mcp_tool: abm_okf_validate }
+  - { id: ads-check, description: "Verifica el Contrato ADS", mode: read, cli: "abm ads-check --json", mcp_tool: abm_ads_check }
+  - { id: methodology-classify, description: "Clasifica el encargo y propone modos por módulo", mode: read, cli: "abm methodology classify --json", mcp_tool: abm_methodology_classify }
+  - { id: decide, description: "Decisión tipada con confianza (capa System One)", mode: read, cli: "abm decide --json", mcp_tool: abm_decide }
+  - { id: pending-list, description: "Lista la cola de pendientes", mode: read, cli: "abm pending list --json", mcp_tool: abm_pending_list }
+  - { id: pending-add, description: "Añade un pendiente con su default aplicado", mode: write, cli: "abm pending add --json", mcp_tool: abm_pending_add }
+  - { id: tokens-report, description: "Genera TOKENS.md desde el ledger", mode: write, cli: "abm tokens report --json", mcp_tool: abm_tokens_report }
+  - { id: tokens-record, description: "Registra un evento de consumo", mode: write, cli: "abm tokens record --json", mcp_tool: abm_tokens_record }
+  - { id: sync, description: "Genera los adaptadores por herramienta", mode: write, cli: "abm sync --json", mcp_tool: abm_sync }
+  - { id: new-ads, description: "Crea el esqueleto de un ADS nuevo", mode: write, cli: "abm new-ads --json" }
+
+endpoints:
+  agents_md: AGENTS.md
+  skill: skills/operate-abm/SKILL.md
+  llms_txt: llms.txt
+  mcp: { transport: stdio, command: "python3 scripts/abm.py mcp", protocol: "2025-11-25" }
+  cli: { command: "./abm", json_flag: "--json", dry_run_flag: "--dry-run" }
+
+docs:
+  okf_index: index.md
+  manual: docs/manual/
+
+auth: { type: none, note: "local; el servidor MCP expone lectura y escrituras en dry-run por defecto" }
+limits: { network: none, note: "sin red salvo la capa System One si hay clave" }
+
+tokens:
+  level: N2
+  ledger: ops/tokens/ledger.jsonl
+  report: TOKENS.md
+  dashboard: ops/tokens/dashboard.html
+  budgets:
+    unit: { soft: 400000, hard: 1500000 }
+    total: { soft: 8000000, hard: 14000000 }
+
+portability:
+  languages: [python]
+  llm_providers: [none]
+  llm_gateway: "opcional: fallback llm de decide vía interfaz de chat compatible"
+  clouds: [none]
+  iac: none
+  exit_plan: docs/adr/0003-lenguaje-de-scripts.md
+
+security:
+  secrets: env
+  agent_audit_log: ops/audit/agent-actions.jsonl
+  hitl_actions: []
