@@ -1,0 +1,5 @@
+---
+description: "Lanza un revisor con contexto limpio que verifica la última unidad o milestone completado."
+---
+<!-- GENERADO por abm sync desde commands/review.md. No editar. -->
+Lee y ejecuta el playbook `commands/review.md` siguiendo `AGENTS.md`.

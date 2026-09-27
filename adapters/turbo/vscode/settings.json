@@ -1,0 +1,32 @@
+{
+  "chat.tools.terminal.autoApprove": {
+    "./abm": true,
+    "python3 scripts/abm.py": true,
+    "git status": true,
+    "git diff": true,
+    "git log": true,
+    "git show": true,
+    "ls": true,
+    "cat": true,
+    "grep": true,
+    "find": true,
+    "head": true,
+    "tail": true,
+    "wc": true,
+    "git push": false,
+    "git commit": false,
+    "git reset": false,
+    "git rebase": false,
+    "rm": false,
+    "mv": false,
+    "npm publish": false,
+    "pip install": false,
+    "npm install": false,
+    "curl": false,
+    "wget": false,
+    "git push --force": false,
+    "git push -f": false,
+    "rm -rf /": false,
+    "sudo": false
+  }
+}

@@ -1,8 +1,5 @@
 ---
-description: Lanza revision independiente del ultimo bloque de trabajo completado.
+description: "Lanza un revisor con contexto limpio que verifica la última unidad o milestone completado."
 ---
-
-Follow the neutral playbook in `commands/review.md`. Do not restate it here.
-
-(Wrapper so the command appears in Claude Code's slash menu. The same `commands/review.md` is used
-unchanged by Cursor, Antigravity, and any other platform.)
+<!-- GENERADO por abm sync desde commands/review.md. No editar. -->
+Lee y ejecuta el playbook `commands/review.md` siguiendo `AGENTS.md`. Argumentos: $ARGUMENTS

@@ -1,0 +1,3 @@
+# GENERADO por abm sync desde commands/test.md. No editar.
+description = "Verifica la unidad con la pirámide de pruebas del perfil, priorizando rutas críticas."
+prompt = "Lee y ejecuta el playbook `commands/test.md` siguiendo `AGENTS.md`. Argumentos: {{args}}"

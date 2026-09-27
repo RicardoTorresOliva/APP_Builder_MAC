@@ -1,0 +1,3 @@
+# GENERADO por abm sync desde commands/help.md. No editar.
+description = "Muestra el catálogo de comandos por fase y resuelve alias en español."
+prompt = "Lee y ejecuta el playbook `commands/help.md` siguiendo `AGENTS.md`. Argumentos: {{args}}"

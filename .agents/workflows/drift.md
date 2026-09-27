@@ -1,0 +1,5 @@
+---
+description: "Detecta y resuelve la deriva entre intención, spec, contrato de prompt y código real."
+---
+<!-- GENERADO por abm sync desde commands/drift.md. No editar. -->
+Lee y ejecuta el playbook `commands/drift.md` siguiendo `AGENTS.md`.

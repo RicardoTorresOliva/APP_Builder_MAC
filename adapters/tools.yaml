@@ -1,0 +1,26 @@
+# adapters/tools.yaml — herramientas para las que `abm sync` genera adaptadores (ADR 0002).
+# Rutas y formatos verificados en docs/compat-matrix.md. Desactiva con enabled: false.
+tools:
+  claude-code: { enabled: true }
+  codex: { enabled: true }
+  antigravity: { enabled: true }
+  copilot: { enabled: true }
+  cursor: { enabled: true }
+  gemini-cli: { enabled: true }
+  windsurf: { enabled: true }
+  kiro: { enabled: true }
+  hermes: { enabled: true }
+
+mcp_server:
+  name: abm
+  command: python3
+  args: [scripts/abm.py, mcp]
+
+ignore_patterns: [".env", ".env.*", "!.env.example", "*.pem", "*.key", "*.p12", "secrets/", "**/credentials*", "ops/audit/"]
+
+# Plantillas turbo (ADR 0014): se escriben en adapters/turbo/ y solo se instalan con `abm sync --apply-turbo`.
+turbo:
+  allow_commands: ["./abm", "python3 scripts/abm.py", "git status", "git diff", "git log", "git show", "ls", "cat", "grep", "find", "head", "tail", "wc"]
+  ask_commands: ["git push", "git commit", "git reset", "git rebase", "rm", "mv", "npm publish", "pip install", "npm install", "curl", "wget"]
+  deny_read: [".env", ".env.*", "**/*.pem", "**/*.key", "secrets/**"]
+  deny_commands: ["git push --force", "git push -f", "rm -rf /", "sudo"]

@@ -1,0 +1,6 @@
+# GENERADO por abm sync. Fragmento turbo para ~/.hermes/config.yaml.
+approvals:
+  mode: smart
+security:
+  redact_secrets: true
+  tirith_enabled: true

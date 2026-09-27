@@ -1,0 +1,3 @@
+# GENERADO por abm sync desde commands/consolidate.md. No editar.
+description = "Convierte los aprendizajes de un explore en spec y diseño definitivos (IDD/SDD)."
+prompt = "Lee y ejecuta el playbook `commands/consolidate.md` siguiendo `AGENTS.md`. Argumentos: {{args}}"

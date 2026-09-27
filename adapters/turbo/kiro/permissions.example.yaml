@@ -1,0 +1,31 @@
+# GENERADO por abm sync. Kiro guarda permisos a nivel usuario (~/.kiro/settings/permissions.yaml); cópialo tú.
+rules:
+  - { capability: shell, match: "./abm*", effect: allow }
+  - { capability: shell, match: "python3 scripts/abm.py*", effect: allow }
+  - { capability: shell, match: "git status*", effect: allow }
+  - { capability: shell, match: "git diff*", effect: allow }
+  - { capability: shell, match: "git log*", effect: allow }
+  - { capability: shell, match: "git show*", effect: allow }
+  - { capability: shell, match: "ls*", effect: allow }
+  - { capability: shell, match: "cat*", effect: allow }
+  - { capability: shell, match: "grep*", effect: allow }
+  - { capability: shell, match: "find*", effect: allow }
+  - { capability: shell, match: "head*", effect: allow }
+  - { capability: shell, match: "tail*", effect: allow }
+  - { capability: shell, match: "wc*", effect: allow }
+  - { capability: shell, match: "git push*", effect: ask }
+  - { capability: shell, match: "git commit*", effect: ask }
+  - { capability: shell, match: "git reset*", effect: ask }
+  - { capability: shell, match: "git rebase*", effect: ask }
+  - { capability: shell, match: "rm*", effect: ask }
+  - { capability: shell, match: "mv*", effect: ask }
+  - { capability: shell, match: "npm publish*", effect: ask }
+  - { capability: shell, match: "pip install*", effect: ask }
+  - { capability: shell, match: "npm install*", effect: ask }
+  - { capability: shell, match: "curl*", effect: ask }
+  - { capability: shell, match: "wget*", effect: ask }
+  - { capability: fs_read, match: ".env", effect: deny }
+  - { capability: fs_read, match: ".env.*", effect: deny }
+  - { capability: fs_read, match: "**/*.pem", effect: deny }
+  - { capability: fs_read, match: "**/*.key", effect: deny }
+  - { capability: fs_read, match: "secrets/**", effect: deny }

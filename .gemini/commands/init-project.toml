@@ -1,0 +1,3 @@
+# GENERADO por abm sync desde commands/init-project.md. No editar.
+description = "Elige perfil y ceremonia, clasifica la metodología, explora el stack con el humano y publica el plan."
+prompt = "Lee y ejecuta el playbook `commands/init-project.md` siguiendo `AGENTS.md`. Argumentos: {{args}}"

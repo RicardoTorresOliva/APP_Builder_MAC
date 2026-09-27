@@ -1,0 +1,3 @@
+# GENERADO por abm sync desde commands/a11y.md. No editar.
+description = "Verifica accesibilidad WCAG 2.2 AA de la capa de interfaz antes de entregar."
+prompt = "Lee y ejecuta el playbook `commands/a11y.md` siguiendo `AGENTS.md`. Argumentos: {{args}}"

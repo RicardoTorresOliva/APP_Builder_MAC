@@ -1,0 +1,3 @@
+# GENERADO por abm sync desde commands/perf.md. No editar.
+description = "Verifica rendimiento, escalabilidad básica y costo por unidad antes de entregar."
+prompt = "Lee y ejecuta el playbook `commands/perf.md` siguiendo `AGENTS.md`. Argumentos: {{args}}"

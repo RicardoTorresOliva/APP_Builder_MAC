@@ -1,0 +1,3 @@
+# GENERADO por abm sync desde commands/closeout.md. No editar.
+description = "Sincroniza intención, spec, contrato y código, registra tokens y actualiza la memoria del proyecto."
+prompt = "Lee y ejecuta el playbook `commands/closeout.md` siguiendo `AGENTS.md`. Argumentos: {{args}}"

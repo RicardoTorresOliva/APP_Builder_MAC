@@ -1,0 +1,10 @@
+# GENERADO por abm sync. Archivos que el agente no debe leer ni indexar.
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+secrets/
+**/credentials*
+ops/audit/

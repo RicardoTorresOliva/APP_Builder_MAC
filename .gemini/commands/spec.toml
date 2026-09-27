@@ -1,0 +1,3 @@
+# GENERADO por abm sync desde commands/spec.md. No editar.
+description = "Convierte la intención en requirements, design y tasks verificables (formato EARS)."
+prompt = "Lee y ejecuta el playbook `commands/spec.md` siguiendo `AGENTS.md`. Argumentos: {{args}}"

@@ -1,0 +1,3 @@
+# GENERADO por abm sync desde commands/session-start.md. No editar.
+description = "Lee la memoria del proyecto y la cola de pendientes, y dice por dónde retomar el trabajo."
+prompt = "Lee y ejecuta el playbook `commands/session-start.md` siguiendo `AGENTS.md`. Argumentos: {{args}}"

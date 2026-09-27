@@ -1,0 +1,3 @@
+# GENERADO por abm sync desde commands/start-execution.md. No editar.
+description = "Verifica que el plan esté listo y ejecuta las FU y DU aprobadas hasta la entrega."
+prompt = "Lee y ejecuta el playbook `commands/start-execution.md` siguiendo `AGENTS.md`. Argumentos: {{args}}"

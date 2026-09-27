@@ -1,0 +1,3 @@
+# GENERADO por abm sync. Plantilla turbo; se añade a .codex/config.toml con `abm sync --apply-turbo`.
+approval_policy = "on-request"
+sandbox_mode = "workspace-write"

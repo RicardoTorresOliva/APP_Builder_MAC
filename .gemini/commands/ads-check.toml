@@ -1,0 +1,3 @@
+# GENERADO por abm sync desde commands/ads-check.md. No editar.
+description = "Verifica que el ADS cumple su nivel del Contrato ADS, estático y dinámico."
+prompt = "Lee y ejecuta el playbook `commands/ads-check.md` siguiendo `AGENTS.md`. Argumentos: {{args}}"
