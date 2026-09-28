@@ -24,8 +24,6 @@
       "Bash(wc:*)"
     ],
     "ask": [
-      "Bash(git push:*)",
-      "Bash(git commit:*)",
       "Bash(git reset:*)",
       "Bash(git rebase:*)",
       "Bash(rm:*)",

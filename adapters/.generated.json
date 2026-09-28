@@ -347,12 +347,12 @@
   ".windsurf/rules/abm.md": "23915009805efb3d84e75d1bb63b533a4568ed41ee56da97772d325b5027f315",
   "CLAUDE.md": "9173203cf379625a4bb10f5709afb7c9cd3f3da6820c225099842a6ae46f519a",
   "adapters/hermes/config.example.yaml": "a8508e18c08a8af3c6502f98fbb53a5983d0b645057eb4162b9ae88491d1ac8e",
-  "adapters/turbo/claude-code/settings.json": "7e0e8fb726a5725a4762c643711ff212d3fda60f743f399622c3fe7eb40a5351",
+  "adapters/turbo/claude-code/settings.json": "61d6a70327313a61987e4dda0b9376d8caa84a985e60804c05d53d3117168da7",
   "adapters/turbo/codex/config.toml": "edf1ebfd0a1202dd19427e2e2aefd5587967ba74388ec281e19d40d4de0a7a39",
   "adapters/turbo/gemini-cli/settings.json": "c75dce00bf143d1973c0c8f73d06d8009f5b5abc791968f1f5169ead022d1b05",
   "adapters/turbo/hermes/config.example.yaml": "5fca6e259216ce96773abdc7a15ab1fbd71cd016e74be55e314cf3ee5ea3804a",
-  "adapters/turbo/kiro/permissions.example.yaml": "595deeeaac3ba8b63c0dad2eeae9a9bdf965e88a3b99b222421d8d99d832ec4d",
-  "adapters/turbo/vscode/settings.json": "39685d532b0f7b8fb6c26c04d46bbe62afafe8718d1b40cf0bcd677c3d4dd30f",
+  "adapters/turbo/kiro/permissions.example.yaml": "6574a4530480ed7baf06c5d4ff8d4f9fa88eea236913104f0cfac0e7775de948",
+  "adapters/turbo/vscode/settings.json": "66cbac26403e966311e9f0c0aedb1837c6e9f5e6a92fec53ff7b32b9f88d51dc",
   "skills/abm-playbooks/SKILL.md": "c344db697316440a2ec84441d2c8e85404a1f1890f883f752a1824ae32d01f3a",
   "skills/operate-abm/references/mcp-server.md": "7f1faeb9d182cc8753320f91c21b79f4a4c1189cdbd9c8e1916ffec5f0d07003"
  }

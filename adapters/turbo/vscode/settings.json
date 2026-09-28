@@ -20,8 +20,6 @@
     "git show": true,
     "ls": true,
     "wc": true,
-    "git push": false,
-    "git commit": false,
     "git reset": false,
     "git rebase": false,
     "rm": false,

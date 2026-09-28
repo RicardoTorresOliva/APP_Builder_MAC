@@ -20,8 +20,6 @@ rules:
   - { capability: shell, match: "git show*", effect: allow }
   - { capability: shell, match: "ls*", effect: allow }
   - { capability: shell, match: "wc*", effect: allow }
-  - { capability: shell, match: "git push*", effect: ask }
-  - { capability: shell, match: "git commit*", effect: ask }
   - { capability: shell, match: "git reset*", effect: ask }
   - { capability: shell, match: "git rebase*", effect: ask }
   - { capability: shell, match: "rm*", effect: ask }
