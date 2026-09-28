@@ -1,0 +1,61 @@
+# ads.yaml — Contrato ADS del panel de ventas (contract/README.md de ABM).
+# Verifica: python3 ../../scripts/abm.py --root . ads-check  y  ... agent-conformance
+id: panel-ventas
+name: Panel de ventas
+version: 1.0.0
+profile: software-app
+contract_level: extendido
+owner: equipo-comercial-demo
+description: Dashboard de ventas con login por roles, registro de ventas y gráficos por mes y vendedor, operable por personas (web) y por agentes (MCP y CLI).
+
+capabilities:
+  - { id: status, description: "Estado: versión de esquema, usuarios, ventas y última fecha", mode: read, cli: "python3 app/cli.py status --json", mcp_tool: status }
+  - { id: ventas-resumen, description: "Totales, ticket promedio y series por mes y por vendedor de un rango", mode: read, cli: "python3 app/cli.py ventas-resumen --json", mcp_tool: ventas_resumen }
+  - { id: crear-venta, description: "Registra una venta; dry-run primero; idempotente con clave", mode: write, cli: "python3 app/cli.py crear-venta --dry-run --json", mcp_tool: crear_venta }
+  - { id: borrar-venta, description: "Borra una venta; irreversible; exige confirmación humana", mode: destructive, cli: "python3 app/cli.py borrar-venta --confirm --json", mcp_tool: borrar_venta }
+
+endpoints:
+  agents_md: AGENTS.md
+  skill: skills/operate-panel-ventas/SKILL.md
+  llms_txt: llms.txt
+  mcp: { transport: stdio, command: "python3 ops/mcp_server.py", protocol: "2025-11-25" }
+  cli: { command: "python3 app/cli.py", json_flag: "--json", dry_run_flag: "--dry-run" }
+  api: { openapi: api/openapi.yaml, errors: application/problem+json }
+
+docs:
+  okf_index: index.md
+  manual: docs/manual/operacion.md
+
+# Web: sesión por cookie (HttpOnly, SameSite=Strict) + CSRF. Agentes: MCP y CLI locales por stdio,
+# heredan el permiso del usuario del sistema sobre data/; sin exposición de red.
+auth: { type: none, agent_scopes: [ventas-read, ventas-write] }
+limits: { rate: "5 intentos de login fallidos cada 15 min por IP y usuario", max_payload_kb: 16 }
+slo: { availability: "best-effort (demo local)", latency_p95_ms: 300 }
+environments: [local]
+
+tokens:
+  level: N2
+  ledger: ops/tokens/ledger.jsonl
+  report: TOKENS.md
+  dashboard: ops/tokens/dashboard.html
+  budgets:
+    unit: { soft: 80000, hard: 200000 }
+    feature: { soft: 20000, hard: 100000 }
+    total: { soft: 400000, hard: 800000 }
+
+portability:
+  languages: [python, javascript]
+  llm_providers: [none]
+  llm_gateway: none
+  clouds: [on-prem]
+  iac: none
+  exit_plan: docs/exit-plan.md
+
+security:
+  secrets: env
+  agent_audit_log: ops/audit/agent-actions.jsonl
+  hitl_actions: [borrar-venta]
+
+# Caso de prueba para `abm agent-conformance` (dry-run de una escritura válida).
+conformance:
+  dry_run: { tool: crear_venta, arguments: { fecha: "2026-01-15", cliente: "Cliente demo", producto: "Producto demo", monto: "10.00", vendedor: "bruno" } }

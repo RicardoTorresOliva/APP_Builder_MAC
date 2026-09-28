@@ -1,0 +1,7 @@
+# Datos y registros de ejecución: nunca al repo
+data/
+ops/audit/
+__pycache__/
+*.db
+*.db-journal
+.env
