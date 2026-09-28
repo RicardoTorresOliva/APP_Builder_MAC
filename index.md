@@ -21,6 +21,7 @@ okf_version: "0.2"
 * [Cola de pendientes](/docs/_work/PENDIENTES.md) - Decisiones no bloqueantes acumuladas para el humano, cada una con su default ya aplicado.
 * [Progreso de la repotenciación de ABM](/docs/_work/PROGRESS.md) - Estado vivo de la ejecución del prompt maestro v3 (modo TURBO) para sobrevivir a la compactación de contexto.
 * [Prompt maestro — análisis y repotenciación de ABM (v3)](/docs/_work/PROMPT_MAESTRO_ABM_v3.md) - Instrucciones para que un agente analice y repotencie APP_Builder_MAC y los ADS que produce.
+* [Resumen técnico — ABM v4.1 → v5.0](/docs/_work/RESUMEN_TECNICO_ABM_v5.md) - Estado inicial frente a estado final de la repotenciación de ABM, correcciones de CI, cola de pendientes y lo no verificado.
 * [ADR 0001 — Nomenclatura ABM/ADS y glosario](/docs/adr/0001-nomenclatura-abm-ads.md) - Cómo se nombran la fábrica, lo que produce y sus unidades de trabajo.
 * [ADR 0002 — Fuente única y generador de adaptadores](/docs/adr/0002-fuente-unica-generador-adaptadores.md) - Los adaptadores por herramienta se generan desde fuentes neutrales con `abm sync`.
 * [ADR 0003 — Lenguaje de los scripts](/docs/adr/0003-lenguaje-de-scripts.md) - El tooling de ABM se escribe en Python 3.9+ solo con biblioteca estándar.
