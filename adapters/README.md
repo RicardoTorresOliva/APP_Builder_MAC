@@ -38,6 +38,7 @@ La gobernanza vive solo en `AGENTS.md`. Cada herramienta la encuentra con archiv
 ## Uso
 
 - `./abm sync` — regenera todo. `./abm sync --check` — falla en CI si algo está desfasado o editado a mano.
+- **Filtro por perfil:** con `abm.yaml → active_profile`, `./abm sync` no genera los comandos, skills y roles que `tools.yaml → profile_filters` excluye para ese perfil (compuestos: solo lo que excluyen todos sus componentes). Siguen como playbooks neutrales en `commands/` y se listan como "fuera del perfil" en la skill `abm-playbooks`. Arranque, plan, cierre, cola, tokens, contrato y revisión están protegidos. Ahorro medido: `research-report` ≈ 707 de ≈ 2 814 tokens de metadatos por herramienta y sesión; `api-service` y `automation-integration` ≈ 230. Sin perfil activo (el propio ABM) se genera todo.
 - `./abm sync --apply-turbo` — instala las plantillas de `turbo/` en las rutas activas (Claude Code, Codex, Gemini CLI, VS Code). Cambia permisos del agente: decisión humana.
 - Añadir una herramienta: entrada en `tools.yaml` + emisor en `scripts/abmkit/sync.py` + fila en `docs/compat-matrix.md`.
 - `install-adapter.sh` queda como shim de `./abm sync` (compatibilidad v4.1).

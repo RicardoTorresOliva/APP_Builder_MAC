@@ -13,6 +13,10 @@ Formato: versionado semántico (MAJOR.MINOR.PATCH). Detalle de migración: `MIGR
 
 ## [Sin publicar]
 
+### Añadido
+
+- Filtro de metadatos por perfil (`adapters/tools.yaml → profile_filters`): `abm sync` omite los comandos, skills y roles que el perfil activo no usa (`research-report` ≈ −707 tokens por herramienta y sesión). Perfiles compuestos: intersección de exclusiones; elementos de arranque, plan, cierre y revisión protegidos.
+
 ### Cambiado
 
 - Licencia propietaria SLG definitiva (sin nota provisional).

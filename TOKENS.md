@@ -4,21 +4,21 @@ title: Reporte de tokens
 description: Consumo de tokens y costo del ADS (construcción y operación), generado desde el ledger.
 tags: [tokens, finops]
 status: stable
-generated: { by: process:abm-tokens, at: 2026-09-28T00:49:59Z }
+generated: { by: process:abm-tokens, at: 2026-09-28T01:04:40Z }
 ---
 
 # Reporte de tokens
 
 <!-- Generado por `abm tokens report`. No editar a mano. -->
 
-- **Total:** 4,595,602 tokens (entrada 4,590,807 · salida 4,795) en 18 eventos.
-- **Estimados** (caracteres/4, sin telemetría): 1 eventos.
+- **Total:** 4,639,854 tokens (entrada 4,623,996 · salida 15,858) en 19 eventos.
+- **Estimados** (caracteres/4, sin telemetría): 2 eventos.
 
 ## Por fase
 
 | Clave | Eventos | Entrada | Salida | Costo USD |
 |---|---|---|---|---|
-| build | 18 | 4,590,807 | 4,795 | n/d |
+| build | 19 | 4,623,996 | 15,858 | n/d |
 
 ## Por unidad (FU/DU/WU)
 
@@ -35,6 +35,7 @@ generated: { by: process:abm-tokens, at: 2026-09-28T00:49:59Z }
 | WU10 | 1 | 201,999 | 0 | n/d |
 | WU4 | 1 | 191,990 | 0 | n/d |
 | WU6 | 1 | 186,755 | 0 | n/d |
+| WU-Metadatos | 1 | 33,189 | 11,063 | n/d |
 | WU-Pendientes | 1 | 14,385 | 4,795 | n/d |
 
 ## Por modelo
@@ -42,13 +43,13 @@ generated: { by: process:abm-tokens, at: 2026-09-28T00:49:59Z }
 | Clave | Eventos | Entrada | Salida | Costo USD |
 |---|---|---|---|---|
 | no-declarado | 17 | 4,576,422 | 0 | n/d |
-| — | 1 | 14,385 | 4,795 | n/d |
+| — | 2 | 47,574 | 15,858 | n/d |
 
 ## Presupuestos
 
 | Alcance | Usado | Blando | Duro | Estado |
 |---|---|---|---|---|
-| total | 4,595,602 | 8000000 | 14000000 | ok |
+| total | 4,639,854 | 8000000 | 14000000 | ok |
 | unit:Fase-1 | 936,221 | 400000 | 1500000 | soft |
 | unit:WU4 | 191,990 | 400000 | 1500000 | ok |
 | unit:WU5 | 417,466 | 400000 | 1500000 | soft |
@@ -61,3 +62,4 @@ generated: { by: process:abm-tokens, at: 2026-09-28T00:49:59Z }
 | unit:Fase-4 | 887,087 | 400000 | 1500000 | soft |
 | unit:Orquestador | 509,186 | 400000 | 1500000 | soft |
 | unit:WU-Pendientes | 19,180 | 400000 | 1500000 | ok |
+| unit:WU-Metadatos | 44,252 | 400000 | 1500000 | ok |

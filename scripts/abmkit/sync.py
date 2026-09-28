@@ -1,6 +1,8 @@
 """`abm sync`: generates per-tool adapters from neutral sources (ADR 0002).
 
 Sources: AGENTS.md, commands/*.md, skills/<name>/, agents/<role>.md, adapters/tools.yaml.
+With `abm.yaml → active_profile`, `profile_filters` in tools.yaml drops the commands, skills and roles the
+profile does not use, so each tool loads fewer descriptions per session (composed profiles: intersection).
 Outputs follow docs/compat-matrix.md. Every generated file is recorded in adapters/.generated.json
 (path → sha256) so `--check` detects drift, hand edits and orphans. Turbo permission templates are
 written to adapters/turbo/ and only installed into active tool paths with `--apply-turbo`.
@@ -9,10 +11,11 @@ from __future__ import annotations
 
 import hashlib
 import json
+import re
 import shutil
 from pathlib import Path
 
-from .common import Ctx, emit, load_yaml_file, read_md
+from .common import Ctx, cfg, emit, load_yaml_file, read_md
 
 REGISTRY = "adapters/.generated.json"
 MARK = "GENERADO por abm sync"
@@ -52,6 +55,85 @@ def load_sources(root: Path) -> dict:
     return {"commands": cmds, "roles": roles, "skills": skills, "tools": tools}
 
 
+# ---------------------------------------------------------------- profile filter
+KINDS = ("commands", "skills", "roles")
+# Nunca se excluyen: arranque, plan, cierre, cola, tokens, contrato y revisión (AGENTS.md reglas 1, 3, 6, 10, 11).
+PROTECTED = {
+    "commands": {"bootstrap", "doctor", "session-start", "help", "pending", "init-project", "plan", "start-execution",
+                 "review", "closeout", "iterate", "tokens", "ads-check", "security"},
+    "skills": {"abm-playbooks", "okf-author", "token-ledger", "methodology-router", "review-independent"},
+    "roles": {"orchestrator", "reviewer", "docs", "finops"},
+}
+
+
+PROFILE_RE = re.compile(r"^[a-z0-9][a-z0-9-]{0,63}$")
+
+
+def _names(v) -> list:
+    return [str(x) for x in v] if isinstance(v, list) else ([str(v)] if v else [])
+
+
+def _profile_excludes(root: Path, name: str, filters: dict, seen: frozenset = frozenset()) -> tuple[dict, list]:
+    """Exclusions of one profile; a composed profile keeps only what all its components exclude."""
+    none = {k: set() for k in KINDS}
+    if not PROFILE_RE.match(name):
+        return none, [f"perfil `{name}`: nombre no válido (sin filtro)"]
+    if name in seen:
+        return none, [f"perfil {name}: composición cíclica (sin filtro)"]
+    pf = root / "profiles" / name / "profile.md"
+    fm = (read_md(pf)[0] or {}) if pf.exists() else {}
+    parts = _names(fm.get("composes"))
+    if parts:
+        res, warns = None, []
+        for part in parts:
+            ex, w = _profile_excludes(root, str(part), filters, seen | {name})
+            warns += w
+            res = ex if res is None else {k: res[k] & ex[k] for k in KINDS}
+        return res, warns
+    entry = filters.get(name)
+    if entry is None and not pf.exists():
+        return none, [f"perfil {name}: no existe en profiles/ ni en profile_filters (sin filtro)"]
+    if entry is not None and not isinstance(entry, dict):
+        return none, [f"profile_filters.{name}: debe ser un mapa commands/skills/roles (sin filtro)"]
+    return {k: set(_names((entry or {}).get(k))) for k in KINDS}, []
+
+
+def profile_filter(root: Path, conf: dict, src: dict) -> dict | None:
+    """Resolve `abm.yaml → active_profile` against `adapters/tools.yaml → profile_filters`."""
+    active = cfg(conf, "active_profile")
+    if not active:
+        return None
+    filters = (src["tools"] or {}).get("profile_filters") or {}
+    names = _names(active)
+    ex, warns = None, []
+    for n in names:
+        e, w = _profile_excludes(root, n, filters)
+        warns += w
+        ex = e if ex is None else {k: ex[k] & e[k] for k in KINDS}
+    known = {"commands": {c["name"] for c in src["commands"]}, "roles": {r["name"] for r in src["roles"]},
+             "skills": {d.name for d in src["skills"]}}
+    for k in KINDS:
+        for n in sorted(ex[k] & PROTECTED[k]):
+            warns.append(f"{k}: `{n}` está protegido y no se excluye")
+        for n in sorted(ex[k] - known[k]):
+            warns.append(f"{k}: `{n}` no existe (revisa profile_filters)")
+        ex[k] = (ex[k] - PROTECTED[k]) & known[k]
+    return {"profile": ", ".join(names), **ex, "warnings": warns}
+
+
+def metadata_saved(src: dict, flt: dict | None) -> int:
+    """Tokens (≈ caracteres/4) de nombre + descripción que una herramienta deja de cargar por sesión."""
+    if not flt:
+        return 0
+    chars = sum(len(c["name"]) + len(c["desc"]) for c in src["commands"] if c["name"] in flt["commands"])
+    chars += sum(len(r["name"]) + len(r["desc"]) for r in src["roles"] if r["name"] in flt["roles"])
+    for d in src["skills"]:
+        if d.name in flt["skills"]:
+            fm = read_md(d / "SKILL.md")[0] or {}
+            chars += len(d.name) + len(str(fm.get("description") or ""))
+    return chars // 4
+
+
 # ---------------------------------------------------------------- builders
 def pointer_md(extra: str = "") -> str:
     return (f"<!-- {MARK}. No editar: la gobernanza vive en AGENTS.md. -->\n"
@@ -65,8 +147,11 @@ def playbook_body(c, argvar: str) -> str:
     return f"<!-- {MARK} desde commands/{c['name']}.md. No editar. -->\nLee y ejecuta el playbook `commands/{c['name']}.md` siguiendo `AGENTS.md`.{arg}\n"
 
 
-def playbooks_skill(cmds) -> str:
+def playbooks_skill(cmds, flt: dict | None = None) -> str:
     rows = "\n".join(f"| `{c['name']}` | {c['desc']} |" for c in cmds)
+    if flt and flt["commands"]:
+        rows += (f"\n\nFuera del perfil `{flt['profile']}` (siguen en `commands/`, sin adaptador): "
+                 + ", ".join(f"`{n}`" for n in sorted(flt["commands"])) + ".")
     return f"""---
 name: abm-playbooks
 description: Catálogo de los playbooks de ABM (comandos) para herramientas sin slash commands. Úsala al empezar o retomar un proyecto ABM, o cuando necesites planificar, construir, revisar, medir tokens o iterar un ADS.
@@ -146,13 +231,15 @@ def ignore_txt(tools) -> str:
 
 
 # ---------------------------------------------------------------- per tool
-def emit_all(root: Path, src: dict) -> dict:
+def emit_all(root: Path, src: dict, flt: dict | None = None) -> dict:
     out: dict[str, str | Path] = {}
     tools = src["tools"]
     enabled = {k for k, v in (tools.get("tools") or {}).items() if (v or {}).get("enabled", True)}
-    cmds, roles = src["commands"], src["roles"]
-    skill_dirs = list(src["skills"])
-    generated_skill = playbooks_skill(cmds)
+    ex = flt or {k: set() for k in KINDS}
+    cmds = [c for c in src["commands"] if c["name"] not in ex["commands"]]
+    roles = [r for r in src["roles"] if r["name"] not in ex["roles"]]
+    skill_dirs = [d for d in src["skills"] if d.name not in ex["skills"]]
+    generated_skill = playbooks_skill(cmds, flt)
     out["skills/abm-playbooks/SKILL.md"] = generated_skill
     if (root / "skills/operate-abm").exists():
         out["skills/operate-abm/references/mcp-server.md"] = mcp_reference()
@@ -324,7 +411,8 @@ def _content(v) -> bytes:
 def plan(ctx: Ctx, with_turbo: bool):
     root = ctx.root
     src = load_sources(root)
-    out = emit_all(root, src)
+    flt = profile_filter(root, ctx.conf, src)
+    out = emit_all(root, src, flt)
     reg_path = root / REGISTRY
     reg = json.loads(reg_path.read_text(encoding="utf-8")) if reg_path.exists() else {"files": {}, "turbo_applied": False}
     turbo = with_turbo or reg.get("turbo_applied", False)
@@ -339,17 +427,34 @@ def plan(ctx: Ctx, with_turbo: bool):
     orphans = [p for p in reg.get("files", {}) if p not in desired]
     edited = [p for p, h in reg.get("files", {}).items() if p in desired and (root / p).exists()
               and hashlib.sha256((root / p).read_bytes()).hexdigest() != h and hashlib.sha256(desired[p]).hexdigest() == h]
-    return desired, changes, orphans, edited, turbo, user_writes
+    return desired, changes, orphans, edited, turbo, user_writes, flt, metadata_saved(src, flt)
+
+
+def _filter_lines(flt, saved) -> list:
+    if not flt:
+        return []
+    n = {k: len(flt[k]) for k in KINDS}
+    head = (f"perfil {flt['profile']}: sin adaptador {n['commands']} comandos, {n['skills']} skills, {n['roles']} roles "
+            f"(≈{saved} tokens de metadatos menos por herramienta y sesión)" if any(n.values())
+            else f"perfil {flt['profile']}: sin exclusiones (se generan todos los comandos, skills y roles)")
+    return [head] + [f"AVISO: {w}" for w in flt["warnings"]]
+
+
+def _filter_json(flt, saved):
+    return None if not flt else {"profile": flt["profile"], **{k: sorted(flt[k]) for k in KINDS},
+                                 "metadata_tokens_saved": saved, "warnings": flt["warnings"]}
 
 
 def cmd_sync(ctx: Ctx, args) -> int:
     root = ctx.root
-    desired, changes, orphans, edited, turbo, user_writes = plan(ctx, args.apply_turbo)
+    desired, changes, orphans, edited, turbo, user_writes, flt, saved = plan(ctx, args.apply_turbo)
     if args.check:
         ok = not changes and not orphans
         lines = [f"DESFASE {c['path']} ({c['action']})" for c in changes[:40]] + [f"HUÉRFANO {p}" for p in orphans]
+        lines += _filter_lines(flt, saved)
         lines.append(f"sync --check: {len(desired)} salidas · {len(changes)} desfasadas · {len(orphans)} huérfanas → {'OK' if ok else 'FALLA (ejecuta ./abm sync)'}")
-        return emit(ctx, {"outputs": len(desired), "changes": changes, "orphans": orphans, "hand_edited": edited}, lines, ok)
+        return emit(ctx, {"outputs": len(desired), "changes": changes, "orphans": orphans, "hand_edited": edited,
+                          "profile_filter": _filter_json(flt, saved)}, lines, ok)
     if not ctx.dry_run:
         for p, data in desired.items():
             f = root / p
@@ -386,9 +491,11 @@ def cmd_sync(ctx: Ctx, args) -> int:
         orphans = deleted
     lines = [f"sync {verb}: {len(desired)} salidas · {len(changes)} escritas · {len(orphans)} huérfanas eliminadas" + (" · turbo instalado" if turbo else "")]
     lines += [f"turbo fusionado en {f.relative_to(root)} (archivo del usuario, no registrado)" for f, _ in user_writes]
+    lines += _filter_lines(flt, saved)
     if edited:
         lines.append(f"AVISO: {len(edited)} archivos generados estaban editados a mano y se sobrescribieron")
-    return emit(ctx, {"outputs": len(desired), "changes": changes, "orphans_removed": orphans, "turbo_applied": turbo}, lines)
+    return emit(ctx, {"outputs": len(desired), "changes": changes, "orphans_removed": orphans, "turbo_applied": turbo,
+                      "profile_filter": _filter_json(flt, saved)}, lines)
 
 
 def register(sub):

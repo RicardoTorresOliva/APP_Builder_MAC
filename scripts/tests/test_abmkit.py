@@ -130,6 +130,51 @@ class Workspace(unittest.TestCase):
         self.assertFalse((self.tmp / "docs/_work/PENDIENTES.md").exists())
 
 
+class ProfileFilter(unittest.TestCase):
+    """`abm sync` con active_profile: menos comandos, skills y roles con adaptador."""
+
+    def setUp(self):
+        self.tmp = Path(tempfile.mkdtemp())
+        for d in ("commands", "skills", "agents", "profiles"):
+            shutil.copytree(ROOT / d, self.tmp / d)
+        (self.tmp / "adapters").mkdir()
+        shutil.copy(ROOT / "adapters/tools.yaml", self.tmp / "adapters/tools.yaml")
+        shutil.copy(ROOT / "abm.yaml", self.tmp / "abm.yaml")
+
+    def tearDown(self):
+        shutil.rmtree(self.tmp, ignore_errors=True)
+
+    def sync(self, profile):
+        conf = self.tmp / "abm.yaml"
+        conf.write_text(conf.read_text(encoding="utf-8").replace("active_profile: null", f"active_profile: {profile}"), encoding="utf-8")
+        code, d = run("sync", root=self.tmp)
+        self.assertEqual(code, 0, d)
+        return d["profile_filter"]
+
+    def test_research_report(self):
+        tools = self.tmp / "adapters/tools.yaml"
+        tools.write_text(tools.read_text(encoding="utf-8").replace("commands: [ui, api, db, a11y, perf, refactor]",
+                                                                   "commands: [ui, api, db, a11y, perf, refactor, plan, nope]"), encoding="utf-8")
+        f = self.sync("research-report")
+        self.assertIn("ui", f["commands"])
+        self.assertNotIn("plan", f["commands"])  # protegido
+        self.assertTrue(any("plan" in w for w in f["warnings"]) and any("nope" in w for w in f["warnings"]))
+        self.assertGreater(f["metadata_tokens_saved"], 0)
+        c = self.tmp / ".claude"
+        self.assertFalse((c / "commands/ui.md").exists())
+        self.assertTrue((c / "commands/plan.md").exists())
+        self.assertFalse((c / "skills/frontend-builder").exists())
+        self.assertTrue((c / "skills/okf-author/SKILL.md").exists())
+        self.assertFalse((c / "agents/frontend.md").exists())
+        self.assertTrue((c / "agents/reviewer.md").exists())
+        self.assertIn("Fuera del perfil", (self.tmp / "skills/abm-playbooks/SKILL.md").read_text(encoding="utf-8"))
+
+    def test_composed_profile_keeps_shared(self):
+        f = self.sync("intelligence-product")  # research-report ∩ data-product: data-product no excluye nada
+        self.assertEqual(f["commands"], [])
+        self.assertTrue((self.tmp / ".claude/commands/ui.md").exists())
+
+
 class YamlAdversarial(unittest.TestCase):
     def test_malformed_flow_does_not_hang(self):
         for bad in ("tags: [a}", "x: {b: [1, 2}", "t: [a b c"):
