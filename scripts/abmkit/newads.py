@@ -14,7 +14,7 @@ from pathlib import Path
 
 from .common import Ctx, emit, load_yaml_file, now_iso
 
-KIT = ["AGENTS.md", "abm", "abm.cmd", ".gitattributes", ".markdownlint-cli2.jsonc", ".env.example", ".github/workflows/abm-ci.yml", "scripts", "okf", "contract", "commands", "skills", "agents", "methodology",
+KIT = ["AGENTS.md", "abm", "abm.cmd", ".gitattributes", ".markdownlint-cli2.jsonc", ".env.example", ".github/workflows/abm-ci.yml", ".gitleaks.toml", "scripts", "okf", "contract", "commands", "skills", "agents", "methodology",
        "standards", "templates", "stacks", "integrations", "adapters/tools.yaml", "docs/glossary.md", "docs/manual",
        "docs/compat-matrix.md", "planning", "implementation", "design_docs", "deliverables", "knowledge",
        "docs/decision_log.md", "docs/project_memory.md", "docs/work_log.md", "docs/tooling", ".gitignore", "START_PROJECT.md"]

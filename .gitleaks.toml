@@ -1,0 +1,11 @@
+# Configuración de gitleaks (job secret-scan de .github/workflows/abm-ci.yml).
+# Reglas por defecto + excepción acotada: adapters/.generated.json es el registro de `abm sync`
+# (ruta del adaptador → sha256 del contenido generado). Rutas como `.claude/commands/api.md` con un
+# hash hexadecimal disparan `generic-api-key` sin ser secretos. `abm sync --check` valida ese registro.
+
+[extend]
+useDefault = true
+
+[allowlist]
+description = "Registro de hashes de abm sync (no contiene secretos)"
+paths = ['''(^|/)adapters/\.generated\.json$''']
