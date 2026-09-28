@@ -1,3 +1,6 @@
+approval_policy = "on-request"
+sandbox_mode = "workspace-write"
+
 # GENERADO por abm sync. No editar. Codex lee AGENTS.md de forma nativa.
 # Codex solo lee este archivo de proyecto si el proyecto está marcado como de confianza (trusted).
 [mcp_servers.abm]

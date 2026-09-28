@@ -9,3 +9,6 @@ __pycache__/
 !.env.example
 examples/**/*.db
 examples/**/*.sqlite3
+
+# Ajustes locales por usuario de Claude Code (no se versionan)
+.claude/settings.local.json
