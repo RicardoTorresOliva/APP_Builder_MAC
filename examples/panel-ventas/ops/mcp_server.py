@@ -197,4 +197,9 @@ def main():
 
 
 if __name__ == "__main__":
+    for _s in (sys.stdin, sys.stdout, sys.stderr):  # UTF-8 en cualquier SO (Windows usa cp1252 por defecto)
+        try:
+            _s.reconfigure(encoding="utf-8")
+        except (AttributeError, ValueError):
+            pass
     main()

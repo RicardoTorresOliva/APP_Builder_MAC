@@ -150,6 +150,11 @@ def cli(argv):
 
 
 if __name__ == "__main__":
+    for _s in (sys.stdin, sys.stdout, sys.stderr):  # UTF-8 en cualquier SO (Windows usa cp1252 por defecto)
+        try:
+            _s.reconfigure(encoding="utf-8")
+        except (AttributeError, ValueError):
+            pass
     if len(sys.argv) > 2 and sys.argv[1] == "--cli":
         sys.exit(cli(sys.argv[2:]))
     for line in sys.stdin:
