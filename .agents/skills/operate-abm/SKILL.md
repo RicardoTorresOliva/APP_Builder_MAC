@@ -12,8 +12,8 @@ ABM es un CLI de Python sin dependencias: `./abm <orden>` (Windows: `abm.cmd`). 
 
 ## Al empezar una sesión
 
-1. `./abm session-start` (o lee `docs/project_memory.md` + `implementation/task_tracker.md`) para
-   saber dónde retomar.
+1. Ejecuta el playbook `session-start` (lee `docs/project_memory.md`, `implementation/task_tracker.md`
+   y la cola) para saber dónde retomar. No es una orden del CLI.
 2. `./abm doctor` si algo del entorno falla.
 3. `./abm pending list` para ver la cola antes de decidir un default por tu cuenta.
 
@@ -37,11 +37,10 @@ o rows }`. Confía en su salida — no la repitas a mano ni la reinterpretes en 
 
 ## Servidor MCP
 
-`./abm mcp` levanta un servidor stdio con una tool por orden, nombrada `abm_<orden>` con guiones
-bajos (`abm_okf_validate`, `abm_ads_check`, `abm_tokens_report`, `abm_pending_list`,
-`abm_methodology_classify`, `abm_decide`, `abm_agent_conformance`…). Las tools de escritura traen
-`dry_run=true` por defecto — pásalo en `false` explícito solo cuando de verdad quieras escribir.
-Recurso de solo lectura: `abm://tokens/summary`. Prefiere el servidor MCP sobre invocar el CLI por
+`./abm mcp` levanta un servidor stdio (protocolo 2025-11-25) con 15 tools `abm_*`; la lista exacta,
+generada desde el código, está en `references/mcp-server.md`. Las tools de escritura traen
+`dry_run=true` por defecto; las destructivas (`abm_sync`) exigen además `confirm=true` con
+confirmación humana. Recursos de solo lectura: `abm://tokens/summary`, `abm://pending`, `abm://ads`. Prefiere el servidor MCP sobre invocar el CLI por
 shell cuando tu cliente ya habla MCP: evita parsear texto y respeta mejor el mínimo privilegio.
 
 ## Antes de terminar cualquier unidad
@@ -52,4 +51,4 @@ Corre `./abm check`; si tocaste `.md` del núcleo, además `okf validate`, `lint
 
 ## Detalle extra
 
-`references/mcp-server.md`: inventario completo de tools `abm_*`, sus hints y un flujo de ejemplo.
+`references/mcp-server.md`: inventario de tools `abm_*` y recursos, generado por `./abm sync` desde `scripts/abmkit/mcp_server.py`.

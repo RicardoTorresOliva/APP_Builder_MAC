@@ -35,9 +35,22 @@ def _check_actor_event(rel, name, ev, out):
     at = ev.get("at")
     if at is not None and not parse_iso(at):
         out.append(_f(rel, "error", "okf.datetime", f"`{name}.at` no es ISO 8601 con zona: {at!r}"))
+    elif at is not None and parse_iso(at) > _dt.datetime.now(_dt.timezone.utc) + _dt.timedelta(days=1):
+        out.append(_f(rel, "warn", "okf.future", f"`{name}.at` está en el futuro: {at}"))
 
 
 def check_concept(rel: str, fm: dict, body: str, profile: str, conf: dict, out: list):
+    """Spec §11: only a parseable frontmatter with a non-empty `type` is a hard requirement; the
+    families of §5–§10 are SHOULD for producers → warnings in spec mode, errors in the ABM profile."""
+    start = len(out)
+    _check_concept(rel, fm, body, profile, conf, out)
+    if profile != "abm":
+        for f in out[start:]:
+            if f["code"] != "okf.type":
+                f["level"] = "warn"
+
+
+def _check_concept(rel: str, fm: dict, body: str, profile: str, conf: dict, out: list):
     typ = fm.get("type")
     if not isinstance(typ, str) or not typ.strip():
         out.append(_f(rel, "error", "okf.type", "falta `type` (obligatorio)"))
@@ -64,6 +77,10 @@ def check_concept(rel: str, fm: dict, body: str, profile: str, conf: dict, out: 
                     ids.add(str(s["id"]))
                 if s.get("last_modified") and not parse_iso(s["last_modified"]):
                     out.append(_f(rel, "warn", "okf.datetime", f"`sources[{i}].last_modified` no es ISO 8601 con zona"))
+    if typ == "Attested Computation":
+        for k in ("runtime", "executor", "attester"):
+            if not fm.get(k):
+                out.append(_f(rel, "error", "okf.attested", f"Attested Computation exige `{k}` (spec §10)"))
     if profile != "abm":
         return
     # ---- ABM producer profile (stricter than the spec, never contradicting it)
@@ -141,7 +158,8 @@ def validate(ctx: Ctx, paths=None, profile="abm"):
         text = path.read_text(encoding="utf-8")
         name = path.name
         if name == "index.md":
-            check_index(rel, text, rel == "index.md", out)
+            from .common import bundle_root
+            check_index(rel, text, path.parent.resolve() == bundle_root(root, path), out)
             continue
         if name == "log.md":
             check_log(rel, text, out)
@@ -220,8 +238,20 @@ def build_llms(ctx: Ctx) -> str:
     if (root / "ads.yaml").exists():
         from .common import load_yaml_file
         m = load_yaml_file(root / "ads.yaml")
-    lines = [f"# {m.get('name') or root.name}", "", f"> {m.get('description') or 'ADS producido con ABM.'}", "",
-             "Gobernanza en `AGENTS.md`. CLI para agentes: `./abm <orden> --json`. Servidor MCP: `python3 scripts/abm.py mcp`. Mapa completo: `index.md`.", ""]
+    ep = m.get("endpoints") or {}
+    mcp = (ep.get("mcp") or {}).get("command") or (ep.get("mcp") or {}).get("url")
+    cli = (ep.get("cli") or {}).get("command")
+    parts = ["Gobernanza para agentes: `AGENTS.md`."]
+    if ep.get("skill"):
+        parts.append(f"Skill de operación: `{ep['skill']}`.")
+    if mcp:
+        parts.append(f"Servidor MCP: `{mcp}`.")
+    if cli:
+        parts.append(f"CLI: `{cli}` (salida JSON).")
+    if (m.get("tokens") or {}).get("report"):
+        parts.append(f"Consumo de tokens: `{m['tokens']['report']}`.")
+    parts.append("Mapa completo: `index.md`.")
+    lines = [f"# {m.get('name') or root.name}", "", f"> {m.get('description') or 'ADS producido con ABM.'}", "", " ".join(parts), ""]
     used = set()
     for title, prefixes in LLMS_SECTIONS:
         items = [(r, t, d) for r, t, d in docs if r not in used and any(r == p or r.startswith(p) for p in prefixes)]

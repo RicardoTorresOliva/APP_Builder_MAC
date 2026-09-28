@@ -10,7 +10,8 @@ import json
 import re
 
 from .common import Ctx, cfg, emit, load_yaml_file, now_iso, write_text
-from .decide import decide, norm
+from .common import safe_path
+from .decide import decide, kw_match, norm
 
 DEFAULTS = {"uncertainty": 1, "criticality": 0, "horizon": 1, "team": 0, "brownfield": 0, "autonomy": 1}
 
@@ -52,8 +53,8 @@ def match_rule(rules, dims):
 
 def triggers_for(text, router):
     t = norm(text)
-    esc = [e for e in (router.get("triggers") or {}).get("escalate", []) if any(norm(k) in t for k in e.get("keywords", []))]
-    de = [e for e in (router.get("triggers") or {}).get("deescalate", []) if any(norm(k) in t for k in e.get("keywords", []))]
+    esc = [e for e in (router.get("triggers") or {}).get("escalate", []) if any(kw_match(k, t) for k in e.get("keywords", []))]
+    de = [e for e in (router.get("triggers") or {}).get("deescalate", []) if any(kw_match(k, t) for k in e.get("keywords", []))]
     return esc, de
 
 
@@ -113,9 +114,17 @@ def classify(ctx, text, answers=None, modules=None, provider=None):
             mods.append({"module": name, "mode": de[0].get("mode", "IDD"), "review": "por milestone",
                          "why": f"desescalamiento: {', '.join(e['id'] for e in de)}", "triggers": [e["id"] for e in de]})
         else:
-            mode = base_mode if not (esc_all and base_mode == "VIBE") else "IDD"
+            mode, mwhy = base_mode, base_why
+            if modules and not answers:
+                # El riesgo es del módulo, no del encargo completo: criticidad inferida solo con su descripción.
+                mdims, _ = infer_dimensions(ctx, router, desc, provider)
+                mvals = {**base_vals, "criticality": mdims["criticality"]["value"]}
+                mrule = match_rule(router.get("rules") or [], mvals)
+                mode, mwhy = (mrule["mode"], mrule["why"]) if mrule else (fallback, base_why)
+            if esc_all and mode == "VIBE":
+                mode = "IDD"
             mods.append({"module": name, "mode": mode, "review": "humana" if mode == "SDD" else "por milestone",
-                         "why": base_why, "triggers": []})
+                         "why": mwhy, "triggers": []})
     pending = [{"dimension": k, "default": v["value"], "confidence": v["confidence"],
                 "question": router["dimensions"][k].get("question", k)} for k, v in dims.items() if v.get("route") != "act"]
     return {"ceremony": ceremony, "ceremony_rules": cer, "dimensions": dims, "project_mode": project_mode, "why": why,
@@ -152,7 +161,7 @@ Ceremonia: **{res['ceremony']}** · modo del proyecto: **{res['project_mode']}**
 def cmd_classify(ctx: Ctx, args) -> int:
     text = args.text or ""
     if args.file:
-        text += "\n" + (ctx.root / args.file).read_text(encoding="utf-8")
+        text += "\n" + safe_path(ctx.root, args.file, "--file").read_text(encoding="utf-8")
     if not text.strip() and not args.answers:
         return emit(ctx, {"error": "sin entrada"}, ["Falta la descripción: --text, --file o --answers"], ok=False)
     answers = json.loads(args.answers) if args.answers else None
@@ -162,7 +171,7 @@ def cmd_classify(ctx: Ctx, args) -> int:
         return emit(ctx, {"error": str(e)}, [f"ERROR {e}"], ok=False)
     written = None
     if args.write:
-        written = write_text(ctx, ctx.root / args.write, render_map(res, args.title or "ADS"))
+        written = write_text(ctx, safe_path(ctx.root, args.write, "--write"), render_map(res, args.title or "ADS"))
     if args.queue and not ctx.dry_run:
         from .pending import load, _render
         p, t, rows = load(ctx)

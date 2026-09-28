@@ -1,5 +1,6 @@
 # GENERADO por abm sync. Fragmento para ~/.hermes/config.yaml (Hermes solo admite MCP a nivel usuario).
-# Hermes carga AGENTS.md y .agents/skills/ del proyecto de forma nativa.
+# Hermes carga .agents/skills/ del proyecto; la carga nativa de AGENTS.md tiene fuentes contradictorias (no-verificado):
+# la skill abm-playbooks indica leer AGENTS.md primero. tools.resources/tools.prompts: no-verificado (ver `hermes mcp --help`).
 mcp_servers:
   abm:
     command: python3

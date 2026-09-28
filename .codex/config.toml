@@ -1,4 +1,5 @@
 # GENERADO por abm sync. No editar. Codex lee AGENTS.md de forma nativa.
+# Codex solo lee este archivo de proyecto si el proyecto está marcado como de confianza (trusted).
 [mcp_servers.abm]
 command = "python3"
 args = ["scripts/abm.py", "mcp"]

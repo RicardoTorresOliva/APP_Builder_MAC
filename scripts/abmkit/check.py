@@ -21,6 +21,8 @@ CHECKS = [
     ("lint-manual", ["lint", "manual"]),
     ("lint-skills", ["lint", "skills"]),
     ("units", ["units"]),
+    ("tokens-attest", ["tokens", "attest"]),
+    ("tokens-budget", ["tokens", "budget"]),
     ("agent-conformance", ["agent-conformance"]),
 ]
 
@@ -43,7 +45,11 @@ def cmd_check(ctx: Ctx, args) -> int:
         sub = Ctx(ctx.root, True, False)
         buf = io.StringIO()
         with contextlib.redirect_stdout(buf):
-            code = a.func(sub, a)
+            try:
+                code = a.func(sub, a)
+            except Exception as e:  # noqa: BLE001 — un validador roto no tumba a los demás
+                print(json.dumps({"error": f"{type(e).__name__}: {e}"}))
+                code = 1
         try:
             data = json.loads(buf.getvalue() or "{}")
         except json.JSONDecodeError:

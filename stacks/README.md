@@ -41,7 +41,7 @@ legacy) y `/stacks/languages.md` (lenguajes dominantes en entornos corporativos)
 
 ## Cómo lo usa el comando `stack`
 
-`/stack` (o `abm stack` desde la CLI) hace preguntas simples sobre el ADS que se va a construir
+El comando `stack` (playbook `commands/stack.md`; no es una orden del CLI) hace preguntas simples sobre el ADS que se va a construir
 (¿quién lo usa?, ¿qué tan crítico es?, ¿hay un legacy que integrar?, ¿usa IA?, ¿qué nube o restricción
 ya existe?), identifica el caso más cercano de este índice, recomienda un paquete (vibe coder, pro,
 low-cost o corporativo según las respuestas) y **explica el porqué**: qué señal de las respuestas

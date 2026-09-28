@@ -47,7 +47,7 @@ TOOLS = {
                                  lambda a: ["methodology", "classify", *(["--text", a["text"]] if a.get("text") else []), *(["--file", a["file"]] if a.get("file") else [])]),
     "abm_decide": ("Decisión tipada (choice/score/boolean) con confianza; capa System One con fallback.",
                    _obj({"state": {"type": "string"}, "questions": {"type": "object"}, "provider": {"type": "string"}}, ["state", "questions"]),
-                   {**RO, "openWorldHint": True},
+                   {"readOnlyHint": False, "destructiveHint": False, "idempotentHint": False, "openWorldHint": True},
                    lambda a: ["decide", "--state", a["state"], "--questions-json", json.dumps(a["questions"], ensure_ascii=False), *(["--provider", a["provider"]] if a.get("provider") else [])]),
     "abm_pending_list": ("Lista la cola de pendientes.", _obj({"all": {"type": "boolean"}}), RO,
                          lambda a: ["pending", "list", *(["--all"] if a.get("all") else [])]),
@@ -65,7 +65,9 @@ TOOLS = {
                                ["input", "output"]), WR,
                           lambda a: ["tokens", "record", "--input", str(a["input"]), "--output", str(a["output"]),
                                      *sum(([f"--{k}", str(a[k])] for k in ("phase", "source", "model", "provider", "unit", "feature") if a.get(k)), [])]),
-    "abm_sync": ("Genera o verifica los adaptadores por herramienta.", _obj({"check": {"type": "boolean"}, **DRY}), WR,
+    "abm_sync": ("Genera o verifica los adaptadores; puede borrar salidas huérfanas (destructiva: dry_run y confirm).",
+                 _obj({"check": {"type": "boolean"}, **DRY, "confirm": {"type": "boolean", "default": False, "description": "confirmación humana explícita"}}),
+                 {**WR, "destructiveHint": True},
                  lambda a: ["sync", *(["--check"] if a.get("check") else [])]),
 }
 
@@ -76,6 +78,55 @@ RESOURCES = {
 }
 
 
+PATH_KEYS = {"paths", "path", "file"}
+SENSITIVE_KEYS = {"state", "questions", "text", "context", "default", "alternative", "impact"}
+
+
+def validate_args(schema: dict, args: dict, root) -> str | None:
+    """Minimal JSON Schema check (type, enum, required, additionalProperties) + path confinement."""
+    from .common import safe_path
+    if not isinstance(args, dict):
+        return "arguments debe ser un objeto"
+    props = schema.get("properties", {})
+    for r in schema.get("required", []):
+        if r not in args:
+            return f"falta el argumento obligatorio `{r}`"
+    for k, v in args.items():
+        if k not in props:
+            return f"argumento no permitido `{k}`"
+        spec = props[k]
+        t = spec.get("type")
+        ok = {"string": isinstance(v, str), "boolean": isinstance(v, bool), "integer": isinstance(v, int) and not isinstance(v, bool),
+              "object": isinstance(v, dict), "array": isinstance(v, list)}.get(t, True)
+        if not ok:
+            return f"`{k}` debe ser {t}"
+        if "enum" in spec and v not in spec["enum"]:
+            return f"`{k}` debe ser uno de {spec['enum']}"
+        vals = v if isinstance(v, list) else [v]
+        for x in vals:
+            if isinstance(x, str) and x.startswith("-"):
+                return f"`{k}` no puede empezar por '-'"
+            if k in PATH_KEYS:
+                try:
+                    safe_path(root, x, k)
+                except ValueError as e:
+                    return str(e)
+    return None
+
+
+def redact(args: dict) -> dict:
+    """Audit log never stores free text that may carry personal data or secrets."""
+    import hashlib
+    out = {}
+    for k, v in (args or {}).items():
+        if k in SENSITIVE_KEYS:
+            raw = json.dumps(v, ensure_ascii=False, sort_keys=True)
+            out[k] = {"len": len(raw), "sha256": hashlib.sha256(raw.encode("utf-8")).hexdigest()[:12]}
+        else:
+            out[k] = v
+    return out
+
+
 class Server:
     def __init__(self, root):
         self.root = root
@@ -84,15 +135,18 @@ class Server:
     # -- helpers
     def run_cli(self, argv, dry_run=False):
         from .cli import build_parser
-        ap = build_parser()
-        args = ap.parse_args(argv)
-        args.json, args.dry_run = True, dry_run
-        buf = io.StringIO()
-        with contextlib.redirect_stdout(buf):
+        buf, err = io.StringIO(), io.StringIO()
+        with contextlib.redirect_stdout(buf), contextlib.redirect_stderr(err):
             try:
+                args = build_parser().parse_args(argv)
+                args.json, args.dry_run = True, dry_run
                 code = args.func(Ctx(self.root, True, dry_run), args)
-            except SystemExit as e:  # argparse or die()
-                code = int(e.code or 1)
+            except SystemExit as e:  # argparse or die(): never let it reach the protocol stream
+                code = int(e.code or 1) or 1
+                print(json.dumps({"error": err.getvalue().strip()[-500:] or "argumentos inválidos"}))
+            except Exception as e:  # noqa: BLE001
+                code = 1
+                print(json.dumps({"error": f"{type(e).__name__}: {e}"}))
         text = buf.getvalue().strip()
         try:
             data = json.loads(text) if text else {}
@@ -116,7 +170,7 @@ class Server:
         p = self.root / rel
         p.parent.mkdir(parents=True, exist_ok=True)
         with p.open("a", encoding="utf-8") as f:
-            f.write(json.dumps({"ts": now_iso(), "via": "mcp", "tool": tool, "arguments": arguments, "dry_run": dry_run, "ok": ok}, ensure_ascii=False) + "\n")
+            f.write(json.dumps({"ts": now_iso(), "via": "mcp", "tool": tool, "arguments": redact(arguments), "dry_run": dry_run, "ok": ok}, ensure_ascii=False) + "\n")
 
     # -- methods
     def initialize(self, params):
@@ -135,7 +189,14 @@ class Server:
         if name not in TOOLS:
             raise KeyError(f"herramienta desconocida: {name}")
         desc, schema, ann, builder = TOOLS[name]
+        problem = validate_args(schema, arguments, self.root)
+        if problem:
+            self.audit(name, arguments, False, True)
+            return {"content": [{"type": "text", "text": problem}], "isError": True}
         dry = bool(arguments.get("dry_run", True)) if not ann["readOnlyHint"] else False
+        if ann.get("destructiveHint") and not dry and not arguments.get("confirm"):
+            self.audit(name, arguments, False, dry)
+            return {"content": [{"type": "text", "text": "Acción destructiva: requiere confirmación humana explícita (confirm=true) según ads.yaml → security.hitl_actions."}], "isError": True}
         if builder is None:
             code, data = 0, self.tokens_summary()
         else:
@@ -167,6 +228,8 @@ class Server:
 
     def handle(self, msg):
         method, mid = msg.get("method"), msg.get("id")
+        if msg.get("params") is not None and not isinstance(msg.get("params"), dict):
+            return {"jsonrpc": "2.0", "id": mid, "error": {"code": -32602, "message": "params debe ser un objeto"}} if mid is not None else None
         if method is None:
             return None
         routes = {"initialize": self.initialize, "server/discover": self.initialize, "ping": lambda p: {},
@@ -185,7 +248,13 @@ class Server:
             return {"jsonrpc": "2.0", "id": mid, "error": {"code": -32603, "message": f"error interno: {e}"}}
 
 
-def serve(root, stdin=sys.stdin, stdout=sys.stdout):
+def serve(root, stdin=None, stdout=None):
+    for st in (sys.stdin, sys.stdout):
+        try:
+            st.reconfigure(encoding="utf-8")
+        except (AttributeError, ValueError):
+            pass
+    stdin, stdout = stdin or sys.stdin, stdout or sys.stdout
     srv = Server(root)
     for line in stdin:
         line = line.strip()
@@ -196,9 +265,13 @@ def serve(root, stdin=sys.stdin, stdout=sys.stdout):
         except json.JSONDecodeError:
             resp = {"jsonrpc": "2.0", "id": None, "error": {"code": -32700, "message": "JSON inválido"}}
         else:
-            batch = msg if isinstance(msg, list) else [msg]
-            resps = [r for r in (srv.handle(m) for m in batch) if r]
-            resp = resps if isinstance(msg, list) else (resps[0] if resps else None)
+            if not isinstance(msg, dict):
+                resp = {"jsonrpc": "2.0", "id": None, "error": {"code": -32600, "message": "solicitud inválida (los lotes JSON-RPC no se admiten)"}}
+            else:
+                try:
+                    resp = srv.handle(msg)
+                except Exception as e:  # noqa: BLE001
+                    resp = {"jsonrpc": "2.0", "id": msg.get("id"), "error": {"code": -32603, "message": f"error interno: {e}"}}
         if resp:
             stdout.write(json.dumps(resp, ensure_ascii=False) + "\n")
             stdout.flush()

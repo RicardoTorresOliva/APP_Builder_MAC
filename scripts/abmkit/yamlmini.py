@@ -38,12 +38,43 @@ def _strip_comment(line: str) -> str:
     return "".join(out).rstrip()
 
 
+_ESC = {"n": "\n", "t": "\t", "r": "\r", '"': '"', "\\": "\\", "/": "/", "0": "\0", " ": " "}
+
+
+def _unescape(body: str) -> str:
+    """YAML double-quoted escapes, implemented by hand (keeps non-ASCII text intact)."""
+    out, i = [], 0
+    while i < len(body):
+        c = body[i]
+        if c != "\\" or i + 1 >= len(body):
+            out.append(c)
+            i += 1
+            continue
+        n = body[i + 1]
+        if n in _ESC:
+            out.append(_ESC[n])
+            i += 2
+        elif n in "uU" or n == "x":
+            size = {"x": 2, "u": 4, "U": 8}[n]
+            hexs = body[i + 2 : i + 2 + size]
+            try:
+                out.append(chr(int(hexs, 16)))
+                i += 2 + size
+            except ValueError:
+                out.append(body[i : i + 2])
+                i += 2
+        else:  # unknown escape: keep literally (e.g. Windows paths)
+            out.append(body[i : i + 2])
+            i += 2
+    return "".join(out)
+
+
 def _scalar(tok: str):
     t = tok.strip()
     if t == "":
         return None
     if (t[0] == t[-1] == '"') and len(t) >= 2:
-        return bytes(t[1:-1], "utf-8").decode("unicode_escape") if "\\" in t else t[1:-1]
+        return _unescape(t[1:-1]) if "\\" in t else t[1:-1]
     if (t[0] == t[-1] == "'") and len(t) >= 2:
         return t[1:-1].replace("''", "'")
     low = t.lower()
@@ -110,6 +141,15 @@ class _Flow:
         self.i = j
         return _scalar(tok)
 
+    def _sep(self, close):
+        self.ws()
+        if self.i < len(self.s) and self.s[self.i] == ",":
+            self.i += 1
+        elif self.i < len(self.s) and self.s[self.i] == close:
+            return
+        else:
+            raise YAMLError(f"se esperaba ',' o '{close}' en {self.s!r} (posición {self.i})")
+
     def seq(self):
         self.i += 1
         out = []
@@ -120,10 +160,11 @@ class _Flow:
             if self.s[self.i] == "]":
                 self.i += 1
                 return out
+            start = self.i
             out.append(self.parse())
-            self.ws()
-            if self.i < len(self.s) and self.s[self.i] == ",":
-                self.i += 1
+            if self.i == start:
+                raise YAMLError(f"carácter inesperado en secuencia: {self.s[self.i]!r}")
+            self._sep("]")
 
     def map(self):
         self.i += 1
@@ -135,16 +176,20 @@ class _Flow:
             if self.s[self.i] == "}":
                 self.i += 1
                 return out
+            start = self.i
             key = self.atom(":,}")
+            if self.i == start:
+                raise YAMLError(f"carácter inesperado en mapa: {self.s[self.i]!r}")
             self.ws()
             if self.i < len(self.s) and self.s[self.i] == ":":
                 self.i += 1
+                vstart = self.i
                 out[str(key)] = self.parse()
+                if self.i == vstart and self.i < len(self.s) and self.s[self.i] not in ",}":
+                    raise YAMLError(f"valor inválido en mapa: {self.s[self.i]!r}")
             else:
                 out[str(key)] = None
-            self.ws()
-            if self.i < len(self.s) and self.s[self.i] == ",":
-                self.i += 1
+            self._sep("}")
 
 
 def _value(tok: str):

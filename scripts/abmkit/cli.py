@@ -3,6 +3,8 @@ from __future__ import annotations
 
 import argparse
 import importlib
+import json
+import os
 import sys
 from pathlib import Path
 
@@ -33,7 +35,17 @@ def build_parser():
     return ap
 
 
+def _utf8_streams():
+    """Windows consoles/pipes may default to cp1252: force UTF-8 so ✔/→/tildes never crash."""
+    for stream in (sys.stdout, sys.stderr):
+        try:
+            stream.reconfigure(encoding="utf-8", errors="replace")
+        except (AttributeError, ValueError):
+            pass
+
+
 def main(argv=None) -> int:
+    _utf8_streams()
     argv = list(sys.argv[1:] if argv is None else argv)
     flags = {f: (f in argv) for f in ("--json", "--dry-run")}
     argv = [a for a in argv if a not in flags]
@@ -42,7 +54,17 @@ def main(argv=None) -> int:
     args.json = args.json or flags["--json"]
     args.dry_run = args.dry_run or flags["--dry-run"]
     ctx = Ctx(find_root(args.root), args.json, args.dry_run)
-    return int(args.func(ctx, args) or 0)
+    try:
+        return int(args.func(ctx, args) or 0)
+    except (ValueError, FileNotFoundError, PermissionError, KeyError, OSError) as e:
+        if os.environ.get("ABM_DEBUG"):
+            raise
+        msg = f"{type(e).__name__}: {e}"
+        if ctx.json:
+            print(json.dumps({"error": msg}, ensure_ascii=False))
+        else:
+            print(f"ERROR {msg}  (detalle: ABM_DEBUG=1)", file=sys.stderr)
+        return 1
 
 
 if __name__ == "__main__":

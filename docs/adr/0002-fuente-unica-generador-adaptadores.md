@@ -22,7 +22,7 @@ Hoy los adaptadores son copias manuales (`adapters/claude-code/.claude` es idén
 - **`abm sync`** escribe las salidas; **`abm sync --check`** falla en CI si alguna difiere de lo que se generaría.
 - Cada archivo generado lleva una marca "GENERADO por abm sync. No editar." (en JSON/TOML, el registro de generados `adapters/.generated.json` lista rutas y hashes).
 - Las salidas se versionan en el repo: el proyecto sigue funcionando sin paso de instalación.
-- Se eliminan las copias manuales de `adapters/<tool>/`; `install-adapter.sh` pasa a ser un shim de `abm sync --tool` (ver `MIGRATION.md`).
+- Se eliminan las copias manuales de `adapters/<tool>/`; `install-adapter.sh` pasa a ser un shim de `abm sync`; para desactivar una herramienta se usa `enabled: false` en `adapters/tools.yaml` (ver `MIGRATION.md`).
 - **Degradación elegante:** si una herramienta no soporta comandos, skills o subagentes, el puntero indica "ejecuta el playbook `commands/<x>.md`".
 
 ## Consecuencias

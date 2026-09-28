@@ -74,7 +74,7 @@ const NS='http://www.w3.org/2000/svg';
 function el(n,a,p){const e=document.createElementNS(NS,n);for(const k in a)e.setAttribute(k,a[k]);if(p)p.appendChild(e);return e;}
 function kpi(label,value,hero){const c=document.createElement('div');c.className='card kpi'+(hero?' hero':'');const v=document.createElement('div');v.className='v';v.textContent=value;const l=document.createElement('div');l.className='l';l.textContent=label;c.append(v,l);return c;}
 const K=document.getElementById('kpis');
-K.append(kpi('tokens totales',fmt(D.total),true),kpi('costo USD (según pricing.yaml)',D.cost_known?('$'+D.cost.toFixed(2)):(D.cost?('≥ $'+D.cost.toFixed(2)):'n/d')),kpi('eventos estimados',D.estimated+' de '+D.events));
+K.append(kpi('tokens totales',fmt(D.total),true),kpi(D.cost_lower_bound?'costo USD (cota inferior, según pricing.yaml)':'costo USD (según pricing.yaml)',(D.cost_known&&!D.cost_lower_bound)?('$'+D.cost.toFixed(2)):(D.cost?('≥ $'+D.cost.toFixed(2)):'n/d')),kpi('eventos estimados',D.estimated+' de '+D.events));
 const worst=D.budgets.reduce((w,b)=>({ok:0,soft:1,hard:2}[b.state]>{ok:0,soft:1,hard:2}[w]?b.state:w),'ok');
 const bc=kpi('presupuestos','');const lab={ok:'✔ dentro',soft:'⚠ umbral blando',hard:'✖ tope duro superado'};const st=document.createElement('span');st.className='st '+worst;const dot=document.createElement('i');st.append(dot,document.createTextNode(lab[worst]));bc.querySelector('.v').replaceChildren(st);K.append(bc);
 function hbar(id,rows){const host=document.getElementById(id);if(!rows.length){host.innerHTML='<p class="empty">Sin datos todavía.</p>';return;}
@@ -132,6 +132,7 @@ def build(ctx):
     data = {"total": sum(int(e.get("input_tokens", 0)) + int(e.get("output_tokens", 0)) for e in events),
             "events": len(events), "estimated": sum(1 for e in events if e.get("source") == "estimate"),
             "cost": round(sum(c for c in costs if c is not None), 6), "cost_known": bool(costs) and all(c is not None for c in costs),
+            "cost_lower_bound": any(e.get("cost_lower_bound") for e in events),
             "by_unit": rows("unit"), "by_model": rows("model"),
             "by_day": [{"k": k, "v": v} for k, v in sorted(day.items())], "budgets": T.budgets_status(ctx, events), "rows": table}
     blob = json.dumps(data, ensure_ascii=False).replace("</", "<\\/")

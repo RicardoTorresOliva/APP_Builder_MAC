@@ -14,7 +14,7 @@ from pathlib import Path
 
 from .common import Ctx, emit, load_yaml_file, now_iso
 
-KIT = ["AGENTS.md", "abm", "abm.cmd", "scripts", "okf", "contract", "commands", "skills", "agents", "methodology",
+KIT = ["AGENTS.md", "abm", "abm.cmd", ".gitattributes", ".markdownlint-cli2.jsonc", ".env.example", ".github/workflows/abm-ci.yml", "scripts", "okf", "contract", "commands", "skills", "agents", "methodology",
        "standards", "templates", "stacks", "integrations", "adapters/tools.yaml", "docs/glossary.md", "docs/manual",
        "docs/compat-matrix.md", "planning", "implementation", "design_docs", "deliverables", "knowledge",
        "docs/decision_log.md", "docs/project_memory.md", "docs/work_log.md", "docs/tooling", ".gitignore", "START_PROJECT.md"]
@@ -60,7 +60,7 @@ def cmd_new_ads(ctx: Ctx, args) -> int:
     dst = Path(args.dir).resolve()
     if not re.match(r"^[a-z0-9]+(-[a-z0-9]+)*$", args.id):
         return emit(ctx, {"error": "id inválido"}, ["`--id` debe ser kebab-case"], ok=False)
-    if not (root / "profiles" / args.profile / "profile.md").exists():
+    if not re.match(r"^[a-z0-9]+(-[a-z0-9]+)*$", args.profile) or not (root / "profiles" / args.profile / "profile.md").exists():
         return emit(ctx, {"error": "perfil inexistente"}, [f"No existe el perfil {args.profile} (ver profiles/)"], ok=False)
     if dst.exists() and any(dst.iterdir()):
         return emit(ctx, {"error": "destino no vacío"}, [f"{dst} no está vacío: elige otra carpeta (bloqueante a: no se sobrescribe)"], ok=False)
@@ -87,9 +87,13 @@ def cmd_new_ads(ctx: Ctx, args) -> int:
     (dst / "abm.yaml").write_text(conf, encoding="utf-8")
     # ads.yaml desde la plantilla
     t = (root / "templates/agentic/ads.yaml").read_text(encoding="utf-8")
-    rep = {"<id-kebab-case>": args.id, "<Nombre del ADS>": args.name, "<id>": args.id,
+    import json as _json
+    q = lambda v: _json.dumps(str(v), ensure_ascii=False)  # noqa: E731 — valores seguros en YAML
+    for key, val in (("name", args.name), ("owner", args.owner), ("description", args.description)):
+        t = re.sub(rf"^{key}: <[^>\n]*>.*$", f"{key}: {q(val)}", t, count=1, flags=re.M)
+    rep = {"<id-kebab-case>": args.id, "<id>": args.id,
            "<software-app | api-service | data-product | research-report | intelligence-product | automation-integration>": args.profile,
-           "<minimo | extendido>": level, "<equipo o persona>": args.owner, "<una frase: qué es y para quién>": args.description,
+           "<minimo | extendido>": level,
            "<N1 | N2 | N3>": "N2" if level == "extendido" else "N1"}
     for a, b in rep.items():
         t = t.replace(a, b)

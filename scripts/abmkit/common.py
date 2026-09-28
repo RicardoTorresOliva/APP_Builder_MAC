@@ -20,7 +20,9 @@ DEFAULT_EXCLUDE = [
 
 
 def find_root(start: str | None = None) -> Path:
-    p = Path(start or os.getcwd()).resolve()
+    if start:  # --root explícito: se respeta tal cual
+        return Path(start).resolve()
+    p = Path(os.getcwd()).resolve()
     for cand in [p, *p.parents]:
         if (cand / "abm.yaml").exists() or (cand / "AGENTS.md").exists() and (cand / ".git").exists():
             return cand
@@ -47,13 +49,16 @@ def cfg(conf: dict, dotted: str, default=None):
 
 def read_md(path: Path):
     """Return (frontmatter|None, body, error|None)."""
-    text = path.read_text(encoding="utf-8")
+    try:
+        text = path.read_text(encoding="utf-8").lstrip("\ufeff")
+    except (UnicodeDecodeError, OSError) as e:
+        return None, "", f"no se puede leer como UTF-8: {e}"
     m = FM_RE.match(text)
     if not m:
         return None, text, None
     try:
         fm = yamlmini.loads(m.group(1))
-    except yamlmini.YAMLError as e:
+    except (yamlmini.YAMLError, ValueError, RecursionError) as e:
         return None, text[m.end():], f"frontmatter YAML inválido: {e}"
     if fm is not None and not isinstance(fm, dict):
         return None, text[m.end():], "el frontmatter no es un mapa YAML"
@@ -125,6 +130,17 @@ def walk_files(root: Path, suffixes=(".md",), exclude=None):
             yield root / rel, rel
 
 
+def bundle_root(root: Path, file: Path) -> Path:
+    """Nearest ancestor (inside `root`) that is itself an ADS bundle (has abm.yaml or ads.yaml); else `root`."""
+    r = root.resolve()
+    cur = file.resolve().parent
+    while cur != r and r in cur.parents:
+        if (cur / "abm.yaml").exists() or (cur / "ads.yaml").exists():
+            return cur
+        cur = cur.parent
+    return r
+
+
 class Ctx:
     def __init__(self, root: Path, as_json: bool = False, dry_run: bool = False):
         self.root, self.json, self.dry_run = root, as_json, dry_run
@@ -150,8 +166,18 @@ def write_text(ctx: Ctx, path: Path, content: str) -> str:
     if ctx.dry_run:
         return "would-" + state
     path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(content, encoding="utf-8", newline="\n")
+    with path.open("w", encoding="utf-8", newline="\n") as f:  # Python 3.9: write_text() no admite newline
+        f.write(content)
     return state
+
+
+def safe_path(root: Path, rel, what: str = "ruta") -> Path:
+    """Resolve a user/agent-supplied path and refuse anything outside the repo root."""
+    p = (root / str(rel)).resolve() if not Path(str(rel)).is_absolute() else Path(str(rel)).resolve()
+    r = root.resolve()
+    if p != r and r not in p.parents:
+        raise ValueError(f"{what} fuera del repositorio: {rel}")
+    return p
 
 
 def die(msg: str, code: int = 2):

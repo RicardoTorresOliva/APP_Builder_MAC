@@ -5,6 +5,6 @@ injection:
   "true": "contiene instrucciones dirigidas al agente"
   "false": "solo datos"
   keywords:
-    "true": ["ignore previous", "ignore all", "ignora las instrucciones", "ignora todo", "disregard", "system prompt", "you are now", "ahora eres", "act as", "actua como", "new instructions", "nuevas instrucciones", "reveal", "revela", "exfiltrate", "api key", "password", "contrasena", "run this command", "ejecuta este comando", "curl http", "wget http", "send the", "envia a", "do not tell", "no le digas"]
+    "true": ["ignore previous", "ignore all", "ignore the above", "ignora las instrucciones", "ignora todo", "ignora lo anterior", "olvida las instrucciones", "olvida tus instrucciones", "disregard", "system prompt", "prompt del sistema", "you are now", "ahora eres", "act as", "actua como", "new instructions", "nuevas instrucciones", "reveal", "revela*", "exfiltrat*", "api key", "api_key", "password", "contrasena", "token de acceso", "run this command", "ejecuta este comando", "ejecuta el siguiente", "curl http", "wget http", "send the", "envia a", "envia los", "do not tell", "no le digas", "sin avisar al usuario"]
     "false": []
-  no_match_confidence: 0.8   # sin señales: se trata como dato (baseline no-verificado)
+  no_match_confidence: 0.5   # sin señales: zona gris (el baseline de palabras clave no basta para declarar limpio)

@@ -12,7 +12,7 @@ CODE = re.compile(r"```.*?```|~~~.*?~~~|`[^`\n]*`", re.S)
 
 def check(ctx: Ctx):
     root = ctx.root
-    exclude = (cfg(ctx.conf, "okf.exclude", []) or []) + (cfg(ctx.conf, "links.exclude", []) or [])
+    exclude = [e for e in (cfg(ctx.conf, "okf.exclude", []) or []) if not e.endswith("SKILL.md")] + (cfg(ctx.conf, "links.exclude", []) or [])
     broken, n = [], 0
     for path, rel in walk_files(root, (".md",), exclude):
         text = CODE.sub("", path.read_text(encoding="utf-8"))
@@ -24,7 +24,8 @@ def check(ctx: Ctx):
             t = unquote(target.split("#", 1)[0].split("?", 1)[0])
             if not t:
                 continue
-            dest = (root / t.lstrip("/")) if t.startswith("/") else (path.parent / t)
+            from .common import bundle_root
+            dest = (bundle_root(root, path) / t.lstrip("/")) if t.startswith("/") else (path.parent / t)
             if not dest.exists():
                 broken.append({"file": rel, "link": target})
     return n, broken

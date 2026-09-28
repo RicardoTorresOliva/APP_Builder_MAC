@@ -13,6 +13,7 @@ version: "2.0"
 Un **perfil** le dice al núcleo de ABM cómo producir un *tipo* de ADS. El núcleo (`AGENTS.md`) es constante; el perfil trae todo lo específico del tipo. Cada ADS elige un perfil (o uno compuesto) en `init-project` y lo registra en `abm.yaml → active_profile`.
 
 ## Reglas de todo perfil
+
 1. **Sin nombres de productos comerciales**: solo categorías (regla 7; lo verifica `abm lint core`). Los productos aparecen en `stacks/` durante la exploración de stack.
 2. **`stack_candidates` son sugerencias, nunca defaults**: la elección es humana (`stack`).
 3. **`tooling_candidates` se evalúan por costo**: una herramienta se instala solo si ahorra más contexto/tokens del que cuesta.
@@ -20,6 +21,7 @@ Un **perfil** le dice al núcleo de ABM cómo producir un *tipo* de ADS. El núc
 5. **El perfil declara comportamiento; no repite reglas de `AGENTS.md`.**
 
 ## Campos obligatorios
+
 ```markdown
 ---
 type: Asset Profile
@@ -44,12 +46,14 @@ ads_contract_level: minimo | extendido     # nivel mínimo del Contrato ADS (con
 ```
 
 ## Cómo consume el núcleo un perfil
+
 - `init-project` lo elige, explora el stack desde `stack_candidates` y crea `ads.yaml` con el nivel de contrato del perfil.
 - `review` aplica `quality_gate` y `deliverable_unit_completeness`.
 - `abm ads-check` exige que `ads.yaml → contract_level` no sea menor que `ads_contract_level`.
 - Cambiar de perfil es una decisión de diseño: regístrala en `docs/decision_log.md`.
 
 ## Composición (híbridos)
+
 Un híbrido no copia campos: **compone** perfiles atómicos y aporta solo el pegamento.
 
 ```markdown
@@ -64,12 +68,14 @@ composes: [research-report, data-product]   # referencias, nunca copias
 Cada DU declara qué capacidad lo gobierna con `governed_by:` (p. ej. `DU-04 governed_by: research-report`).
 
 **Resolución:**
+
 - `design_docs`, `foundation_unit_examples`, `stack_candidates`, `tooling_candidates`, `knowledge_bundles` → **unión** de los compuestos.
 - `deliverable_unit_completeness` y `quality_gate` → **por DU**, según su `governed_by`.
 - `deliverable_format`, `publication_step` → los declara el pegamento.
 - `ads_contract_level` → el **mayor** de los compuestos.
 
 ## Perfiles incluidos
+
 | Perfil | Tipo de ADS | Nivel de contrato |
 |---|---|---|
 | `software-app` | Software con interfaz (web, móvil, escritorio, dashboard, ERP) | extendido |

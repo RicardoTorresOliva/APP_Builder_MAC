@@ -66,6 +66,19 @@ class Client:
             self.p.kill()
 
 
+def minimal_args(schema: dict) -> dict:
+    """Smallest valid arguments for the required properties of an inputSchema (for a real dry-run)."""
+    out = {}
+    props = schema.get("properties") or {}
+    for k in schema.get("required") or []:
+        sp = props.get(k) or {}
+        if "enum" in sp:
+            out[k] = sp["enum"][0]
+        else:
+            out[k] = {"string": "conformance", "integer": 1, "number": 1, "boolean": False, "array": [], "object": {}}.get(sp.get("type"), "conformance")
+    return out
+
+
 def static_checks(root: Path, m: dict):
     steps = []
     ep = m.get("endpoints") or {}
@@ -113,12 +126,22 @@ def mcp_checks(root: Path, m: dict, cmd: str):
             steps.append({"step": f"leer:{ro['name']}", "ok": not r.get("isError") and bool(r.get("content")), "detail": "lectura"})
         else:
             steps.append({"step": "leer", "ok": False, "detail": "no hay tool de lectura sin argumentos obligatorios"})
-        wr = [t for t in tools if not (t.get("annotations") or {}).get("readOnlyHint") and "dry_run" in ((t.get("inputSchema") or {}).get("properties") or {})
-              and not set((t.get("inputSchema") or {}).get("required") or [])]
+        wr = [t for t in tools if not (t.get("annotations") or {}).get("readOnlyHint") and "dry_run" in ((t.get("inputSchema") or {}).get("properties") or {})]
+        wr.sort(key=lambda t: (bool((t.get("annotations") or {}).get("destructiveHint")), len((t.get("inputSchema") or {}).get("required") or [])))
+        fixture = (m.get("conformance") or {}).get("dry_run") or {}
+        if fixture.get("tool"):
+            wr = [t for t in tools if t["name"] == fixture["tool"]] or wr
         if wr:
-            r = c.request("tools/call", {"name": wr[0]["name"], "arguments": {"dry_run": True}})
+            args = dict(fixture.get("arguments") or {}) if fixture.get("tool") == wr[0]["name"] else minimal_args(wr[0].get("inputSchema") or {})
+            r = c.request("tools/call", {"name": wr[0]["name"], "arguments": {**args, "dry_run": True}})
             sc = r.get("structuredContent") or {}
-            steps.append({"step": f"dry-run:{wr[0]['name']}", "ok": not r.get("isError") and sc.get("dry_run") is True, "detail": "escritura simulada"})
+            status = sc.get("status") if isinstance(sc.get("status"), int) else None
+            if not r.get("isError") and sc.get("dry_run") is True:
+                steps.append({"step": f"dry-run:{wr[0]['name']}", "ok": True, "detail": "escritura simulada"})
+            elif r.get("isError") and status and 400 <= status < 500:
+                steps.append({"step": f"dry-run:{wr[0]['name']}", "ok": True, "detail": f"rechazo controlado {status} ({sc.get('title')}); declara `conformance.dry_run` en ads.yaml para un caso válido"})
+            else:
+                steps.append({"step": f"dry-run:{wr[0]['name']}", "ok": False, "detail": f"error no controlado: {str(sc)[:160]}"})
         else:
             steps.append({"step": "dry-run", "ok": True, "detail": "sin tools de escritura con dry_run (no aplica)"})
         res = c.request("resources/list").get("resources", [])

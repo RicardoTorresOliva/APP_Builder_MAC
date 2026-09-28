@@ -21,7 +21,8 @@
     "feature": {"type": "string"},
     "tenant": {"type": "string"},
     "cost_usd": {"type": "number", "minimum": 0},
-    "note": {"type": "string"}
+    "note": {"type": "string"},
+    "cost_lower_bound": {"type": "boolean", "description": "true si el costo calculado es una cota inferior (p. ej. total sin desglose entrada/salida)"}
   },
   "additionalProperties": false
 }

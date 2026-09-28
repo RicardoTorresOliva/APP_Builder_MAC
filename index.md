@@ -41,14 +41,63 @@ okf_version: "0.2"
 * [Benchmark de referentes](/docs/analysis/02-benchmark.md) - Referentes de desarrollo agent-native verificados a la fecha y las ideas que ABM adopta de cada uno.
 * [Investigación agéntica — Hermes, Jev, protocolos y telemetría](/docs/analysis/03-investigacion-agentica.md) - Hechos verificados para diseñar la superficie agéntica, la capa System One y el espacio de tokens de ABM y sus ADS.
 * [Plan de repotenciación ABM v5](/docs/analysis/04-plan.md) - Arquitectura objetivo, plan de migración y roadmap de WU con criterios de aceptación y verificación.
+* [Verificación de adaptadores contra la documentación oficial](/docs/analysis/verificacion/adaptadores.md) - Contraste de cada salida de abm sync con la documentación oficial vigente de su herramienta.
+* [Recorridos de los 6 encargos simulados](/docs/analysis/verificacion/recorridos.md) - Recorrido de punta a punta, como vibe coder, de seis encargos con la documentación y el CLI de ABM v5; huecos encontrados.
+* [Revisión adversarial independiente de ABM v5](/docs/analysis/verificacion/revision-adversarial.md) - Hallazgos de un revisor independiente sobre el diff completo de la repotenciación, con evidencia y severidad.
 * [Matriz de compatibilidad multi-herramienta](/docs/compat-matrix.md) - Cómo consume cada herramienta de IA las instrucciones, reglas, comandos, skills, subagentes, hooks, MCP, ignore, turbo y telemetría.
 * [Registro de decisiones](/docs/decision_log.md) - Decisiones significativas del ADS durante la planificación y la ejecución.
+* [Preguntas frecuentes sobre ABM](/docs/faq.md) - Respuestas cortas a las dudas más comunes de alguien que usa ABM sin saber programar.
 * [Totales de tokens del ADS](/docs/finops/token-totals.md) - Cálculo sancionado de los totales de tokens y costo a partir del ledger; verificable con un atestador determinista.
 * [Glosario de ABM](/docs/glossary.md) - Definiciones canónicas de ABM; ningún otro archivo redefine estos términos.
+* [Disciplina de tokens](/docs/guides/token-discipline.md) - Reglas y ejemplos concretos para que un agente use el mínimo de tokens necesario, en ABM y en cualquier ADS que produce.
+* [Manual de ABM](/docs/manual/README.md) - Índice del manual para no programadores y cómo usarlo según lo que necesites hacer.
+* [Cheatsheet de comandos de ABM](/docs/manual/cheatsheet.md) - Los 36 comandos de ABM en una sola página, agrupados por fase, con su alias en español.
+* [a11y — accesibilidad WCAG 2.2 AA](/docs/manual/comandos/a11y.md) - Verifica accesibilidad WCAG 2.2 AA de la capa de interfaz antes de entregar.
+* [ads-check — verifica el Contrato ADS](/docs/manual/comandos/ads-check.md) - Verifica que el ADS cumple su nivel del Contrato ADS, estático y dinámico.
+* [api — construye el servicio](/docs/manual/comandos/api.md) - Construye la capa de API/servicio de una unidad con contrato de errores y quality gate.
+* [assess — inventario de brownfield/legacy](/docs/manual/comandos/assess.md) - Inventaría un stack existente y propone el patrón de integración más simple que funcione.
+* [bootstrap — chequeo único de plataforma](/docs/manual/comandos/bootstrap.md) - Detecta la plataforma, corre doctor y sync, y confirma que el repo está listo para trabajar.
+* [closeout — cierra una unidad](/docs/manual/comandos/closeout.md) - Sincroniza intención, spec, contrato y código, registra tokens y actualiza la memoria del proyecto.
+* [connect — superficie agéntica del ADS](/docs/manual/comandos/connect.md) - Da al ADS su superficie agéntica (ads.yaml, skill, MCP, API) para que otro agente lo opere.
+* [consolidate — lleva lo aprendido a diseño real](/docs/manual/comandos/consolidate.md) - Convierte los aprendizajes de un explore en spec y diseño definitivos (IDD/SDD).
+* [db — construye el modelo de datos](/docs/manual/comandos/db.md) - Modela y migra el esquema de datos de una unidad con migraciones reversibles.
+* [decide — capa System One](/docs/manual/comandos/decide.md) - Resuelve una decisión tipada (choice/score/boolean) con la capa de decisión y su routing por confianza.
+* [deploy — publica el ADS](/docs/manual/comandos/deploy.md) - Publica el ADS en su entorno de destino tras pasar la checklist previa y con rollback listo.
+* [doctor — diagnóstico del entorno](/docs/manual/comandos/doctor.md) - Diagnostica el entorno (Python, git, estructura, config) en lenguaje simple y sugiere arreglos.
+* [drift — deriva intención/spec/código](/docs/manual/comandos/drift.md) - Detecta y resuelve la deriva entre intención, spec, contrato de prompt y código real.
+* [explore — spike acotado en sandbox](/docs/manual/comandos/explore.md) - Prueba y descarta en una rama sandbox con tiempo acotado para resolver una incertidumbre.
+* [fix — corrige un bug](/docs/manual/comandos/fix.md) - Reproduce el bug, escribe el test que falla, aplica el cambio mínimo y verifica sin regresión.
+* [help — índice de comandos](/docs/manual/comandos/help.md) - Muestra el catálogo de comandos por fase y resuelve alias en español.
+* [init-project — planifica un proyecto nuevo](/docs/manual/comandos/init-project.md) - Elige perfil y ceremonia, clasifica la metodología, explora el stack con el humano y publica el plan.
+* [integrate — integra una plataforma externa](/docs/manual/comandos/integrate.md) - Conecta el ADS con un tercero por la vía más segura disponible, de MCP a SQL de mínimo privilegio.
+* [intent — captura la intención](/docs/manual/comandos/intent.md) - Registra el qué y el por qué de una unidad antes de especificarla o construirla.
+* [iterate — cambios post-entrega](/docs/manual/comandos/iterate.md) - Aplica un cambio, mejora o corrección tras la entrega, con spec-delta antes de tocar código.
+* [methodology — clasifica el modo metodológico](/docs/manual/comandos/methodology.md) - Asigna VIBE, IDD, SDD, SPDD o AIDD a un módulo según sus seis dimensiones de riesgo.
+* [pending — cola de pendientes](/docs/manual/comandos/pending.md) - Lista, agrega y resuelve en lote las decisiones y defaults que turbo dejó en cola.
+* [perf — rendimiento y escalabilidad](/docs/manual/comandos/perf.md) - Verifica rendimiento, escalabilidad básica y costo por unidad antes de entregar.
+* [plan — publica el plan de ejecución](/docs/manual/comandos/plan.md) - Ordena FU y DU en el tracker, redacta el plan y lo publica para su aprobación o cola.
+* [prompt-contract — contrato de un agente o prompt](/docs/manual/comandos/prompt-contract.md) - Fija entradas, salidas, límites y HITL de un prompt o agente antes de construirlo.
+* [refactor — mejora la estructura sin cambiar comportamiento](/docs/manual/comandos/refactor.md) - Reestructura código manteniendo la suite de tests en verde antes y después, sin cambiar comportamiento.
+* [release — cierra una versión](/docs/manual/comandos/release.md) - Cierra una versión del ADS con semver, changelog y verificación previa completa.
+* [review — revisión independiente](/docs/manual/comandos/review.md) - Lanza una revisión independiente, con contexto limpio, de la última unidad o milestone completado.
+* [security — auditoría de seguridad](/docs/manual/comandos/security.md) - Audita la unidad o el ADS contra OWASP y verifica que no haya secretos expuestos.
+* [session-start — inicio de sesión](/docs/manual/comandos/session-start.md) - Lee la memoria del proyecto y la cola de pendientes, y dice por dónde retomar el trabajo.
+* [spec — especificación verificable](/docs/manual/comandos/spec.md) - Convierte la intención en requirements, design y tasks verificables (formato EARS).
+* [stack — elige el stack con el humano](/docs/manual/comandos/stack.md) - Explora 2-3 opciones de stack con trade-offs y espera la elección del humano (HITL).
+* [start-execution — ejecución autónoma](/docs/manual/comandos/start-execution.md) - Verifica que el plan esté listo y ejecuta las FU y DU aprobadas hasta la entrega.
+* [test — pirámide de pruebas](/docs/manual/comandos/test.md) - Verifica la unidad con la pirámide de pruebas del perfil, priorizando rutas críticas.
+* [tokens — espacio de control de tokens](/docs/manual/comandos/tokens.md) - Registra, reporta y verifica el consumo y presupuesto de tokens de cada unidad.
+* [ui — construye la interfaz](/docs/manual/comandos/ui.md) - Construye la capa de interfaz de una unidad siguiendo el standard de frontend y su quality gate.
+* [Cómo deshacer un cambio](/docs/manual/como-deshacer.md) - Los checkpoints de git explicados sin jerga, y los comandos exactos para volver atrás de forma segura.
+* [Herramientas de IA compatibles con ABM](/docs/manual/herramientas.md) - Tabla maestra de cómo invocar comandos en cada herramienta, qué genera "./abm sync" para cada una, y qué no se puede generar.
+* [Modo turbo y cola de pendientes](/docs/manual/modo-turbo.md) - Qué es turbo frente a checkpoint, los bloqueantes, la cola de pendientes, el semáforo de riesgo, y cómo activar turbo en cada herramienta.
+* [Tus primeros 15 minutos con ABM](/docs/manual/primeros-15-minutos.md) - Onboarding paso a paso, sin dar por sabido nada de programación, desde abrir el repo hasta ver el plan de tu proyecto.
+* [Cómo leer TOKENS.md y el dashboard](/docs/manual/tokens.md) - Qué es un token, cómo leer el reporte TOKENS.md y el dashboard de tokens, qué es un presupuesto blando o duro, y qué hacer si se supera.
 * [Memoria del proyecto](/docs/project_memory.md) - Estado actual del ADS y punto de reanudación entre sesiones.
 * [Metadatos de ejecución (histórico)](/docs/run_metadata.md) - Tabla manual de tokens por milestone de v4.1; reemplazada por el ledger y TOKENS.md.
 * [Inventario de servidores MCP](/docs/tooling/mcp-inventory.md) - Servidores MCP evaluados para el ADS, con selecciones y rechazos en una línea.
 * [Inventario de skills](/docs/tooling/skills-inventory.md) - Skills evaluadas para el ADS, con selecciones y rechazos en una línea.
+* [Solución de problemas de ABM](/docs/troubleshooting.md) - Errores típicos de ABM con su causa en una línea y los pasos exactos para resolverlos.
 * [Registro de trabajo](/docs/work_log.md) - Registro cronológico por unidad: qué se produjo, qué se verificó, hallazgos y riesgos.
 
 # commands
@@ -96,7 +145,7 @@ okf_version: "0.2"
 * [Vías de integración por categoría](/skills/integrate-safely/references/vias.md) - Comparación de vías de integración (API directa, webhook, MCP, cola de eventos, automatización de navegador) con su superficie de riesgo, sin nombrar productos.
 * [Modos metodológicos — criterios y matriz de escalamiento](/skills/methodology-router/references/modos.md) - Señales de clasificación por modo, matriz de escalamiento y un methodology-map.md de ejemplo.
 * [Ejemplo completo de documento OKF v0.2 + perfil ABM](/skills/okf-author/references/ejemplo-completo.md) - Un documento ficticio con sources, notas al pie, stale_after y verified resueltos de punta a punta, para copiar la forma.
-* [Servidor MCP de ABM — inventario de tools](/skills/operate-abm/references/mcp-server.md) - Mapeo 1:1 entre órdenes del CLI abm y las tools abm_* del servidor MCP, con hints y un flujo de ejemplo.
+* [Tools y recursos del servidor MCP de ABM](/skills/operate-abm/references/mcp-server.md) - Inventario generado desde scripts/abmkit/mcp_server.py; no editar a mano.
 * [Severidad de hallazgos en revisión independiente](/skills/review-independent/references/severidades.md) - Taxonomía de severidad, ejemplos de hallazgo bien y mal formulado, y la plantilla de reporte de una revisión.
 * [Criterios de los cuatro perfiles de stack](/skills/stack-advisor/references/perfiles-stack.md) - Señales para decidir qué perfil de stacks/ (vibe coder, pro, low-cost, corporativo) calza con un proyecto, en categorías, sin nombrar productos.
 * [Patrones de la capa System One para un ADS](/skills/system-one/references/patrones.md) - Siete recetas reutilizables de decisión tipada con su fallback, para usar dentro de cualquier ADS construido con ABM.
@@ -248,6 +297,23 @@ okf_version: "0.2"
 # examples
 
 * [examples/](/examples/README.md) - Ejemplos de referencia; el núcleo nunca depende de ellos.
+* [AGENTS.md — panel de ventas](/examples/panel-ventas/AGENTS.md) - Reglas para agentes que operan o modifican el ADS panel-ventas; la gobernanza completa es la de ABM.
+* [Ejemplo golden path — panel de ventas](/examples/panel-ventas/README.md) - ADS completo y ejecutable (dashboard con auth, base de datos y gráficos) recorrido con ABM de encargo a entrega, con build, tests y Contrato ADS en verde.
+* [Encargo — panel de ventas](/examples/panel-ventas/START_PROJECT.md) - Encargo original del ADS panel-ventas tal como lo escribió la persona, antes de init-project.
+* [Reporte de tokens](/examples/panel-ventas/TOKENS.md) - Consumo de tokens y costo del ADS (construcción y operación), generado desde el ledger.
+* [Contratos de API — panel de ventas](/examples/panel-ventas/design_docs/api-contracts.md) - Endpoints, autenticación, autorización por rol y errores problem+json del panel de ventas (design doc HIGH).
+* [Modelo de datos — panel de ventas](/examples/panel-ventas/design_docs/data-model.md) - ERD, restricciones, índices y migraciones del panel de ventas (design doc HIGH del perfil software-app).
+* [Interfaz y arquitectura — panel de ventas](/examples/panel-ventas/design_docs/ui-architecture.md) - Pantallas, estados, guía de estilo y componentes del panel de ventas (design docs MEDIUM/LIGHT).
+* [Cola de pendientes](/examples/panel-ventas/docs/_work/PENDIENTES.md) - Decisiones no bloqueantes acumuladas para el humano, cada una con su default ya aplicado.
+* [Registro de decisiones — panel de ventas](/examples/panel-ventas/docs/decision_log.md) - Decisiones de stack, datos, identidad y superficie agéntica del panel de ventas, con alternativas y reversibilidad.
+* [Plan de salida — panel de ventas](/examples/panel-ventas/docs/exit-plan.md) - Cómo migrar el panel de ventas fuera del stack de demo sin reescribir reglas ni contratos.
+* [Manual de operación — panel de ventas](/examples/panel-ventas/docs/manual/operacion.md) - Cómo arrancar, sembrar, migrar, respaldar y operar el panel de ventas, para personas y agentes.
+* [Memoria del proyecto — panel de ventas](/examples/panel-ventas/docs/project_memory.md) - Estado vigente del ADS panel-ventas para retomar el trabajo en una sesión nueva (session-start).
+* [Registro de trabajo — panel de ventas](/examples/panel-ventas/docs/work_log.md) - Registro por unidad del panel de ventas con lo producido, el quality gate aplicado, la evidencia y los riesgos residuales.
+* [Task tracker — panel de ventas](/examples/panel-ventas/implementation/task_tracker.md) - Estado de las FU y DU del panel de ventas por milestone (start-execution).
+* [Unidades de trabajo — panel de ventas](/examples/panel-ventas/implementation/user_units.md) - FU y DU del panel de ventas con criterio de aceptación atado a la regla de completitud de software-app.
+* [Mapa metodológico — panel-ventas](/examples/panel-ventas/planning/methodology-map.md) - Modo metodológico por módulo del ADS, con justificación, revisión y disparadores.
+* [Requisitos — panel de ventas](/examples/panel-ventas/planning/requirements.md) - Requisitos EARS del panel de ventas con trazabilidad a unidades y tests, alcance y riesgos (init-project, paso 6).
 
 # adapters
 

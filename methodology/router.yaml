@@ -7,16 +7,17 @@ dimensions:
   brownfield: { question: "¿Sobre qué se construye?", levels: { 0: "Greenfield: no hay código ni restricciones previas", 1: "Brownfield parcial: se integra con algo existente pero con margen", 2: "Brownfield estricto: stack corporativo fijo e integraciones legacy" }, keywords: { 0: [desde cero, proyecto nuevo, greenfield], 2: [legacy, sistema existente, stack corporativo, integrar con, no se puede cambiar] } }
   autonomy: { question: "¿Cuánta libertad tiene el agente para decidir el cómo?", levels: { 0: "Ninguna: el humano decide cada paso y revisa antes de avanzar", 1: "Media: el agente decide dentro de la spec e informa al cerrar la unidad", 2: "Alta: el agente explora, decide y construye; el humano revisa por muestreo o al final" }, keywords: { 0: [revisar cada paso, paso a paso, pideme permiso, pídeme permiso], 2: [modo turbo, turbo, autonomo, autónomo, no me preguntes, avanza solo] } }
 triggers:
+  # Coincidencia por palabra completa sobre texto sin tildes; "raiz*" = cualquier palabra que empiece así.
   escalate:
-    - { id: payments, keywords: [pago, pagos, cobro, cobros, tarjeta, factura, facturas, facturacion, facturación, suscripcion, suscripción, checkout, pasarela de pago, cuenta bancaria], mode: SDD, review: human }
-    - { id: auth, keywords: [login, inicio de sesion, inicio de sesión, autenticacion, autenticación, autorizacion, autorización, contrasena, contraseña, permisos, roles, sso, oauth], mode: SDD, review: human }
-    - { id: personal-data, keywords: [datos personales, pii, dni, cedula, cédula, correo del usuario, direccion del usuario, dirección del usuario, telefono del usuario, teléfono del usuario, gdpr, rgpd], mode: SDD, review: human }
-    - { id: health, keywords: [salud, medico, médico, clinico, clínico, historia clinica, historia clínica, paciente, diagnostico, diagnóstico, hipaa], mode: SDD, review: human }
-    - { id: regulated, keywords: [regulacion, regulación, cumplimiento normativo, normativa, auditoria, auditoría, sector financiero, sector salud regulado, organismo regulador], mode: SDD, review: human }
+    - { id: payments, keywords: [pag*, cobr*, dinero, saldo*, tarjeta*, factur*, suscrip*, checkout, pasarela de pago, cuenta bancaria, orden de compra, ordenes de compra, aprobacion de compra*, aprobaciones de compra, purchase order*, transferencia*, reembols*, billetera*, payment*, pay, paying, billing, invoice*, credit card, refund*, wallet*, bank*], mode: SDD, review: human }
+    - { id: auth, keywords: [login, inicio de sesion, autentic*, autoriz*, contrasena*, password*, permisos, rol, roles, rol de usuario, control de acceso, sso, oauth*, oidc, mfa, 2fa, sign in, signin, authentication, authorization], mode: SDD, review: human }
+    - { id: personal-data, keywords: [datos personales, pii, dni, cedula*, pasaporte*, correo del usuario, direccion del usuario, telefono del usuario, gdpr, rgpd, personal data, personally identifiable], mode: SDD, review: human }
+    - { id: health, keywords: [salud, medic*, clinic*, historia clinica, paciente*, diagnostic*, hipaa, health*, patient*], mode: SDD, review: human }
+    - { id: regulated, keywords: [regulacion, regulad*, cumplimiento normativo, normativa, auditoria*, sector financiero, organismo regulador, pci, sox, iso 27001, compliance, regulated, regulatory], mode: SDD, review: human }
   deescalate:
-    - { id: throwaway, keywords: [prototipo, desechable, spike, poc, prueba de concepto, tirar, descartable], mode: VIBE }
-    - { id: landing-content, keywords: [landing, pagina de aterrizaje, página de aterrizaje, contenido estatico, contenido estático, sitio informativo, marketing], mode: IDD }
-    - { id: internal-low-risk, keywords: [herramienta interna, uso interno, bajo riesgo, solo para el equipo], mode: IDD }
+    - { id: throwaway, keywords: [prototipo, desechable, spike, poc, prueba de concepto, descartable, throwaway, proof of concept], mode: VIBE }
+    - { id: landing-content, keywords: [landing, landing page, pagina de aterrizaje, contenido estatico, sitio informativo, marketing], mode: IDD }
+    - { id: internal-low-risk, keywords: [herramienta interna, uso interno, bajo riesgo, solo para el equipo, internal tool], mode: IDD }
 rules:
   - { if: { criticality: [2] }, mode: SDD, why: "Riesgo alto (dinero, datos personales o de salud, seguridad): exige trazabilidad requisito-tarea-test y revisión humana." }
   - { if: { horizon: [0], criticality: [0, 1] }, mode: VIBE, why: "Prototipo desechable de riesgo bajo o medio: explorar rápido en una rama sandbox y desechar." }

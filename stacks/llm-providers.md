@@ -55,7 +55,7 @@ sources:
 Todo ADS habla con los modelos a través de una **interfaz de chat compatible** (el formato de facto
 que exponen la mayoría de proveedores y gateways: mensajes con rol, `tool_calls`, `response_format`
 JSON) como lingua franca. El proveedor y el modelo se fijan por variables de entorno
-(`LLM_PROVIDER`, `LLM_MODEL`, `LLM_BASE_URL`, `*_API_KEY`); el código de la aplicación nunca
+(`LLM_PROVIDER`, `LLM_MODEL`, `LLM_BASE_URL`, `LLM_API_KEY`); el código de la aplicación nunca
 importa el SDK propietario de un proveedor directamente, solo el cliente del gateway.
 
 | Opción de gateway | Qué es | Licencia/hosting |
@@ -130,7 +130,7 @@ Antes de mover un ADS de un modelo/proveedor a otro (o de subir/bajar de tier):
 
 ## Cambio de proveedor por configuración
 
-`LLM_PROVIDER`, `LLM_MODEL`, `LLM_BASE_URL` y `<PROVIDER>_API_KEY` en `.env` (nunca en código).
+`LLM_PROVIDER`, `LLM_MODEL`, `LLM_BASE_URL` y `LLM_API_KEY` en `.env` (nunca en código). Son las variables del **ADS en operación**; el CLI de ABM usa las suyas (`ABM_LLM_BASE_URL`, `ABM_LLM_API_KEY`, `ABM_LLM_MODEL`) para el fallback `llm` de `abm decide` (ver `integrations/llm-gateway/README.md`).
 Cambiar de Anthropic directo a la misma familia de modelos vía Azure AI Foundry, Bedrock o Vertex AI
 es cambiar `LLM_BASE_URL` y las credenciales — el contrato de la interfaz de chat compatible no
 cambia. `portability.exit_plan` en `ads.yaml` documenta a qué proveedor migraría el ADS y qué se

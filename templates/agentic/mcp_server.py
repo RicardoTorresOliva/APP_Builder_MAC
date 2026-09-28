@@ -70,13 +70,29 @@ def audit(name, args, ok):
         f.write(json.dumps({"ts": datetime.now(timezone.utc).isoformat(), "tool": name, "arguments": args, "ok": ok}, ensure_ascii=False) + "\n")
 
 
+def hitl_actions():
+    """Capacidades destructivas autorizadas en ads.yaml → security.hitl_actions (lectura mínima, sin dependencias)."""
+    f = ROOT / "ads.yaml"
+    if not f.exists():
+        return set()
+    for line in f.read_text(encoding="utf-8").splitlines():
+        if line.strip().startswith("hitl_actions:"):
+            return {x.strip().strip("'\"") for x in line.split("[", 1)[-1].rstrip("]").split(",") if x.strip()}
+    return set()
+
+
 def call(params):
     name, args = params.get("name"), params.get("arguments") or {}
     t = TOOLS.get(name)
     if not t:
         raise KeyError(f"herramienta desconocida: {name}")
-    if t["mode"] == "destructive" and not args.get("dry_run", True) and not args.get("confirm"):
-        return {"content": [{"type": "text", "text": "Requiere confirmación humana (confirm=true)."}], "isError": True}
+    if not isinstance(args, dict):
+        return {"content": [{"type": "text", "text": "arguments debe ser un objeto"}], "isError": True}
+    if t["mode"] == "destructive" and not args.get("dry_run", True):
+        # confirm=true lo fija el cliente tras pedir aprobación humana (destructiveHint); además la
+        # capacidad debe estar declarada en hitl_actions. Sin ambas, no se ejecuta.
+        if not args.get("confirm") or name not in hitl_actions():
+            return {"content": [{"type": "text", "text": "Requiere confirmación humana (confirm=true) y figurar en ads.yaml → security.hitl_actions."}], "isError": True}
     try:
         data, ok = t["fn"](args), True
     except Exception as e:  # noqa: BLE001 — error estructurado estilo problem+json
@@ -88,7 +104,11 @@ def call(params):
 
 
 def handle(msg):
+    if not isinstance(msg, dict):
+        return {"jsonrpc": "2.0", "id": None, "error": {"code": -32600, "message": "solicitud inválida"}}
     method, mid, p = msg.get("method"), msg.get("id"), msg.get("params") or {}
+    if not isinstance(p, dict):
+        return {"jsonrpc": "2.0", "id": mid, "error": {"code": -32602, "message": "params debe ser un objeto"}}
     if mid is None:
         return None
     try:
@@ -134,7 +154,12 @@ if __name__ == "__main__":
         sys.exit(cli(sys.argv[2:]))
     for line in sys.stdin:
         if line.strip():
-            out = handle(json.loads(line))
+            try:
+                out = handle(json.loads(line))
+            except json.JSONDecodeError:
+                out = {"jsonrpc": "2.0", "id": None, "error": {"code": -32700, "message": "JSON inválido"}}
+            except Exception as e:  # noqa: BLE001
+                out = {"jsonrpc": "2.0", "id": None, "error": {"code": -32603, "message": f"error interno: {e}"}}
             if out:
                 sys.stdout.write(json.dumps(out, ensure_ascii=False) + "\n")
                 sys.stdout.flush()

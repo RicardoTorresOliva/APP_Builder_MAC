@@ -18,7 +18,7 @@ capabilities:
   - { id: pending-add, description: "Añade un pendiente con su default aplicado", mode: write, cli: "abm pending add --json", mcp_tool: abm_pending_add }
   - { id: tokens-report, description: "Genera TOKENS.md desde el ledger", mode: write, cli: "abm tokens report --json", mcp_tool: abm_tokens_report }
   - { id: tokens-record, description: "Registra un evento de consumo", mode: write, cli: "abm tokens record --json", mcp_tool: abm_tokens_record }
-  - { id: sync, description: "Genera los adaptadores por herramienta", mode: write, cli: "abm sync --json", mcp_tool: abm_sync }
+  - { id: sync, description: "Genera los adaptadores; puede borrar salidas huérfanas", mode: destructive, cli: "abm sync --json", mcp_tool: abm_sync }
   - { id: new-ads, description: "Crea el esqueleto de un ADS nuevo", mode: write, cli: "abm new-ads --json" }
 
 endpoints:
@@ -55,4 +55,4 @@ portability:
 security:
   secrets: env
   agent_audit_log: ops/audit/agent-actions.jsonl
-  hitl_actions: []
+  hitl_actions: [sync]

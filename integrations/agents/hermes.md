@@ -83,10 +83,10 @@ usage.json` escribe costo/tokens/modelo/llamadas al terminar, incluso si falla[^
 
 ```text
 hermes -z "revisa el último PR" --usage-file usage.json
-./abm tokens record --source telemetry --file usage.json
+./abm tokens import usage.json --tool hermes --unit <FU|DU>
 ```
 
-`abm tokens record --source telemetry` traduce ese reporte al esquema común del ledger (ADR 0013)
+`abm tokens import` busca en ese JSON los campos de tokens (entrada/salida), modelo y costo y los registra con `source: telemetry` en el esquema común del ledger (ADR 0013); el formato exacto del archivo de Hermes es `no-verificado`, por eso el import es tolerante
 — así el consumo de una sesión Hermes en CI queda en el mismo ledger que el resto de fuentes.
 
 ## `approvals.mode`

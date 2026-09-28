@@ -103,6 +103,10 @@ def check_manifest(root: Path, manifest: Path):
             warn("ads.ext.dashboard", f"dashboard no generado aún ({tok.get('dashboard')}); ejecuta `abm tokens dashboard`")
         if not tok.get("budgets"):
             err("ads.ext.budgets", "nivel extendido exige `tokens.budgets`")
+        if not m.get("auth"):
+            err("ads.ext.auth", "nivel extendido exige `auth` (tipo y scopes de agentes)")
+        if not m.get("limits"):
+            err("ads.ext.limits", "nivel extendido exige `limits` (rate limits, tamaño de payload)")
         if not sec.get("agent_audit_log"):
             err("ads.ext.audit", "nivel extendido exige `security.agent_audit_log`")
         if not port.get("exit_plan"):

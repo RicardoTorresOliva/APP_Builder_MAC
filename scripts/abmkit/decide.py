@@ -24,6 +24,24 @@ def norm(s: str) -> str:
     return "".join(c for c in s if not unicodedata.combining(c))
 
 
+_KW_CACHE: dict = {}
+
+
+def kw_match(keyword: str, normalized_text: str) -> bool:
+    """Whole-word match on normalized text. A trailing '*' makes it a stem (prefix at a word start):
+    'pag*' matches 'pagos', 'pagar'; 'tirar' no longer matches inside 'retirar'."""
+    k = norm(keyword).strip()
+    if not k:
+        return False
+    rx = _KW_CACHE.get(k)
+    if rx is None:
+        stem = k.endswith("*")
+        body = re.escape(k.rstrip("*")).replace("\\ ", r"\s+")
+        rx = re.compile(r"(?<![a-z0-9])" + body + (r"[a-z0-9]*" if stem else "") + r"(?![a-z0-9])")
+        _KW_CACHE[k] = rx
+    return bool(rx.search(normalized_text))
+
+
 # ---------------------------------------------------------------- validation
 def validate_questions(qs: dict) -> list:
     errs = []
@@ -126,14 +144,14 @@ def provider_rules(state, qs, conf):
     for qid, q in qs.items():
         kw = q.get("keywords") or {}
         if q["type"] == "boolean":
-            hits = [k for k in kw.get("true", []) if norm(k) in s]
-            neg = [k for k in kw.get("false", []) if norm(k) in s]
+            hits = [k for k in kw.get("true", []) if kw_match(k, s)]
+            neg = [k for k in kw.get("false", []) if kw_match(k, s)]
             val = bool(hits) and len(hits) >= len(neg)
             confv = min(1.0, 0.5 + 0.2 * abs(len(hits) - len(neg))) if (hits or neg) else float(q.get("no_match_confidence", 0.0))
             answers[qid] = {"type": "boolean", "value": val, "confidence": round(confv, 4), "matched": hits}
         else:
             keys = list(_options(q)) if q["type"] == "choice" else [str(i) for i in range(len(q["levels"]))]
-            scores = {k: sum(1 for w in kw.get(k, []) if norm(w) in s) for k in keys}
+            scores = {k: sum(1 for w in kw.get(k, []) if kw_match(w, s)) for k in keys}
             best = max(keys, key=lambda k: (scores[k], -keys.index(k))) if keys else None
             total = sum(scores.values())
             if total == 0:
@@ -203,7 +221,10 @@ def decide(ctx: Ctx, state: str, qs: dict, provider: str | None = None, use: str
 
 
 def cmd_decide(ctx: Ctx, args) -> int:
+    from .common import safe_path
     if args.preset:
+        if not re.match(r"^[a-z0-9-]+$", args.preset):
+            return emit(ctx, {"error": "preset inválido"}, ["Nombre de preset inválido"], ok=False)
         pp = ctx.root / "integrations/decision/presets" / f"{args.preset}.yaml"
         if not pp.exists():
             return emit(ctx, {"error": "preset inexistente"}, [f"No existe el preset {args.preset}"], ok=False)
@@ -215,11 +236,11 @@ def cmd_decide(ctx: Ctx, args) -> int:
     elif args.questions_json:
         qs = json.loads(args.questions_json)
     elif args.questions:
-        text = (ctx.root / args.questions).read_text(encoding="utf-8")
-        qs = json.loads(text) if args.questions.endswith(".json") else load_yaml_file(ctx.root / args.questions)
+        qp = safe_path(ctx.root, args.questions, "--questions")
+        qs = json.loads(qp.read_text(encoding="utf-8")) if args.questions.endswith(".json") else load_yaml_file(qp)
     else:
         return emit(ctx, {"error": "faltan preguntas"}, ["Faltan preguntas: --questions archivo.json|yaml o --questions-json"], ok=False)
-    state = args.state if args.state is not None else (ctx.root / args.state_file).read_text(encoding="utf-8")
+    state = args.state if args.state is not None else safe_path(ctx.root, args.state_file, "--state-file").read_text(encoding="utf-8")
     try:
         res = decide(ctx, state, qs, args.provider, args.use)
     except (ValueError, RuntimeError) as e:

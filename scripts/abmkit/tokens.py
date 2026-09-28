@@ -81,7 +81,7 @@ def cmd_record(ctx, args):
     ev = {"ts": now_iso(), "phase": args.phase, "source": args.source, "input_tokens": args.input, "output_tokens": args.output,
           "cache_read_tokens": args.cache_read, "provider": args.provider, "model": args.model, "tool": args.tool,
           "actor": args.actor, "unit": args.unit, "command": args.command_name, "feature": args.feature, "tenant": args.tenant,
-          "cost_usd": args.cost, "note": args.note}
+          "cost_usd": args.cost, "note": args.note, "cost_lower_bound": True if args.lower_bound else None}
     ev = {k: v for k, v in ev.items() if v is not None}
     p, errs = append(ctx, ev)
     if errs:
@@ -107,6 +107,47 @@ def cmd_estimate(ctx, args):
     return emit(ctx, {"recorded": ev}, [f"Estimado {args.unit}: out≈{total} in≈{ev['input_tokens']} tokens → {p.relative_to(ctx.root) if p else '-'}"], ok=not errs)
 
 
+def _find(obj, names):
+    """First numeric/string value for any of `names`, searching nested dicts/lists."""
+    if isinstance(obj, dict):
+        for n in names:
+            if n in obj and not isinstance(obj[n], (dict, list)):
+                return obj[n]
+        for v in obj.values():
+            r = _find(v, names)
+            if r is not None:
+                return r
+    elif isinstance(obj, list):
+        for v in obj:
+            r = _find(v, names)
+            if r is not None:
+                return r
+    return None
+
+
+def cmd_import(ctx, args):
+    """Best-effort import of a usage report (e.g. an agent CLI's --usage-file) into the ledger."""
+    from .common import safe_path
+    data = json.loads(safe_path(ctx.root, args.file, "archivo").read_text(encoding="utf-8"))
+    tin = _find(data, ["input_tokens", "prompt_tokens", "inputTokens", "promptTokens"])
+    tout = _find(data, ["output_tokens", "completion_tokens", "outputTokens", "completionTokens"])
+    if tin is None and tout is None:
+        return emit(ctx, {"error": "sin campos de tokens reconocibles"}, ["No encontré input/output tokens en el archivo (registra a mano con `tokens record`)"], ok=False)
+    ev = {"ts": now_iso(), "phase": args.phase, "source": "telemetry", "input_tokens": int(tin or 0), "output_tokens": int(tout or 0),
+          "model": _find(data, ["model", "model_id", "modelId"]), "provider": args.provider, "tool": args.tool, "unit": args.unit,
+          "cost_usd": _find(data, ["cost_usd", "total_cost_usd", "costUsd", "cost"]), "note": f"importado de {args.file}"}
+    ev = {k: v for k, v in ev.items() if v is not None}
+    if "cost_usd" in ev:
+        try:
+            ev["cost_usd"] = float(ev["cost_usd"])
+        except (TypeError, ValueError):
+            ev.pop("cost_usd")
+    p, errs = append(ctx, ev)
+    if errs:
+        return emit(ctx, {"errors": errs}, [f"Evento inválido: {'; '.join(errs)}"], ok=False)
+    return emit(ctx, {"recorded": ev}, [f"Importado: in={ev['input_tokens']} out={ev['output_tokens']} ({ev.get('model', 'modelo n/d')})"])
+
+
 def aggregate(events, pricing, by):
     agg = defaultdict(lambda: {"events": 0, "input_tokens": 0, "output_tokens": 0, "cost_usd": 0.0, "cost_known": True, "estimated": 0})
     for ev in events:
@@ -122,6 +163,8 @@ def aggregate(events, pricing, by):
             a["cost_known"] = False
         else:
             a["cost_usd"] += c
+        if ev.get("cost_lower_bound"):
+            a["lower_bound"] = True
         a["estimated"] += 1 if ev.get("source") == "estimate" else 0
     return dict(agg)
 
@@ -175,6 +218,8 @@ def report_md(ctx, events, pricing):
         out = [f"## {title}", "", "| Clave | Eventos | Entrada | Salida | Costo USD |", "|---|---|---|---|---|"]
         for k, a in sorted(agg.items(), key=lambda kv: -(kv[1]["input_tokens"] + kv[1]["output_tokens"])):
             c = f"{a['cost_usd']:.4f}" if a["cost_known"] else (f"≥ {a['cost_usd']:.4f} (precio no registrado)" if a["cost_usd"] else "n/d")
+            if a.get("lower_bound") and a["cost_known"]:
+                c = f"≥ {a['cost_usd']:.4f} (cota inferior)"
             out.append(f"| {k} | {a['events']} | {a['input_tokens']:,} | {a['output_tokens']:,} | {c} |")
         return out + [""]
 
@@ -204,6 +249,20 @@ def cmd_budget(ctx, args):
     soft = [s for s in st if s["state"] == "soft"]
     lines = [f"{s['state'].upper()} {s['scope']}: {s['used']:,} tokens (blando {s['soft']}, duro {s['hard']})" for s in st if s["state"] != "ok"]
     lines.append(f"Presupuestos: {len(st)} alcances · {len(soft)} sobre umbral blando (→ cola) · {len(hard)} sobre tope duro (→ bloqueante)")
+    if args.queue and soft and not ctx.dry_run:
+        from .pending import _render, load
+        p, t, rows = load(ctx)
+        known = {r["Contexto"] for r in rows}
+        n = max([int(re.sub(r"\D", "", r["ID"]) or 0) for r in rows] or [0])
+        for b in soft:
+            ctxt = f"Presupuesto blando superado: {b['scope']} ({b['used']:,} > {b['soft']:,})"
+            if ctxt in known:
+                continue
+            n += 1
+            rows.append({"ID": f"P-{n:03d}", "Tipo": "revisión", "Contexto": ctxt, "Default aplicado": "continuar (sin tope duro)",
+                         "Alternativa": "reducir alcance o cambiar de modelo", "Impacto si no se responde": "más costo", "Estado": "abierto"})
+        write_text(ctx, p, _render(t, rows))
+        lines.append("Umbrales blandos encolados en la cola de pendientes")
     return emit(ctx, {"budgets": st}, lines, ok=not hard)
 
 
@@ -224,7 +283,7 @@ def cmd_attest(ctx, args):
             claimed = tuple(int(x.replace(",", "").replace(".", "")) for x in m.groups())
     receipt = {"events": len(events), "invalid_lines": len(invalid), "invalid_events": bad, "total": tin + tout, "input": tin, "output": tout,
                "claimed": claimed}
-    ok = claimed == (tin + tout, tin, tout) and not invalid and not bad
+    ok = (claimed == (tin + tout, tin, tout) or (not events and claimed in (None, (0, 0, 0)))) and not invalid and not bad
     lines = [f"Ledger: {len(events)} eventos · total {tin + tout:,} (entrada {tin:,} · salida {tout:,})",
              f"Reporte {rp.name}: {claimed if claimed else 'sin cifras'}",
              f"Atestación: {'OK — las cifras del reporte salen del ledger' if ok else 'FALLA — regenera con `abm tokens report` o corrige el ledger'}"]
@@ -244,6 +303,7 @@ def register(sub):
         r.add_argument(f"--{k}")
     r.add_argument("--command", dest="command_name")
     r.add_argument("--cost", type=float)
+    r.add_argument("--lower-bound", action="store_true", help="el costo calculado es una cota inferior (p. ej. total sin desglose)")
     r.set_defaults(func=cmd_record)
     e = s.add_parser("estimate", help="Estima tokens de lo producido (caracteres/4)")
     e.add_argument("--unit", required=True)
@@ -256,9 +316,17 @@ def register(sub):
     rp = s.add_parser("report", help="Genera el reporte N1 (TOKENS.md)")
     rp.add_argument("--by", default="unit", choices=["unit", "model", "phase", "feature", "tool", "provider", "tenant"])
     rp.set_defaults(func=cmd_report)
+    im = s.add_parser("import", help="Importa un reporte de uso JSON (p. ej. --usage-file de un agente) al ledger")
+    im.add_argument("file")
+    im.add_argument("--phase", choices=PHASES, default="build")
+    im.add_argument("--tool")
+    im.add_argument("--provider")
+    im.add_argument("--unit")
+    im.set_defaults(func=cmd_import)
     at = s.add_parser("attest", help="Atesta que las cifras de TOKENS.md salen del ledger (OKF Attested Computation)")
     at.set_defaults(func=cmd_attest)
     b = s.add_parser("budget", help="Verifica presupuestos (falla si se supera un tope duro)")
+    b.add_argument("--queue", action="store_true", help="encola los umbrales blandos superados (turbo)")
     b.set_defaults(func=cmd_budget)
     try:
         from . import dashboard

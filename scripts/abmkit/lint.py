@@ -28,7 +28,8 @@ def lint_core(ctx: Ctx):
     if not rx:
         return hits
     from .common import matches
-    for path, rel in walk_files(ctx.root, (".md", ".yaml", ".yml"), cfg(ctx.conf, "okf.exclude", []) or []):
+    excl = [e for e in (cfg(ctx.conf, "okf.exclude", []) or []) if not e.endswith("SKILL.md")]
+    for path, rel in walk_files(ctx.root, (".md", ".yaml", ".yml"), excl):
         if not matches(rel, paths) or matches(rel, allow):
             continue
         text = path.read_text(encoding="utf-8")

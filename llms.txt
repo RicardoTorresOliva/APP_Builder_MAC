@@ -2,7 +2,7 @@
 
 > Fábrica agent-native de Activos Digitales SLG (ADS) — gobernanza, CLI y servidor MCP.
 
-Gobernanza en `AGENTS.md`. CLI para agentes: `./abm <orden> --json`. Servidor MCP: `python3 scripts/abm.py mcp`. Mapa completo: `index.md`.
+Gobernanza para agentes: `AGENTS.md`. Skill de operación: `skills/operate-abm/SKILL.md`. Servidor MCP: `python3 scripts/abm.py mcp`. CLI: `./abm` (salida JSON). Consumo de tokens: `TOKENS.md`. Mapa completo: `index.md`.
 
 ## Empieza aquí
 
@@ -10,6 +10,49 @@ Gobernanza en `AGENTS.md`. CLI para agentes: `./abm <orden> --json`. Servidor MC
 - [APP_Builder_MAC (ABM) v5](/README.md): Fábrica agent-native de Activos Digitales SLG (ADS), neutral de herramienta y de modelo; punto de entrada del repo.
 - [Quickstart de ABM v5](/QUICKSTART.md): Procedimiento corto para preparar ABM una vez y producir un ADS nuevo.
 - [Glosario de ABM](/docs/glossary.md): Definiciones canónicas de ABM; ningún otro archivo redefine estos términos.
+- [Manual de ABM](/docs/manual/README.md): Índice del manual para no programadores y cómo usarlo según lo que necesites hacer.
+- [Cheatsheet de comandos de ABM](/docs/manual/cheatsheet.md): Los 36 comandos de ABM en una sola página, agrupados por fase, con su alias en español.
+- [a11y — accesibilidad WCAG 2.2 AA](/docs/manual/comandos/a11y.md): Verifica accesibilidad WCAG 2.2 AA de la capa de interfaz antes de entregar.
+- [ads-check — verifica el Contrato ADS](/docs/manual/comandos/ads-check.md): Verifica que el ADS cumple su nivel del Contrato ADS, estático y dinámico.
+- [api — construye el servicio](/docs/manual/comandos/api.md): Construye la capa de API/servicio de una unidad con contrato de errores y quality gate.
+- [assess — inventario de brownfield/legacy](/docs/manual/comandos/assess.md): Inventaría un stack existente y propone el patrón de integración más simple que funcione.
+- [bootstrap — chequeo único de plataforma](/docs/manual/comandos/bootstrap.md): Detecta la plataforma, corre doctor y sync, y confirma que el repo está listo para trabajar.
+- [closeout — cierra una unidad](/docs/manual/comandos/closeout.md): Sincroniza intención, spec, contrato y código, registra tokens y actualiza la memoria del proyecto.
+- [connect — superficie agéntica del ADS](/docs/manual/comandos/connect.md): Da al ADS su superficie agéntica (ads.yaml, skill, MCP, API) para que otro agente lo opere.
+- [consolidate — lleva lo aprendido a diseño real](/docs/manual/comandos/consolidate.md): Convierte los aprendizajes de un explore en spec y diseño definitivos (IDD/SDD).
+- [db — construye el modelo de datos](/docs/manual/comandos/db.md): Modela y migra el esquema de datos de una unidad con migraciones reversibles.
+- [decide — capa System One](/docs/manual/comandos/decide.md): Resuelve una decisión tipada (choice/score/boolean) con la capa de decisión y su routing por confianza.
+- [deploy — publica el ADS](/docs/manual/comandos/deploy.md): Publica el ADS en su entorno de destino tras pasar la checklist previa y con rollback listo.
+- [doctor — diagnóstico del entorno](/docs/manual/comandos/doctor.md): Diagnostica el entorno (Python, git, estructura, config) en lenguaje simple y sugiere arreglos.
+- [drift — deriva intención/spec/código](/docs/manual/comandos/drift.md): Detecta y resuelve la deriva entre intención, spec, contrato de prompt y código real.
+- [explore — spike acotado en sandbox](/docs/manual/comandos/explore.md): Prueba y descarta en una rama sandbox con tiempo acotado para resolver una incertidumbre.
+- [fix — corrige un bug](/docs/manual/comandos/fix.md): Reproduce el bug, escribe el test que falla, aplica el cambio mínimo y verifica sin regresión.
+- [help — índice de comandos](/docs/manual/comandos/help.md): Muestra el catálogo de comandos por fase y resuelve alias en español.
+- [init-project — planifica un proyecto nuevo](/docs/manual/comandos/init-project.md): Elige perfil y ceremonia, clasifica la metodología, explora el stack con el humano y publica el plan.
+- [integrate — integra una plataforma externa](/docs/manual/comandos/integrate.md): Conecta el ADS con un tercero por la vía más segura disponible, de MCP a SQL de mínimo privilegio.
+- [intent — captura la intención](/docs/manual/comandos/intent.md): Registra el qué y el por qué de una unidad antes de especificarla o construirla.
+- [iterate — cambios post-entrega](/docs/manual/comandos/iterate.md): Aplica un cambio, mejora o corrección tras la entrega, con spec-delta antes de tocar código.
+- [methodology — clasifica el modo metodológico](/docs/manual/comandos/methodology.md): Asigna VIBE, IDD, SDD, SPDD o AIDD a un módulo según sus seis dimensiones de riesgo.
+- [pending — cola de pendientes](/docs/manual/comandos/pending.md): Lista, agrega y resuelve en lote las decisiones y defaults que turbo dejó en cola.
+- [perf — rendimiento y escalabilidad](/docs/manual/comandos/perf.md): Verifica rendimiento, escalabilidad básica y costo por unidad antes de entregar.
+- [plan — publica el plan de ejecución](/docs/manual/comandos/plan.md): Ordena FU y DU en el tracker, redacta el plan y lo publica para su aprobación o cola.
+- [prompt-contract — contrato de un agente o prompt](/docs/manual/comandos/prompt-contract.md): Fija entradas, salidas, límites y HITL de un prompt o agente antes de construirlo.
+- [refactor — mejora la estructura sin cambiar comportamiento](/docs/manual/comandos/refactor.md): Reestructura código manteniendo la suite de tests en verde antes y después, sin cambiar comportamiento.
+- [release — cierra una versión](/docs/manual/comandos/release.md): Cierra una versión del ADS con semver, changelog y verificación previa completa.
+- [review — revisión independiente](/docs/manual/comandos/review.md): Lanza una revisión independiente, con contexto limpio, de la última unidad o milestone completado.
+- [security — auditoría de seguridad](/docs/manual/comandos/security.md): Audita la unidad o el ADS contra OWASP y verifica que no haya secretos expuestos.
+- [session-start — inicio de sesión](/docs/manual/comandos/session-start.md): Lee la memoria del proyecto y la cola de pendientes, y dice por dónde retomar el trabajo.
+- [spec — especificación verificable](/docs/manual/comandos/spec.md): Convierte la intención en requirements, design y tasks verificables (formato EARS).
+- [stack — elige el stack con el humano](/docs/manual/comandos/stack.md): Explora 2-3 opciones de stack con trade-offs y espera la elección del humano (HITL).
+- [start-execution — ejecución autónoma](/docs/manual/comandos/start-execution.md): Verifica que el plan esté listo y ejecuta las FU y DU aprobadas hasta la entrega.
+- [test — pirámide de pruebas](/docs/manual/comandos/test.md): Verifica la unidad con la pirámide de pruebas del perfil, priorizando rutas críticas.
+- [tokens — espacio de control de tokens](/docs/manual/comandos/tokens.md): Registra, reporta y verifica el consumo y presupuesto de tokens de cada unidad.
+- [ui — construye la interfaz](/docs/manual/comandos/ui.md): Construye la capa de interfaz de una unidad siguiendo el standard de frontend y su quality gate.
+- [Cómo deshacer un cambio](/docs/manual/como-deshacer.md): Los checkpoints de git explicados sin jerga, y los comandos exactos para volver atrás de forma segura.
+- [Herramientas de IA compatibles con ABM](/docs/manual/herramientas.md): Tabla maestra de cómo invocar comandos en cada herramienta, qué genera "./abm sync" para cada una, y qué no se puede generar.
+- [Modo turbo y cola de pendientes](/docs/manual/modo-turbo.md): Qué es turbo frente a checkpoint, los bloqueantes, la cola de pendientes, el semáforo de riesgo, y cómo activar turbo en cada herramienta.
+- [Tus primeros 15 minutos con ABM](/docs/manual/primeros-15-minutos.md): Onboarding paso a paso, sin dar por sabido nada de programación, desde abrir el repo hasta ver el plan de tu proyecto.
+- [Cómo leer TOKENS.md y el dashboard](/docs/manual/tokens.md): Qué es un token, cómo leer el reporte TOKENS.md y el dashboard de tokens, qué es un presupuesto blando o duro, y qué hacer si se supera.
 
 ## Comandos
 
@@ -186,6 +229,9 @@ Gobernanza en `AGENTS.md`. CLI para agentes: `./abm <orden> --json`. Servidor MC
 - [Benchmark de referentes](/docs/analysis/02-benchmark.md): Referentes de desarrollo agent-native verificados a la fecha y las ideas que ABM adopta de cada uno.
 - [Investigación agéntica — Hermes, Jev, protocolos y telemetría](/docs/analysis/03-investigacion-agentica.md): Hechos verificados para diseñar la superficie agéntica, la capa System One y el espacio de tokens de ABM y sus ADS.
 - [Plan de repotenciación ABM v5](/docs/analysis/04-plan.md): Arquitectura objetivo, plan de migración y roadmap de WU con criterios de aceptación y verificación.
+- [Verificación de adaptadores contra la documentación oficial](/docs/analysis/verificacion/adaptadores.md): Contraste de cada salida de abm sync con la documentación oficial vigente de su herramienta.
+- [Recorridos de los 6 encargos simulados](/docs/analysis/verificacion/recorridos.md): Recorrido de punta a punta, como vibe coder, de seis encargos con la documentación y el CLI de ABM v5; huecos encontrados.
+- [Revisión adversarial independiente de ABM v5](/docs/analysis/verificacion/revision-adversarial.md): Hallazgos de un revisor independiente sobre el diff completo de la repotenciación, con evidencia y severidad.
 - [Matriz de compatibilidad multi-herramienta](/docs/compat-matrix.md): Cómo consume cada herramienta de IA las instrucciones, reglas, comandos, skills, subagentes, hooks, MCP, ignore, turbo y telemetría.
 - [agentic — hace el ADS operable por agentes](/agents/agentic.md): Construye la superficie agéntica del ADS (ads.yaml, MCP, CLI --json, llms.txt) con agentic-surface y la verifica con agent-conformance; delégale al cerrar el Contrato ADS de cualquier ADS.
 - [architect — diseña la arquitectura del ADS](/agents/architect.md): Define arquitectura, contratos entre capas, nivel de Contrato ADS y methodology-map; delégale al iniciar un ADS o ante un cambio estructural que afecte a varios roles.

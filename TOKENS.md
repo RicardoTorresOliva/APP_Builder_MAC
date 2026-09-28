@@ -4,7 +4,7 @@ title: Reporte de tokens
 description: Consumo de tokens y costo del ADS (construcción y operación), generado desde el ledger.
 tags: [tokens, finops]
 status: stable
-generated: { by: process:abm-tokens, at: 2026-09-27T23:49:54Z }
+generated: { by: process:abm-tokens, at: 2026-09-28T00:13:40Z }
 ---
 
 # Reporte de tokens
@@ -18,25 +18,25 @@ generated: { by: process:abm-tokens, at: 2026-09-27T23:49:54Z }
 
 | Clave | Eventos | Entrada | Salida | Costo USD |
 |---|---|---|---|---|
-| build | 10 | 2,539,900 | 0 | 5.0798 |
+| build | 10 | 2,539,900 | 0 | ≥ 5.0798 (cota inferior) |
 
 ## Por unidad (FU/DU/WU)
 
 | Clave | Eventos | Entrada | Salida | Costo USD |
 |---|---|---|---|---|
-| Fase-1 | 3 | 936,221 | 0 | 1.8724 |
-| WU5 | 2 | 417,466 | 0 | 0.8349 |
-| WU9-WU10 | 1 | 328,960 | 0 | 0.6579 |
-| WU11 | 1 | 276,509 | 0 | 0.5530 |
-| WU10 | 1 | 201,999 | 0 | 0.4040 |
-| WU4 | 1 | 191,990 | 0 | 0.3840 |
-| WU6 | 1 | 186,755 | 0 | 0.3735 |
+| Fase-1 | 3 | 936,221 | 0 | ≥ 1.8724 (cota inferior) |
+| WU5 | 2 | 417,466 | 0 | ≥ 0.8349 (cota inferior) |
+| WU9-WU10 | 1 | 328,960 | 0 | ≥ 0.6579 (cota inferior) |
+| WU11 | 1 | 276,509 | 0 | ≥ 0.5530 (cota inferior) |
+| WU10 | 1 | 201,999 | 0 | ≥ 0.4040 (cota inferior) |
+| WU4 | 1 | 191,990 | 0 | ≥ 0.3840 (cota inferior) |
+| WU6 | 1 | 186,755 | 0 | ≥ 0.3735 (cota inferior) |
 
 ## Por modelo
 
 | Clave | Eventos | Entrada | Salida | Costo USD |
 |---|---|---|---|---|
-| claude-sonnet-5 | 10 | 2,539,900 | 0 | 5.0798 |
+| claude-sonnet-5 | 10 | 2,539,900 | 0 | ≥ 5.0798 (cota inferior) |
 
 ## Presupuestos
 
