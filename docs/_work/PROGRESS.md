@@ -13,7 +13,9 @@ generated: { by: claude-code/web, at: 2026-09-28T00:20:59Z }
 
 - **Fase actual:** 5 — Cierre completado.
 - **Rama:** `claude/jolly-davinci-m2wcju`.
-- **Próximo paso:** decisiones humanas de la cola (P-001, P-003, P-005, P-006, P-007) y ejecución de la CI en la plataforma.
+- **Fusionado:** PR #1 en `main` (CI 16/16 en Ubuntu, macOS y Windows × Python 3.9/3.13).
+- **Cola (2026-09-28):** resueltos P-001, P-002 (`AGE_Builder_MAC#1`), P-003 (propietaria SLG), P-007 (turbo activado), P-008 a P-011. Abiertos: P-005 y P-006 (credenciales).
+- **Próximo paso:** con credenciales, `./abm decide --provider typesafe-jev` y `./abm agent-conformance --hermes`.
 
 ## Línea base (antes)
 
@@ -64,4 +66,4 @@ generated: { by: claude-code/web, at: 2026-09-28T00:20:59Z }
 
 | Fase/WU | Tokens | Fuente |
 |---|---|---|
-| Todas | ver `TOKENS.md` y `ops/tokens/dashboard.html` | ledger (telemetría de la sesión; costo cota inferior) |
+| Todas | ver `TOKENS.md` y `ops/tokens/dashboard.html` | ledger (telemetría de la sesión; modelo no declarado, costo sin calcular) |

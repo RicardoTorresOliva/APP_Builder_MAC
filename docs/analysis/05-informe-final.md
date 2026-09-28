@@ -68,7 +68,7 @@ verified:
 | 100 % de comandos en el manual | cumple | `abm lint manual` |
 | CI en verde | cumple localmente; ejecución en la plataforma de CI sin evidencia | `abm check` 15/15 en 3.9/3.11/3.13 y cp1252 |
 | 6 encargos sin huecos; uno ejecutado | cumple (huecos H1–H5 corregidos) | `/docs/analysis/verificacion/recorridos.md`, `examples/panel-ventas/` |
-| README, CHANGELOG, MIGRATION, CONTRIBUTING, SECURITY, LICENSE | cumple (licencia provisional, P-003) | raíz del repo |
+| README, CHANGELOG, MIGRATION, CONTRIBUTING, SECURITY, LICENSE | cumple (licencia propietaria SLG definitiva, P-003) | raíz del repo |
 | Contrato ADS, superficie agéntica, System One, portabilidad, tokens, turbo, protocolo (criterios del prompt v3) | cumple; Jev y Hermes en vivo sin verificar | `ads.yaml`, `abm agent-conformance`, `abm decide`, `TOKENS.md` |
 
 ## Verificación (Fase 4)
@@ -82,7 +82,6 @@ verified:
 
 - Jev real (sin `TYPESAFE_API_KEY`): la capa System One funcionó con el proveedor de reglas (P-006).
 - Hermes en vivo (sin credenciales de LLM): conformidad con cliente MCP genérico (P-005).
-- Ejecución en Windows y macOS reales y en la plataforma de CI (probado: Python 3.9/3.11/3.13 y salida cp1252 en Linux).
 - Antigravity `.agents/workflows/` y claves MCP de Hermes (fuentes contradictorias).
 - Calidad de la clasificación con texto libre sin proveedor de decisión (reglas de palabras clave).
 
@@ -95,14 +94,13 @@ verified:
 
 ## Consumo de esta repotenciación
 
-Ledger `ops/tokens/ledger.jsonl` → `/TOKENS.md` y dashboard N2: subagentes y orquestador, fuente `telemetry` (totales reportados por la sesión, sin desglose entrada/salida: el costo es cota inferior). `abm tokens attest` OK. Umbrales blandos superados en Fase 1, WU5 y Fase 4 (encolados); ningún tope duro.
+Ledger `ops/tokens/ledger.jsonl` → `/TOKENS.md` y dashboard N2: subagentes y orquestador, fuente `telemetry` (totales reportados por la sesión, sin desglose entrada/salida; modelo `no-declarado`, por eso el costo queda sin calcular). `abm tokens attest` OK. Umbrales blandos superados en Fase 1, WU5 y Fase 4 (encolados); ningún tope duro.
 
 ## Pendientes y próximos pasos
 
-Cola: `/docs/_work/PENDIENTES.md` (P-001 a P-010). Próximos pasos recomendados:
+Cola: `/docs/_work/PENDIENTES.md`. Resueltos el 2026-09-28 por decisión humana: plan aprobado (P-001), tarea de alineación OKF en `RicardoTorresOliva/AGE_Builder_MAC#1` (P-002), licencia propietaria SLG definitiva (P-003), turbo activado con `./abm sync --apply-turbo` (P-007), umbrales blandos aceptados (P-008 a P-011). CI en verde en Ubuntu, macOS y Windows × Python 3.9/3.13 (PR #1, fusionado en `main`).
 
-1. Aprobar el plan (P-001) y decidir la licencia (P-003).
-2. Verificar Jev con clave (P-006) y Hermes con credenciales (P-005): `./abm decide --provider typesafe-jev`, `./abm agent-conformance --hermes`.
-3. Ejecutar la CI en la plataforma y corregir lo que falle en Windows/macOS reales.
-4. Decidir si se activa turbo en las herramientas (P-007): `./abm sync --apply-turbo`.
-5. Reducir metadatos: filtrar comandos o skills por perfil en `adapters/tools.yaml`.
+Próximos pasos:
+
+1. Verificar Jev con clave (P-006) y Hermes con credenciales (P-005): `./abm decide --provider typesafe-jev`, `./abm agent-conformance --hermes`.
+2. Reducir metadatos: filtrar comandos o skills por perfil en `adapters/tools.yaml`.

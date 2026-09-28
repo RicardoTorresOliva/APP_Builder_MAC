@@ -11,6 +11,19 @@ generated: { by: claude-code/web, at: 2026-09-27T23:47:53Z }
 
 Formato: versionado semántico (MAJOR.MINOR.PATCH). Detalle de migración: `MIGRATION.md`.
 
+## [Sin publicar]
+
+### Cambiado
+
+- Licencia propietaria SLG definitiva (sin nota provisional).
+- Permisos turbo activados en el repo (`abm sync --apply-turbo`): `.claude/settings.json`, `.vscode/settings.json`, `.codex/config.toml`, `.gemini/settings.json`.
+- El ledger de tokens registra `model: no-declarado` para el trabajo de la repotenciación.
+
+### Corregido
+
+- CI en Windows: stdio UTF-8 en el ejemplo y la plantilla MCP.
+- `secret-scan`: permiso `pull-requests: read` y `.gitleaks.toml` (excluye solo el registro de hashes de `abm sync`); `abm new-ads` lo copia.
+
 ## [5.0.0] — 2026-09-27
 
 ### Añadido

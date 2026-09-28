@@ -1,6 +1,6 @@
 {
  "note": "Registro de archivos generados por abm sync (ruta → sha256). No editar.",
- "turbo_applied": false,
+ "turbo_applied": true,
  "files": {
   ".agents/mcp_config.json": "dd18689f40eabcd9f538464b813b0d9b7d93db672b7b6a03283b89bf6ef738c9",
   ".agents/skills/a11y-audit/SKILL.md": "7d05147a9ae26e6b4f4fb9bf83a02de5867a864e4e9fe8c1f8918fee1d505b15",
@@ -142,7 +142,7 @@
   ".claude/skills/test-strategy/SKILL.md": "f9860d226605fc2d6ae179e8ae79a952fca316667dae9eae5e28c09b619f03b3",
   ".claude/skills/token-ledger/SKILL.md": "ef9d7e0af73446555a2515ac80bc32e1d042e22a52359c2889d25483adb55a0e",
   ".claude/skills/token-ledger/references/ledger-schema.md": "5b45c61498c8d30ed39bb04d03b18e87d742ffe7e3a85328f7b9a044512a66c8",
-  ".codex/config.toml": "94fe5e23bf8fa7a98cb62e88f1166abd4893891b7c5fabec802b6feeb39aad10",
+  ".codex/config.toml": "2a8c6330b8d7f629565db67e5d40d2093238c1a2469424b13043598a90e4b04c",
   ".codex/skills/a11y-audit/SKILL.md": "7d05147a9ae26e6b4f4fb9bf83a02de5867a864e4e9fe8c1f8918fee1d505b15",
   ".codex/skills/abm-playbooks/SKILL.md": "c344db697316440a2ec84441d2c8e85404a1f1890f883f752a1824ae32d01f3a",
   ".codex/skills/agentic-surface/SKILL.md": "fbe2882e271aede5c049884c6a18b307dc7e70d23fcb20241615911d898d4886",
@@ -259,7 +259,7 @@
   ".gemini/commands/test.toml": "cc6a188772cf427f76458b150d52359ae1a5ee67830dd71a8b2c02302b95200c",
   ".gemini/commands/tokens.toml": "17dcdfa2751e7d2fff78bf50db220433f8cb47401c60d5e69d45269fe6b39916",
   ".gemini/commands/ui.toml": "451cead469177d7ad4b3cedef4b2532d6299fc5245be5ab62901b5a477a49bcc",
-  ".gemini/settings.json": "8f856faf785da095aa3d9d93a7d49b15b6ed438ac69cd90bb3260b483aedbedd",
+  ".gemini/settings.json": "c86ed22f381f8fdb6b37ed50839d1b3f06d4ec3e98202eca724f2ddec7fbd0c8",
   ".geminiignore": "3f5d2836212ed4c7c4a7f22d221e717417bd820705371ada803139de445ec21a",
   ".github/agents/agentic.agent.md": "e47e9eee36aa6eafaa98ec186f14571959c5c7cfffe98f4aa9af40658cdecc41",
   ".github/agents/architect.agent.md": "1ae739d3c8e9a86b215f016877ccdde9378909cf6de4ced61f5ece8a2901f765",

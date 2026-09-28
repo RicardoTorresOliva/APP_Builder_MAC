@@ -12,5 +12,8 @@
         "mcp"
       ]
     }
+  },
+  "general": {
+    "defaultApprovalMode": "auto_edit"
   }
 }
