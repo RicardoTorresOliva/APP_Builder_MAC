@@ -28,7 +28,7 @@ def parse(text):
 
 
 def _row(r):
-    return "| " + " | ".join(str(r.get(k, "")).replace("|", "/") for k in COLS) + " |"
+    return "| " + " | ".join(" ".join(str(r.get(k, "")).split()).replace("|", "/") for k in COLS) + " |"
 
 
 def _render(text, rows):

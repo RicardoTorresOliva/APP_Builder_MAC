@@ -41,3 +41,12 @@ La gobernanza vive solo en `AGENTS.md`. Cada herramienta la encuentra con archiv
 - `./abm sync --apply-turbo` — instala las plantillas de `turbo/` en las rutas activas (Claude Code, Codex, Gemini CLI, VS Code). Cambia permisos del agente: decisión humana.
 - Añadir una herramienta: entrada en `tools.yaml` + emisor en `scripts/abmkit/sync.py` + fila en `docs/compat-matrix.md`.
 - `install-adapter.sh` queda como shim de `./abm sync` (compatibilidad v4.1).
+
+## Límites conocidos (verificación de Fase 4, `/docs/analysis/verificacion/adaptadores.md`)
+
+- **Antigravity:** la documentación vigente describe reglas (`.agents/rules/`) y skills (`.agents/skills/`); `.agents/workflows/` tiene fuentes contradictorias (`no-verificado`). Los playbooks también llegan como la skill `abm-playbooks`.
+- **VS Code + Copilot:** los prompt files no se cargan en Agent Host; por eso los playbooks también se generan como skills en `.github/skills/`. La plantilla turbo `chat.tools.terminal.autoApprove` solo aplica al agente local.
+- **Windsurf / Devin Desktop:** `.devin/*` y `.windsurf/*` aplican al agente Cascade (legado); el agente local actual se configura aparte.
+- **Codex:** `.codex/config.toml` de proyecto solo se lee si el proyecto está marcado como de confianza.
+- **Hermes:** carga `.agents/skills/`; la carga nativa de `AGENTS.md` y las claves `tools.resources`/`tools.prompts` tienen fuentes contradictorias (`no-verificado`).
+- **Windows:** las configuraciones MCP usan `python3`; en Windows cambia `mcp_server.command` a `python` (o `py`) en `tools.yaml` y ejecuta `abm.cmd sync`.

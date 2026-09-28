@@ -4,16 +4,16 @@ title: Progreso de la repotenciación de ABM
 description: Estado vivo de la ejecución del prompt maestro v3 (modo TURBO) para sobrevivir a la compactación de contexto.
 tags: [abm, progreso, turbo]
 status: draft
-generated: { by: claude-code/web, at: 2026-09-27T23:44:18Z }
+generated: { by: claude-code/web, at: 2026-09-28T00:20:59Z }
 ---
 
 # Progreso — repotenciación ABM (prompt maestro v3, modo TURBO)
 
 ## Estado
 
-- **Fase actual:** 3 — Implementación por WU (TURBO).
+- **Fase actual:** 5 — Cierre completado.
 - **Rama:** `claude/jolly-davinci-m2wcju`.
-- **Próximo paso:** integrar WU5 (comandos, roles, skills), WU9/10 (stacks), WU11 (integraciones); luego WU2 `sync` real, WU14 manual, WU15 ejemplo + CI, WU16 docs, Fase 4.
+- **Próximo paso:** decisiones humanas de la cola (P-001, P-003, P-005, P-006, P-007) y ejecución de la CI en la plataforma.
 
 ## Línea base (antes)
 
@@ -48,11 +48,20 @@ generated: { by: claude-code/web, at: 2026-09-27T23:44:18Z }
 | WU4 metodología | hecho | 0ab84bd |
 | WU8 System One | hecho | 038f75a |
 | WU12 tokens | hecho | 2ea3b50 |
-| WU13 cola | parcial (falta turbo en sync y lint) | ecf1a24 |
+| WU13 turbo y cola | hecho | ecf1a24, f316921 |
 | WU7 superficie agéntica | hecho | 99fc17f |
-| WU2, WU5, WU9, WU10, WU11, WU14–16 | en curso | — |
+| WU2 adaptadores | hecho | f316921 |
+| WU5 comandos, roles, skills | hecho | 46a0d3d, 249cbd6 |
+| WU9/WU10 stacks | hecho | ab3b987 |
+| WU11 integraciones | hecho | fefb8ae |
+| WU14 manual | hecho | a177c69 |
+| WU15 ejemplo + CI | hecho | e8e8d8a, f0a671e |
+| WU16 documentos | hecho | f0a671e |
+| Fase 4 verificación + correcciones | hecho | 177f5d0, 83be20a |
+| Fase 5 informe final | hecho | (este commit) |
 
 ## Consumo de tokens (estimado)
 
 | Fase/WU | Tokens | Fuente |
 |---|---|---|
+| Todas | ver `TOKENS.md` y `ops/tokens/dashboard.html` | ledger (telemetría de la sesión; costo cota inferior) |

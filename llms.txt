@@ -229,6 +229,7 @@ Gobernanza para agentes: `AGENTS.md`. Skill de operación: `skills/operate-abm/S
 - [Benchmark de referentes](/docs/analysis/02-benchmark.md): Referentes de desarrollo agent-native verificados a la fecha y las ideas que ABM adopta de cada uno.
 - [Investigación agéntica — Hermes, Jev, protocolos y telemetría](/docs/analysis/03-investigacion-agentica.md): Hechos verificados para diseñar la superficie agéntica, la capa System One y el espacio de tokens de ABM y sus ADS.
 - [Plan de repotenciación ABM v5](/docs/analysis/04-plan.md): Arquitectura objetivo, plan de migración y roadmap de WU con criterios de aceptación y verificación.
+- [Informe final de la repotenciación de ABM v5](/docs/analysis/05-informe-final.md): Qué cambió y por qué, métricas antes/después, verificación, criterios de aceptación, pendientes y próximos pasos.
 - [Verificación de adaptadores contra la documentación oficial](/docs/analysis/verificacion/adaptadores.md): Contraste de cada salida de abm sync con la documentación oficial vigente de su herramienta.
 - [Recorridos de los 6 encargos simulados](/docs/analysis/verificacion/recorridos.md): Recorrido de punta a punta, como vibe coder, de seis encargos con la documentación y el CLI de ABM v5; huecos encontrados.
 - [Revisión adversarial independiente de ABM v5](/docs/analysis/verificacion/revision-adversarial.md): Hallazgos de un revisor independiente sobre el diff completo de la repotenciación, con evidencia y severidad.

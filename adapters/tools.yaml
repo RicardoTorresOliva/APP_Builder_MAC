@@ -13,7 +13,7 @@ tools:
 
 mcp_server:
   name: abm
-  command: python3
+  command: python3          # Windows: python (o py). Luego ejecuta abm.cmd sync.
   args: [scripts/abm.py, mcp]
 
 ignore_patterns: [".env", ".env.*", "!.env.example", "*.pem", "*.key", "*.p12", "secrets/", "**/credentials*", "ops/audit/"]

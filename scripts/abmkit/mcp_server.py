@@ -163,6 +163,9 @@ class Server:
                 "budgets": T.budgets_status(self.ctx, ev)}
 
     def audit(self, tool, arguments, ok, dry_run):
+        import os
+        if os.environ.get("ABM_NO_AUDIT"):
+            return
         m = load_yaml_file(self.root / "ads.yaml") if (self.root / "ads.yaml").exists() else {}
         rel = ((m.get("security") or {}).get("agent_audit_log"))
         if not rel:
@@ -223,7 +226,7 @@ class Server:
         elif uri == "abm://ads":
             data = load_yaml_file(self.root / "ads.yaml") if (self.root / "ads.yaml").exists() else {}
         else:
-            raise KeyError(f"recurso desconocido: {uri}")
+            raise LookupError(f"recurso desconocido: {uri}")
         return {"contents": [{"uri": uri, "mimeType": "application/json", "text": json.dumps(data, ensure_ascii=False, default=str)}]}
 
     def handle(self, msg):
@@ -244,6 +247,8 @@ class Server:
             return {"jsonrpc": "2.0", "id": mid, "result": fn(msg.get("params"))}
         except KeyError as e:
             return {"jsonrpc": "2.0", "id": mid, "error": {"code": -32602, "message": str(e)}}
+        except LookupError as e:  # MCP: recurso no encontrado
+            return {"jsonrpc": "2.0", "id": mid, "error": {"code": -32002, "message": str(e)}}
         except Exception as e:  # noqa: BLE001
             return {"jsonrpc": "2.0", "id": mid, "error": {"code": -32603, "message": f"error interno: {e}"}}
 

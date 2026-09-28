@@ -97,7 +97,9 @@ def provider_typesafe(state, qs, conf):
         elif t == "score":
             answers[qid] = {"type": t, "value": a.get("score"), "probabilities": a.get("probabilities"), "confidence": a.get("confidence")}
         else:
-            p = float(a.get("noul", 0.5))
+            if not isinstance(a, dict) or a.get("noul") is None:
+                raise ValueError(f"respuesta de Jev sin noul para {qid}")
+            p = float(a.get("noul"))
             answers[qid] = {"type": t, "value": p >= 0.5, "probability": p, "confidence": round(abs(2 * p - 1), 4)}
     u = data.get("usage") or {}
     return answers, {"provider": "typesafe", "model": data.get("model") or c.get("model"),
@@ -130,7 +132,12 @@ def provider_llm(state, qs, conf):
         if q["type"] == "choice" and val not in _options(q):
             val, conf_v = None, 0.0
         if q["type"] == "boolean":
-            val = bool(val)
+            val = val if isinstance(val, bool) else str(val).strip().lower() in ("true", "1", "si", "sí", "yes")
+        if q["type"] == "score" and not isinstance(val, int):
+            try:
+                val = int(val)
+            except (TypeError, ValueError):
+                val, conf_v = None, 0.0
         answers[qid] = {"type": q["type"], "value": val, "confidence": conf_v}
     u = data.get("usage") or {}
     return answers, {"provider": "llm", "model": model, "input_tokens": int(u.get("prompt_tokens", 0)),
@@ -204,7 +211,7 @@ def decide(ctx: Ctx, state: str, qs: dict, provider: str | None = None, use: str
             break
         except Unavailable as e:
             tried.append(f"{name}: {e}")
-        except (urllib.error.URLError, TimeoutError, KeyError, ValueError, json.JSONDecodeError) as e:
+        except (urllib.error.URLError, TimeoutError, OSError, KeyError, ValueError, TypeError, json.JSONDecodeError) as e:
             tried.append(f"{name}: error {type(e).__name__}: {e}")
     else:
         raise RuntimeError("ningún proveedor disponible: " + " | ".join(tried))

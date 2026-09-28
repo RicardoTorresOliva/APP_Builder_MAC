@@ -18,7 +18,7 @@ Hermes (y el resto) carga `AGENTS.md`, usa skills del estándar y consume MCP (v
 ## Decisión
 
 - **Todo ADS:** `ads.yaml`, `AGENTS.md`, skill `operate-<id>` (copiada por `sync` a `.agents/skills/` y equivalentes), `llms.txt`, índice OKF.
-- **Extendido:** servidor MCP (stdio siempre; Streamable HTTP para servicios desplegados), protocolo base **2025-11-25** y tolerancia a clientes que pidan `2026-07-28`; tools con `readOnlyHint`/`destructiveHint` correctos y descripciones cortas; CLI `--json`/`--dry-run`; OpenAPI para APIs HTTP; errores `application/problem+json` (RFC 9457); webhooks firmados; log de auditoría.
+- **Extendido:** servidor MCP (stdio siempre; Streamable HTTP para servicios desplegados), protocolo base **2025-11-25**; a un cliente que pida `2026-07-28` se le responde con `2025-11-25` (negociación estándar) y se aceptan solicitudes sin `initialize` y `server/discover` (tolerancia a clientes sin estado); tools con `readOnlyHint`/`destructiveHint` correctos y descripciones cortas; CLI `--json`/`--dry-run`; OpenAPI para APIs HTTP; errores `application/problem+json` (RFC 9457); webhooks firmados; log de auditoría.
 - **A2A** (`/.well-known/agent-card.json`, v1.0) solo si el ADS es o expone un agente.
 - **ABM expone su propio servidor MCP** (stdio, biblioteca estándar) sobre el CLI: tools de lectura y `dry-run`, recurso `abm://tokens/summary`. Coste bajo y permite que Hermes conduzca ABM sin parsear texto.
 - **`abm agent-conformance`**: cliente MCP propio (stdlib) que ejecuta el guion descubrir → listar → leer → `dry-run` → tokens; si Hermes está instalado, además una prueba `hermes -z`.

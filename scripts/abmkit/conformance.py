@@ -1,4 +1,4 @@
-"""`abm agent-conformance`: dynamic check that an external agent can operate an ADS (ADR 0010).
+"""`abm agent-conformance`: dynamic check (executes the MCP command declared by the ADS: use it on trusted repos only) that an external agent can operate an ADS (ADR 0010).
 
 Generic MCP stdio client (standard library): initialize → tools/list → read tool → write tool in
 dry-run → resources (tokens). Level `minimo` ADS without MCP get the static checks only.
@@ -24,11 +24,13 @@ SKILL_KEYS = {"name", "description", "license", "compatibility", "metadata", "al
 
 class Client:
     def __init__(self, cmd, cwd, timeout=60):
-        argv = shlex.split(cmd)
+        import os
+        argv = shlex.split(cmd, posix=(os.name != "nt"))
         if argv and argv[0] in ("python3", "python"):
             argv[0] = sys.executable
-        self.p = subprocess.Popen(argv, cwd=cwd, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
-                                  text=True, encoding="utf-8", bufsize=1)
+        env = {**__import__("os").environ, "ABM_NO_AUDIT": "1", "PYTHONUTF8": "1"}
+        self.p = subprocess.Popen(argv, cwd=cwd, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.DEVNULL,
+                                  text=True, encoding="utf-8", bufsize=1, env=env)
         self.q: queue.Queue = queue.Queue()
         self.timeout, self.nid = timeout, 0
         threading.Thread(target=self._reader, daemon=True).start()

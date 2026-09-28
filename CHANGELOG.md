@@ -25,7 +25,9 @@ Formato: versionado semántico (MAJOR.MINOR.PATCH). Detalle de migración: `MIGR
 - **Modo turbo** y cola de pendientes (`abm pending`) (ADR 0014); **protocolo de salida** verificado por lint (ADR 0015).
 - 36 comandos, 13 roles, 18 skills, estándares FE/BE/DB con paridad, catálogo de 14 stacks + nubes, LLMs y legacy, guías de integraciones, manual para no programadores.
 - Perfiles `api-service` y `automation-integration`.
-- CI multiplataforma y tests del CLI.
+- CI multiplataforma (Linux/macOS/Windows × Python 3.9/3.13) y tests del CLI con regresiones adversariales.
+- Ejemplo golden path ejecutable `examples/panel-ventas/` y verificación de Fase 4 (`docs/analysis/verificacion/`).
+- `abm tokens import`, `abm tokens budget --queue`, `abm units`, `abm preflight`.
 
 ### Cambiado
 

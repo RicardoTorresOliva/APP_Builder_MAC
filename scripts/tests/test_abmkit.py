@@ -111,12 +111,54 @@ class Workspace(unittest.TestCase):
         code, d = run("tokens", "dashboard", root=self.tmp)
         self.assertTrue((self.tmp / "ops/tokens/dashboard.html").exists())
 
+    def test_budget_queue(self):
+        run("tokens", "record", "--input", "500000", "--output", "0", "--unit", "DU-9", root=self.tmp)
+        code, d = run("tokens", "budget", "--queue", root=self.tmp)
+        self.assertEqual(code, 0)
+        code, d = run("pending", "list", root=self.tmp)
+        self.assertTrue(any("DU-9" in r["Contexto"] for r in d["pending"]))
+
+    def test_tokens_import(self):
+        f = self.tmp / "usage.json"
+        f.write_text('{"usage": {"prompt_tokens": 120, "completion_tokens": 30}, "model": "m"}', encoding="utf-8")
+        code, d = run("tokens", "import", "usage.json", "--tool", "hermes", root=self.tmp)
+        self.assertEqual(code, 0, d)
+        self.assertEqual(d["recorded"]["input_tokens"], 120)
+
     def test_dry_run_writes_nothing(self):
         code, d = run("--dry-run", "pending", "add", "--type", "decisión", "--context", "c", "--default", "d", root=self.tmp)
         self.assertFalse((self.tmp / "docs/_work/PENDIENTES.md").exists())
 
 
+class YamlAdversarial(unittest.TestCase):
+    def test_malformed_flow_does_not_hang(self):
+        for bad in ("tags: [a}", "x: {b: [1, 2}", "t: [a b c"):
+            with self.assertRaises(yamlmini.YAMLError):
+                yamlmini.loads(bad)
+
+    def test_windows_path_and_unicode(self):
+        d = yamlmini.loads('p: "C:\\Users\\x"\nq: "año"')
+        self.assertEqual(d["q"], "año")
+
+
 class Mcp(unittest.TestCase):
+    def test_adversarial_messages(self):
+        msgs = ['{"jsonrpc":"2.0","id":1,"method":"tools/call","params":{"name":"abm_lint","arguments":{"kind":"--help"}}}',
+                "[1]", "nojson",
+                '{"jsonrpc":"2.0","id":2,"method":"tools/call","params":{"name":"abm_okf_validate","arguments":{"paths":["../../etc/passwd"]}}}',
+                '{"jsonrpc":"2.0","id":3,"method":"tools/call","params":{"name":"abm_sync","arguments":{"dry_run":false}}}',
+                '{"jsonrpc":"2.0","id":4,"method":"ping"}']
+        p = subprocess.run([sys.executable, str(ROOT / "scripts/abm.py"), "--root", str(ROOT), "mcp"],
+                           input="\n".join(msgs) + "\n", capture_output=True, text=True, timeout=60)
+        out = [json.loads(l) for l in p.stdout.splitlines() if l.strip()]
+        self.assertEqual(len(out), 6)
+        self.assertTrue(out[0]["result"]["isError"])
+        self.assertEqual(out[1]["error"]["code"], -32600)
+        self.assertEqual(out[2]["error"]["code"], -32700)
+        self.assertIn("fuera del repositorio", out[3]["result"]["content"][0]["text"])
+        self.assertIn("confirm", out[4]["result"]["content"][0]["text"])
+        self.assertEqual(out[5]["result"], {})
+
     def test_handshake_and_tools(self):
         msgs = [{"jsonrpc": "2.0", "id": 1, "method": "initialize", "params": {"protocolVersion": "2025-11-25"}},
                 {"jsonrpc": "2.0", "method": "notifications/initialized"},

@@ -177,7 +177,10 @@ def cmd_classify(ctx: Ctx, args) -> int:
         p, t, rows = load(ctx)
         nums = [int(re.sub(r"\D", "", r["ID"]) or 0) for r in rows]
         n = max(nums) if nums else 0
+        known = {r["Contexto"] for r in rows}
         for q in res["pending"]:
+            if f"Metodología: {q['question']}" in known:
+                continue
             n += 1
             rows.append({"ID": f"P-{n:03d}", "Tipo": "decisión", "Contexto": f"Metodología: {q['question']}",
                          "Default aplicado": f"nivel {q['default']}", "Alternativa": "otro nivel 0–2",
