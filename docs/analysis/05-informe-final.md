@@ -90,7 +90,7 @@ verified:
 - `yamlmini` acepta en silencio algunos YAML inválidos fuera del subconjunto (B1); `lint core` distingue mayúsculas por diseño (B4); marcas `generated.at` aproximadas en conceptos creados por subagentes (B7).
 - Los esquemas `ads.schema.json` y `okf/schema.json` documentan; los validadores ejecutables son `ads-check` y `okf validate` (M12).
 - Presupuesto por sesión no implementado (hay por unidad, funcionalidad y total).
-- Costo de metadatos (~3 000 tokens) en herramientas que listan todas las descripciones.
+- Costo de metadatos (≈ 2 814 tokens) en herramientas que listan todas las descripciones; desde el 2026-09-28 el filtro por perfil lo reduce (`research-report` −707, `api-service` y `automation-integration` −230; `software-app`, `data-product` e `intelligence-product` sin exclusiones).
 
 ## Consumo de esta repotenciación
 
@@ -103,4 +103,4 @@ Cola: `/docs/_work/PENDIENTES.md`. Resueltos el 2026-09-28 por decisión humana:
 Próximos pasos:
 
 1. Verificar Jev con clave (P-006) y Hermes con credenciales (P-005): `./abm decide --provider typesafe-jev`, `./abm agent-conformance --hermes`.
-2. Reducir metadatos: filtrar comandos o skills por perfil en `adapters/tools.yaml`.
+2. Hecho (2026-09-28): filtro de comandos, skills y roles por perfil en `adapters/tools.yaml → profile_filters`.

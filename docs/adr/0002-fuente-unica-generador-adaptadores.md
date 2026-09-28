@@ -23,6 +23,7 @@ Hoy los adaptadores son copias manuales (`adapters/claude-code/.claude` es idén
 - Cada archivo generado lleva una marca "GENERADO por abm sync. No editar." (en JSON/TOML, el registro de generados `adapters/.generated.json` lista rutas y hashes).
 - Las salidas se versionan en el repo: el proyecto sigue funcionando sin paso de instalación.
 - Se eliminan las copias manuales de `adapters/<tool>/`; `install-adapter.sh` pasa a ser un shim de `abm sync`; para desactivar una herramienta se usa `enabled: false` en `adapters/tools.yaml` (ver `MIGRATION.md`).
+- **Filtro por perfil (2026-09-28):** `adapters/tools.yaml → profile_filters` excluye por perfil los comandos, skills y roles que no usa; `abm sync` los omite cuando `abm.yaml → active_profile` está fijado. Motivo: reducir las descripciones que cada herramienta carga por sesión sin tocar las fuentes neutrales.
 - **Degradación elegante:** si una herramienta no soporta comandos, skills o subagentes, el puntero indica "ejecuta el playbook `commands/<x>.md`".
 
 ## Consecuencias

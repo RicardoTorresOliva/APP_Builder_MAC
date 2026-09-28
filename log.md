@@ -2,6 +2,7 @@
 
 ## 2026-09-28
 
+* **Update**: filtro de metadatos por perfil en `abm sync` (`adapters/tools.yaml → profile_filters`).
 * **Update**: cola de pendientes — P-001, P-002, P-003, P-007 y P-008 a P-011 resueltos por decisión humana; LICENSE definitiva; turbo activado; CI en verde en 3 SO.
 
 ## 2026-09-27
