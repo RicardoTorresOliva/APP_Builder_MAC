@@ -1,15 +1,5 @@
----
-type: log
-title: Knowledge bundle log
-description: Chronology of additions, changes and deprecations in this bundle
----
+# Registro del sub-bundle knowledge/
 
-# Bundle log
+## 2026-09-27
 
-> One entry per write to the bundle, most recent on top. Format: date · concept ·
-> added/changed/deprecated · reason. Written by `init-project` (Step 9) when mounting bundles and
-> by any later write to `knowledge/`.
-
-| Date | Concept | Action | Reason |
-|---|---|---|---|
-| <YYYY-MM-DD> | (example) | added | (delete this row when recording the first real entry) |
+* **Update**: Migrado a OKF v0.2 (perfil ABM): índice y registro sin frontmatter, encabezados por fecha.

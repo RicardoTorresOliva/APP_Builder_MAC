@@ -1,53 +1,46 @@
-# APP_Builder v4.1 — Template
+---
+type: Reference
+title: APP_Builder_MAC (ABM) v5
+description: Fábrica agent-native de Activos Digitales SLG (ADS), neutral de herramienta y de modelo; punto de entrada del repo.
+tags: [abm, readme]
+status: stable
+generated: { by: claude-code/web, at: 2026-09-27T23:47:13Z }
+---
 
-A reusable, asset-agnostic, platform-neutral template for AI-assisted production of digital assets
-(software, research reports, data products, and hybrids). Governance lives in one file (`AGENTS.md`);
-everything asset-specific lives in pluggable Asset Profiles. **Works on any platform with no install step.**
+# APP_Builder_MAC (ABM) v5
 
-## ▶ Start here: read `QUICKSTART.md`
+ABM es una **fábrica**: guía a agentes de IA (Claude Code, Codex, Antigravity, Copilot, Cursor, Gemini CLI, Windsurf, Kiro, Hermes y cualquier lector de `AGENTS.md`) para producir **ADS — Activos Digitales SLG**: apps web y móviles, APIs, dashboards, ERPs, automatizaciones, apps con IA, informes y productos de datos.
 
-`QUICKSTART.md` is the procedure — set up the template once, then run each project. Read that first.
+Todo ADS nace **agent-native** (operable por otros agentes vía MCP, CLI `--json`, skill y `llms.txt`), con **espacio de tokens** (ledger, reporte y dashboard), **portable** (stacks corporativos y legacy, varios proveedores LLM y nubes) y construido en **modo turbo** con comunicación concreta.
 
-## Layout
+## Empieza aquí
 
-```
-AGENTS.md            ★ single source of governance (neutral, no products, token-aware)
-QUICKSTART.md        ★ the procedure (read this first)
-START_PROJECT.md     describe your project here, then run init-project
+1. **Primeros 15 minutos:** `docs/manual/primeros-15-minutos.md`.
+2. Comprueba el entorno: `./abm doctor` (Windows: `abm.cmd doctor`). Requisitos: Python 3.9+ y git.
+3. Describe tu encargo en `START_PROJECT.md` y ejecuta `init-project` en tu herramienta.
+4. O crea un ADS limpio: `./abm new-ads ../mi-ads --id mi-ads --name "Mi ADS" --profile software-app`.
 
-CLAUDE.md            pointer (Claude Code) — pre-installed, redirects to AGENTS.md
-.claude/commands/    slash commands (Claude Code) — pre-installed
-.cursor/rules/       pointer (Cursor) — pre-installed
-                     (Antigravity & others read AGENTS.md natively — no pointer needed)
+## Qué hay dentro
 
-commands/            the 6 neutral playbooks: bootstrap, init-project, start-execution,
-                     session-start, review, iterate
-profiles/            Asset Profiles (the pluggable, asset-specific layer)
-  _contract.md         the profile schema + composition rules
-  software-app/        reference profile (software, no lock-in)
-  research-report/     a document that is read
-  data-product/        a dataset/dashboard that is queried
-  intelligence-product/ composed (report + data) — the consulting hybrid
-scripts/             deterministic verifiers + detect_platform.sh
-ci/                  example CI gates + neutral pre-commit alternative
-adapters/            source copies of the platform pointers (for restore/extend)
-install-adapter.sh   restore/add a platform pointer (rarely needed — they are pre-installed)
-examples/            reference examples only — never referenced by the core
-```
+| Pieza | Dónde |
+|---|---|
+| Gobernanza única (turbo, bloqueantes, protocolo de salida) | `AGENTS.md` |
+| 36 comandos (playbooks) y su manual | `commands/`, `docs/manual/` |
+| Skills (Agent Skills) y 13 roles | `skills/`, `agents/` |
+| Motor metodológico (VIBE, IDD, SDD, SPDD, AIDD) | `methodology/`, `templates/` |
+| Estándares FE/BE/DB, seguridad, tests, agentes, finops | `standards/` |
+| Catálogo de stacks, nubes, LLMs y legacy | `stacks/` |
+| MCP, APIs, Hermes, A2A, capa System One (Jev), observabilidad | `integrations/` |
+| Contrato ADS y OKF v0.2 | `contract/`, `okf/`, `ads.yaml` |
+| CLI `abm` (Python, sin dependencias) y servidor MCP | `scripts/`, `./abm`, `abm.cmd` |
+| Adaptadores generados por herramienta | `./abm sync` → ver `adapters/README.md` |
+| Decisiones y análisis | `docs/adr/`, `docs/analysis/` |
+| Mapa completo del repo | `index.md` (generado) |
 
-The knowledge layer (`knowledge/`, mounted by `init-project`) uses **OKF** (Open Knowledge Format):
-atomic Markdown concepts + YAML frontmatter, interoperable with the `conocimiento/` bundles of
-**AGE_Builder** — knowledge moves between both SLG factories without conversion. Convention:
-`knowledge/README.md`.
+## Órdenes clave del CLI
 
-## The flow (one line)
+`./abm check` (todos los validadores) · `./abm sync` · `./abm ads-check` · `./abm agent-conformance` · `./abm methodology classify` · `./abm decide` · `./abm tokens report|dashboard|budget` · `./abm pending list` · `./abm mcp`. Todas con `--json`; las que escriben, con `--dry-run`.
 
-Use the template → open in any IDE (it just works) → `/bootstrap` (detects platform, optional) →
-describe the project in `START_PROJECT.md` → `/init-project` (picks profile, explores stack, you
-choose, it plans) → approve → `/start-execution` → `/iterate` for changes.
+## Documentos del proyecto
 
-## Principles (antifragility)
-
-No stack/product lock-in (categories only) · stack chosen by you, not defaulted (HITL) · runs on any
-platform with no install step · examples never constitutive · tokens optimized as a first-class
-criterion · tooling installed only if it saves more than it costs.
+`CHANGELOG.md` · `MIGRATION.md` (de v4.1 a v5) · `CONTRIBUTING.md` · `SECURITY.md` · `LICENSE`.

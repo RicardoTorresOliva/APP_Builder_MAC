@@ -1,3 +1,12 @@
+---
+type: Reference
+title: examples/
+description: Ejemplos de referencia; el núcleo nunca depende de ellos.
+tags: [estructura]
+status: stable
+generated: { by: process:abm-migration, at: 2026-09-27T23:31:11Z }
+---
+
 # examples/
 
 Reference examples only. Content here is **never constitutive**: the core (`AGENTS.md`, `commands/`,

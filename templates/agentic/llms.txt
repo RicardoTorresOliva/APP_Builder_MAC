@@ -1,0 +1,14 @@
+# <Nombre del ADS>
+
+> <Una frase: qué es, para quién y qué puede hacer un agente con él.>
+
+Gobernanza para agentes: `AGENTS.md`. Manifiesto: `ads.yaml`. Servidor MCP: `<comando>`. Mapa completo: `index.md` (se regenera con `./abm okf index`).
+
+## Empieza aquí
+
+- [AGENTS.md](/AGENTS.md): reglas para agentes que operan o construyen este ADS
+- [Skill de operación](/skills/operate-<id>/SKILL.md): cómo operar el ADS
+
+## Optional
+
+- [Reporte de tokens](/TOKENS.md): consumo de construcción y operación

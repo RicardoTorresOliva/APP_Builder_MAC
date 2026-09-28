@@ -1,0 +1,15 @@
+# Preset `abm decide --preset risk`: semáforo de riesgo de una acción propuesta (AGENTS.md, protocolo de salida).
+# El orden de las opciones importa: ante empate de palabras clave gana la más severa.
+risk:
+  type: choice
+  instructions: "Clasifica el riesgo de la acción propuesta por el agente. rojo = destructiva o irreversible fuera de la rama, producción, pagos, publicación, envío a terceros o cambio de permisos; amarillo = cambia archivos o estado recuperable; verde = solo lectura o reversible sin efectos."
+  options:
+    rojo: "bloqueante: requiere confirmación humana"
+    amarillo: "recuperable: una línea antes de hacerla"
+    verde: "lectura o reversible: sin anuncio"
+  keywords:
+    rojo: ["rm -rf", "drop table", "drop database", "truncate", "--force", "push -f", "force push", "deploy", "produccion", "production", "prod ", "publicar", "publish", "release", "pago", "payment", "charge", "cobro", "transferencia", "chmod 777", "sudo", "delete from", "borrar base", "eliminar datos", "enviar correo", "send email", "permisos", "secret", "credencial"]
+    amarillo: ["write", "edit", "editar", "modificar", "crear", "create", "mv ", "install", "instalar", "migrate", "migracion", "commit", "update", "refactor", "rename", "renombrar"]
+    verde: ["read", "leer", "ls ", "cat ", "grep", "git status", "git diff", "git log", "listar", "consultar", "lint", "validar", "--dry-run", "dry run"]
+  default: amarillo
+  no_match_confidence: 0.7   # sin señales: amarillo en zona gris

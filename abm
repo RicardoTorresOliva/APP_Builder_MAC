@@ -1,0 +1,6 @@
+#!/bin/sh
+# Lanzador del CLI de ABM (macOS/Linux). En Windows usa abm.cmd.
+DIR="$(cd "$(dirname "$0")" && pwd)"
+PY="$(command -v python3 || command -v python)"
+[ -z "$PY" ] && { echo "Falta Python 3.9+. Instálalo desde python.org." >&2; exit 2; }
+exec "$PY" "$DIR/scripts/abm.py" "$@"

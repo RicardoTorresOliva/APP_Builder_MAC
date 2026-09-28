@@ -1,0 +1,56 @@
+# CI de ABM: validadores del propio repo en Linux, macOS y Windows (ADR 0003).
+name: ABM CI
+on:
+  push:
+  pull_request:
+permissions:
+  contents: read
+
+jobs:
+  abm-check:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+        python: ["3.9", "3.13"]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: abm check (OKF, índice, enlaces, presupuesto, secretos, sync, contrato, lints, conformidad)
+        run: python scripts/abm.py check --verbose
+      - name: Atestación de tokens
+        run: python scripts/abm.py tokens attest
+      - name: Presupuestos de tokens
+        run: python scripts/abm.py tokens budget
+      - name: Tests del CLI
+        run: python -m unittest discover -s scripts/tests -v
+      - name: Ejemplo golden path (panel-ventas)
+        if: hashFiles('examples/panel-ventas/tests/**') != ''
+        working-directory: examples/panel-ventas
+        run: python -m unittest discover -s tests -v
+
+  markdownlint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - run: npx --yes markdownlint-cli2@0.18.1
+
+  secret-scan:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: read  # gitleaks-action lista los commits del PR
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # En organizaciones, gitleaks-action exige GITLEAKS_LICENSE; alternativa: cualquier escáner dedicado.

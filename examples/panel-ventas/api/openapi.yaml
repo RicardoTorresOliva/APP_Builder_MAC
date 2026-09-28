@@ -1,0 +1,149 @@
+# Contrato HTTP del panel de ventas (OpenAPI 3.1). Errores en application/problem+json (RFC 9457).
+# Coincide con app/server.py; los tests de tests/test_api.py lo ejercitan de punta a punta.
+openapi: 3.1.0
+info:
+  title: Panel de ventas API
+  version: 1.0.0
+  description: Registro y resumen de ventas con sesión por cookie, roles admin/vendedor y CSRF en mutaciones.
+servers:
+  - url: http://127.0.0.1:8765
+security:
+  - session: []
+paths:
+  /healthz:
+    get:
+      operationId: getHealth
+      summary: Salud del servicio (sin autenticación)
+      security: []
+      responses:
+        "200": { description: OK, content: { application/json: { schema: { type: object, properties: { status: { const: ok } } } } } }
+  /login:
+    post:
+      operationId: login
+      summary: Inicia sesión (formulario con token CSRF de pre-sesión)
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              required: [csrf, username, password]
+              properties: { csrf: { type: string }, username: { type: string, maxLength: 40 }, password: { type: string, maxLength: 1024 } }
+      responses:
+        "303": { description: "Sesión creada; cookie pv_session (HttpOnly, SameSite=Strict); Location /dashboard" }
+        "401": { description: Credenciales inválidas (mensaje genérico, HTML) }
+        "403": { $ref: "#/components/responses/Problem" }
+        "429": { $ref: "#/components/responses/Problem" }
+  /api/ventas:
+    get:
+      operationId: listVentas
+      summary: Lista ventas del rango (un vendedor solo ve las suyas)
+      parameters:
+        - { $ref: "#/components/parameters/desde" }
+        - { $ref: "#/components/parameters/hasta" }
+        - { name: vendedor_id, in: query, schema: { type: integer }, description: "solo admin" }
+        - { name: limit, in: query, schema: { type: integer, minimum: 1, maximum: 500, default: 50 } }
+        - { name: offset, in: query, schema: { type: integer, minimum: 0, default: 0 } }
+      responses:
+        "200":
+          description: Página de ventas
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  items: { type: array, items: { $ref: "#/components/schemas/Venta" } }
+                  total: { type: integer }
+                  limit: { type: integer }
+                  offset: { type: integer }
+        default: { $ref: "#/components/responses/Problem" }
+    post:
+      operationId: createVenta
+      summary: Registra una venta (idempotente con Idempotency-Key)
+      parameters:
+        - { $ref: "#/components/parameters/csrf" }
+        - { name: Idempotency-Key, in: header, schema: { type: string, maxLength: 80 } }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/VentaNueva" }
+      responses:
+        "201": { description: Creada, headers: { Location: { schema: { type: string } } }, content: { application/json: { schema: { $ref: "#/components/schemas/Venta" } } } }
+        "200": { description: Ya existía con esa Idempotency-Key, content: { application/json: { schema: { $ref: "#/components/schemas/Venta" } } } }
+        default: { $ref: "#/components/responses/Problem" }
+  /api/ventas/{id}:
+    delete:
+      operationId: deleteVenta
+      summary: Borra una venta (solo admin; auditada)
+      parameters:
+        - { name: id, in: path, required: true, schema: { type: integer } }
+        - { $ref: "#/components/parameters/csrf" }
+      responses:
+        "204": { description: Borrada }
+        default: { $ref: "#/components/responses/Problem" }
+  /api/resumen:
+    get:
+      operationId: getResumen
+      summary: Totales, ticket promedio y series por mes y por vendedor
+      parameters:
+        - { $ref: "#/components/parameters/desde" }
+        - { $ref: "#/components/parameters/hasta" }
+      responses:
+        "200": { description: Resumen, content: { application/json: { schema: { $ref: "#/components/schemas/Resumen" } } } }
+        default: { $ref: "#/components/responses/Problem" }
+components:
+  securitySchemes:
+    session: { type: apiKey, in: cookie, name: pv_session }
+  parameters:
+    desde: { name: desde, in: query, schema: { type: string, format: date } }
+    hasta: { name: hasta, in: query, schema: { type: string, format: date } }
+    csrf: { name: X-CSRF-Token, in: header, required: true, schema: { type: string } }
+  responses:
+    Problem:
+      description: "Error estructurado (RFC 9457): 400, 401, 403, 404, 405, 413, 415, 422, 429, 500"
+      content:
+        application/problem+json:
+          schema: { $ref: "#/components/schemas/Problem" }
+  schemas:
+    Problem:
+      type: object
+      required: [type, title, status]
+      properties:
+        type: { type: string, format: uri, examples: ["urn:panel-ventas:problem:validacion"] }
+        title: { type: string }
+        status: { type: integer }
+        detail: { type: string }
+        instance: { type: string }
+        errors: { type: array, items: { type: object, properties: { pointer: { type: string }, detail: { type: string } } } }
+    VentaNueva:
+      type: object
+      required: [fecha, cliente, producto, monto]
+      properties:
+        fecha: { type: string, format: date, description: "no futura" }
+        cliente: { type: string, minLength: 1, maxLength: 120 }
+        producto: { type: string, minLength: 1, maxLength: 80 }
+        monto: { type: [string, number], description: "unidades con hasta 2 decimales; > 0 y ≤ 1.000.000" }
+        vendedor_id: { type: integer, description: "solo admin; un vendedor registra a su nombre" }
+        vendedor: { type: string, description: "username; alternativa a vendedor_id" }
+    Venta:
+      type: object
+      properties:
+        id: { type: integer }
+        fecha: { type: string, format: date }
+        cliente: { type: string }
+        producto: { type: string }
+        monto_centavos: { type: integer }
+        vendedor_id: { type: integer }
+        vendedor: { type: string }
+    Resumen:
+      type: object
+      properties:
+        moneda: { type: string }
+        rango: { type: object, properties: { desde: { type: [string, "null"] }, hasta: { type: [string, "null"] } } }
+        n_ventas: { type: integer }
+        total_centavos: { type: integer }
+        ticket_promedio_centavos: { type: integer }
+        por_mes: { type: array, items: { type: object, properties: { mes: { type: string }, total_centavos: { type: integer }, n: { type: integer } } } }
+        por_vendedor: { type: array, items: { type: object, properties: { vendedor_id: { type: integer }, vendedor: { type: string }, total_centavos: { type: integer }, n: { type: integer } } } }

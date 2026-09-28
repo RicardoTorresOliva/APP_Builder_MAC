@@ -1,0 +1,16 @@
+{
+  "context": {
+    "fileName": [
+      "AGENTS.md"
+    ]
+  },
+  "mcpServers": {
+    "abm": {
+      "command": "python3",
+      "args": [
+        "scripts/abm.py",
+        "mcp"
+      ]
+    }
+  }
+}

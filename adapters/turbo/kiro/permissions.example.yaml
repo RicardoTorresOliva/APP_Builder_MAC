@@ -1,0 +1,38 @@
+# GENERADO por abm sync. Kiro guarda permisos a nivel usuario (~/.kiro/settings/permissions.yaml); cópialo tú.
+rules:
+  - { capability: shell, match: "./abm check*", effect: allow }
+  - { capability: shell, match: "./abm doctor*", effect: allow }
+  - { capability: shell, match: "./abm okf validate*", effect: allow }
+  - { capability: shell, match: "./abm ads-check*", effect: allow }
+  - { capability: shell, match: "./abm links*", effect: allow }
+  - { capability: shell, match: "./abm token-budget*", effect: allow }
+  - { capability: shell, match: "./abm lint*", effect: allow }
+  - { capability: shell, match: "./abm pending list*", effect: allow }
+  - { capability: shell, match: "./abm methodology classify*", effect: allow }
+  - { capability: shell, match: "./abm agent-conformance*", effect: allow }
+  - { capability: shell, match: "./abm sync --check*", effect: allow }
+  - { capability: shell, match: "./abm tokens report*", effect: allow }
+  - { capability: shell, match: "./abm tokens attest*", effect: allow }
+  - { capability: shell, match: "./abm tokens budget*", effect: allow }
+  - { capability: shell, match: "git status*", effect: allow }
+  - { capability: shell, match: "git diff*", effect: allow }
+  - { capability: shell, match: "git log*", effect: allow }
+  - { capability: shell, match: "git show*", effect: allow }
+  - { capability: shell, match: "ls*", effect: allow }
+  - { capability: shell, match: "wc*", effect: allow }
+  - { capability: shell, match: "git push*", effect: ask }
+  - { capability: shell, match: "git commit*", effect: ask }
+  - { capability: shell, match: "git reset*", effect: ask }
+  - { capability: shell, match: "git rebase*", effect: ask }
+  - { capability: shell, match: "rm*", effect: ask }
+  - { capability: shell, match: "mv*", effect: ask }
+  - { capability: shell, match: "npm publish*", effect: ask }
+  - { capability: shell, match: "pip install*", effect: ask }
+  - { capability: shell, match: "npm install*", effect: ask }
+  - { capability: shell, match: "curl*", effect: ask }
+  - { capability: shell, match: "wget*", effect: ask }
+  - { capability: fs_read, match: ".env", effect: deny }
+  - { capability: fs_read, match: ".env.*", effect: deny }
+  - { capability: fs_read, match: "**/*.pem", effect: deny }
+  - { capability: fs_read, match: "**/*.key", effect: deny }
+  - { capability: fs_read, match: "secrets/**", effect: deny }

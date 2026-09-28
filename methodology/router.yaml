@@ -1,0 +1,34 @@
+version: 1
+dimensions:
+  uncertainty: { question: "¿Qué tan claro está el problema y la solución?", levels: { 0: "Requisitos y solución conocidos y estables", 1: "Objetivo claro; el camino técnico está por definir", 2: "Problema o solución exploratorios: puede cambiar mientras se construye" }, keywords: { 0: [requisitos claros, spec cerrada, ya definido, proceso conocido], 2: [no se que construir, no sé qué construir, exploracion, exploración, prueba de concepto, poc, experimento, aun no esta claro, aún no está claro] } }
+  criticality: { question: "¿Qué pasa si esto falla o se hace mal?", levels: { 0: "Sin impacto real: nadie pierde nada si falla", 1: "Impacto moderado y reversible: afecta trabajo o reputación", 2: "Impacto alto o irreversible: dinero, datos personales o de salud, seguridad, cumplimiento" }, keywords: { 0: [interno, descartable, juguete, demo], 2: [pago, pagos, dinero, factura, facturacion, facturación, auth, login, contrasena, contraseña, datos personales, salud, medico, médico, regulacion, regulación, cumplimiento] } }
+  horizon: { question: "¿Para qué vida útil se construye?", levels: { 0: "Prototipo desechable: se tira después de aprender", 1: "MVP: primera versión real que va a evolucionar", 2: "Producto o sistema de largo plazo" }, keywords: { 0: [prototipo, desechable, spike, tirar, descartable], 2: [producto, largo plazo, sistema critico, sistema crítico, produccion estable, producción estable] } }
+  team: { question: "¿Cuánta gente coordina sobre este módulo?", levels: { 0: "Una persona o un agente solo", 1: "Equipo pequeño, de 2 a 5 personas", 2: "Equipo grande o varios equipos que dependen del mismo contrato" }, keywords: { 0: [yo solo, un agente solo], 2: [varios equipos, multiples equipos, múltiples equipos, equipo grande, organizacion, organización] } }
+  brownfield: { question: "¿Sobre qué se construye?", levels: { 0: "Greenfield: no hay código ni restricciones previas", 1: "Brownfield parcial: se integra con algo existente pero con margen", 2: "Brownfield estricto: stack corporativo fijo e integraciones legacy" }, keywords: { 0: [desde cero, proyecto nuevo, greenfield], 2: [legacy, sistema existente, stack corporativo, integrar con, no se puede cambiar] } }
+  autonomy: { question: "¿Cuánta libertad tiene el agente para decidir el cómo?", levels: { 0: "Ninguna: el humano decide cada paso y revisa antes de avanzar", 1: "Media: el agente decide dentro de la spec e informa al cerrar la unidad", 2: "Alta: el agente explora, decide y construye; el humano revisa por muestreo o al final" }, keywords: { 0: [revisar cada paso, paso a paso, pideme permiso, pídeme permiso], 2: [modo turbo, turbo, autonomo, autónomo, no me preguntes, avanza solo] } }
+triggers:
+  # Coincidencia por palabra completa sobre texto sin tildes; "raiz*" = cualquier palabra que empiece así.
+  escalate:
+    - { id: payments, keywords: [pag*, cobr*, dinero, saldo*, tarjeta*, factur*, suscrip*, checkout, pasarela de pago, cuenta bancaria, orden de compra, ordenes de compra, aprobacion de compra*, aprobaciones de compra, purchase order*, transferencia*, reembols*, billetera*, payment*, pay, paying, billing, invoice*, credit card, refund*, wallet*, bank*], mode: SDD, review: human }
+    - { id: auth, keywords: [login, inicio de sesion, autentic*, autoriz*, contrasena*, password*, permisos, rol, roles, rol de usuario, control de acceso, sso, oauth*, oidc, mfa, 2fa, sign in, signin, authentication, authorization], mode: SDD, review: human }
+    - { id: personal-data, keywords: [datos personales, pii, dni, cedula*, pasaporte*, correo del usuario, direccion del usuario, telefono del usuario, gdpr, rgpd, personal data, personally identifiable], mode: SDD, review: human }
+    - { id: health, keywords: [salud, medic*, clinic*, historia clinica, paciente*, diagnostic*, hipaa, health*, patient*], mode: SDD, review: human }
+    - { id: regulated, keywords: [regulacion, regulad*, cumplimiento normativo, normativa, auditoria*, sector financiero, organismo regulador, pci, sox, iso 27001, compliance, regulated, regulatory], mode: SDD, review: human }
+  deescalate:
+    - { id: throwaway, keywords: [prototipo, desechable, spike, poc, prueba de concepto, descartable, throwaway, proof of concept], mode: VIBE }
+    - { id: landing-content, keywords: [landing, landing page, pagina de aterrizaje, contenido estatico, sitio informativo, marketing], mode: IDD }
+    - { id: internal-low-risk, keywords: [herramienta interna, uso interno, bajo riesgo, solo para el equipo, internal tool], mode: IDD }
+rules:
+  - { if: { criticality: [2] }, mode: SDD, why: "Riesgo alto (dinero, datos personales o de salud, seguridad): exige trazabilidad requisito-tarea-test y revisión humana." }
+  - { if: { horizon: [0], criticality: [0, 1] }, mode: VIBE, why: "Prototipo desechable de riesgo bajo o medio: explorar rápido en una rama sandbox y desechar." }
+  - { if: { team: [2] }, mode: SDD, why: "Equipo grande: varias personas o agentes necesitan un contrato compartido y trazable." }
+  - { if: { uncertainty: [2], criticality: [0, 1], autonomy: [2] }, mode: AIDD, why: "Incertidumbre alta con autonomía alta: explorar en VIBE, consolidar en IDD o SDD y construir con revisión humana obligatoria." }
+  - { if: { autonomy: [2], horizon: [1, 2], brownfield: [0, 1] }, mode: SPDD, why: "Autonomía alta en un módulo que va a vivir y cambiar: contrato de prompt versionado, sincronizado con el código en ambos sentidos." }
+  - { if: { uncertainty: [1, 2], criticality: [0, 1] }, mode: IDD, why: "Incertidumbre media o alta y riesgo bajo o medio: Minimum Viable Spec, el agente decide el cómo." }
+  - { if: { criticality: [1], horizon: [2] }, mode: SDD, why: "Riesgo medio en un producto o sistema de largo plazo: SDD maduro con revisión humana." }
+default_mode: IDD
+ceremony:
+  prototipo: { default_mode: VIBE, ads_contract_level: minimo, tokens_level: N1, review: opcional, planning_gate: acumulado }
+  mvp: { default_mode: IDD, ads_contract_level: minimo, tokens_level: N1, review: recomendada, planning_gate: acumulado }
+  producto: { default_mode: IDD, ads_contract_level: extendido, tokens_level: N2, review: obligatoria-en-criticos, planning_gate: acumulado }
+  enterprise-regulado: { default_mode: SDD, ads_contract_level: extendido, tokens_level: N3, review: humana-obligatoria, planning_gate: bloqueante }

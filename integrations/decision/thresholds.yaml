@@ -1,0 +1,13 @@
+# Umbrales de routing por confianza de la capa System One (ADR 0011). Lo lee `abm decide`.
+# act: el código actúa · gray (≥ gray y < act): LLM o cola de pendientes · menor que gray: humano.
+version: 1
+default: { act: 0.85, gray: 0.60 }
+ceremony:
+  prototipo: { act: 0.75, gray: 0.50 }
+  mvp: { act: 0.80, gray: 0.55 }
+  producto: { act: 0.85, gray: 0.60 }
+  enterprise-regulado: { act: 0.92, gray: 0.70 }
+uses:
+  risk: { act: 0.90, gray: 0.70 }
+  injection: { act: 0.80, gray: 0.50 }
+  abm-methodology: { act: 0.70, gray: 0.40 }

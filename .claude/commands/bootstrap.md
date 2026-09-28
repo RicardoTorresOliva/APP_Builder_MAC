@@ -1,5 +1,5 @@
 ---
-description: Detecta la plataforma y confirma el setup del adaptador (correr una vez).
+description: "Detecta la plataforma, corre doctor y sync, y confirma que el repo está listo para trabajar."
 ---
-
-Follow the neutral playbook in `commands/bootstrap.md`. Do not restate it here.
+<!-- GENERADO por abm sync desde commands/bootstrap.md. No editar. -->
+Lee y ejecuta el playbook `commands/bootstrap.md` siguiendo `AGENTS.md`. Argumentos: $ARGUMENTS

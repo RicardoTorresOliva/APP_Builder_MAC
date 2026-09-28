@@ -1,0 +1,73 @@
+# abm.yaml — configuración de ABM y de cada ADS creado con ABM (lo lee el CLI `abm`).
+abm_version: 5.0.0
+mode: turbo                 # turbo | checkpoint (ADR 0014)
+ceremony: producto          # prototipo | mvp | producto | enterprise-regulado (ADR 0006)
+active_profile: null        # lo fija init-project en cada ADS
+
+okf:
+  version: "0.2"
+  require_fields: [type, title, description, status, generated]
+  stale_required_types: [Compat Matrix, Stack Sheet, Research, Pricing]
+  critical_stale_types: []
+  exclude:
+    - "**/.claude/**"
+    - "**/.agents/**"
+    - "**/.codex/**"
+    - "**/.agent/**"
+    - "**/.gemini/**"
+    - "**/.cursor/**"
+    - "**/.windsurf/**"
+    - "**/.devin/**"
+    - "**/.kiro/**"
+    - "**/.github/**"
+    - "**/.vscode/**"
+    - "**/.clinerules/**"
+    - "**/.junie/**"
+    - "**/.hermes/**"
+    - "**/CLAUDE.md"
+    - "**/GEMINI.md"
+    - "**/SKILL.md"
+    - "**/node_modules/**"
+    - "deliverables/**"
+  index_order: ["(raíz)", docs, commands, skills, agents, methodology, standards, stacks, integrations, templates, profiles, contract, okf, knowledge, examples]
+
+budgets:
+  always_loaded: [AGENTS.md]
+  always_loaded_max_tokens: 3200
+  files:
+    "AGENTS.md": 3200
+    "commands/*.md": 1600
+    "skills/*/SKILL.md": 1200
+    "agents/*.md": 1000
+    "methodology/*.md": 2600
+    "standards/**/*.md": 3200
+    "profiles/*/profile.md": 1600
+    "templates/**/*.md": 1600
+    "stacks/**/*.md": 4500
+    "integrations/**/*.md": 4000
+
+lint:
+  report_max_lines: 12
+  core_paths: ["AGENTS.md", "commands/**", "methodology/**", "standards/**", "profiles/**", "contract/**", "templates/**", "agents/**", "skills/**", "okf/**"]
+  core_allow: []
+  products: [Claude, Anthropic, OpenAI, Codex, ChatGPT, Copilot, GitHub, GitLab, Cursor, Gemini, Antigravity, Windsurf, Kiro, Hermes, Nous Research, Jev, TypeSafe, AWS, Amazon, Azure, Microsoft, GCP, Google Cloud, Vercel, Netlify, Supabase, Firebase, PostgreSQL, Postgres, MySQL, MongoDB, SQLite, Redis, React, Next.js, Vue, Svelte, Angular, Tailwind, Django, FastAPI, Flask, Rails, Laravel, Spring Boot, NestJS, Stripe, Docker, Kubernetes, Terraform, OpenTofu, Odoo, ERPNext, SAP, Oracle, LangChain, LiteLLM, OpenRouter, Portkey, n8n, Zapier, Make.com, Expo, Flutter, React Native, Electron, Tauri, Auth0, Clerk, Okta, Sentry, Datadog, Grafana, Langfuse, Playwright, Cypress, Jest, Vitest, Pytest, Prisma, Drizzle, dbt, Snowflake, BigQuery, Databricks, Metabase, Power BI, Tableau, Shopify, WordPress, Salesforce, HubSpot, Slack, Telegram, Discord, Notion, Figma]
+
+decision:
+  providers: [typesafe-jev, llm, rules]
+  thresholds: integrations/decision/thresholds.yaml
+  typesafe: { endpoint: "https://api.typesafe.ai/v1/systemone", model: jev-latest, key_env: TYPESAFE_API_KEY, timeout_s: 20 }
+  llm: { base_url_env: ABM_LLM_BASE_URL, key_env: ABM_LLM_API_KEY, model_env: ABM_LLM_MODEL, timeout_s: 60 }
+
+tokens:
+  pricing: integrations/observability/pricing.yaml
+
+pending:
+  path: docs/_work/PENDIENTES.md
+
+manual:
+  commands_dir: docs/manual/comandos
+  cheatsheet: docs/manual/cheatsheet.md
+
+secrets:
+  exclude: ["docs/analysis/**", "docs/_work/**"]
+  allow: []

@@ -1,73 +1,73 @@
-# Playbook: init-project — Planning Mode
+---
+type: Playbook
+title: init-project — planifica un proyecto nuevo
+description: Elige perfil y ceremonia, clasifica la metodología, explora el stack con el humano y publica el plan.
+args: "[<descripción del proyecto>]"
+tags: [comando, descubrir]
+status: stable
+generated: { by: claude-code/web, at: 2026-09-28T00:00:00Z }
+---
 
-`AGENTS.md` governs your behavior. Do not restate its rules — follow them. This playbook plans a new
-project and ends at user approval. **Produce nothing until the user approves.**
+# init-project
 
-## Step 0 — First run? Bootstrap
-If this is the first time running in this repo, run the `bootstrap` playbook first (detect platform +
-confirm setup). If already bootstrapped this session, skip.
+## Propósito
 
-## Step 1 — Select the Asset Profile
-Read the project description (from `START_PROJECT.md` or the conversation). Choose the Asset Profile
-that fits (`profiles/<name>/profile.md`), or infer it and confirm with the user. If the asset is a
-hybrid, choose a composed profile (e.g. `intelligence-product`). Record the choice as `active_profile`
-in `docs/project_memory.md`. From here on, read all asset-specific behavior from that profile.
+Planifica un ADS nuevo de punta a punta: perfil, ceremonia, metodología por módulo, requisitos, stack elegido con el humano, design docs, unidades de trabajo, Contrato ADS y conocimiento montado. Termina en un plan publicado, no en código.
 
-## Step 2 — Understand
-Analyze: purpose, consumers/roles, integrations, constraints, what is stated vs must be inferred.
+## Cuándo usarlo
 
-## Step 3 — Clarify
-Separate **must answer before planning** from **can assume for now** (state the assumption, proceed).
-Write to `planning/questions.md`. Wait for answers on blocking items.
+- Al arrancar un ADS nuevo, con `START_PROJECT.md` o una descripción en la conversación.
 
-## Step 4 — Requirements, scope, risks
-- `planning/requirements.md` — functional + non-functional, each tagged explicit/implied/assumed
-- `planning/scope.md` — in / out / future
-- `planning/risks.md` — risk, likelihood, impact, mitigation
+## Entradas
 
-## Step 5 — Explore the stack and select WITH the user (human-in-the-loop)
-- Start from the profile's `stack_candidates` (categories).
-- Explore options well-suited to **this specific asset** — do not default.
-- Present **2–3 options with trade-offs** (cost, maturity, fit, portability).
-- **Wait for the user's choice.** Record it in `docs/decision_log.md`. Never name a product the user
-  did not choose.
+- `START_PROJECT.md` o la conversación.
+- `profiles/<name>/profile.md`.
+- `stacks/README.md`, `stacks/cases/*.md`.
+- `templates/agentic/ads.yaml`.
 
-## Step 6 — Design
-Produce the `design_docs` listed by the active profile, at the detail levels it specifies
-(HIGH/MEDIUM/LIGHT). Invest detail where it will be re-read during production.
+## Pasos
 
-## Step 7 — Decompose into work units
-Break all work into **Foundation Units (FU)** and **Deliverable Units (DU)** in
-`implementation/user_units.md`, each with acceptance criteria tied to the profile's completeness rule.
-Group DUs into milestones (3–6 related units). Populate `implementation/task_tracker.md` with
-milestone boundaries, all status `pending`.
-- **If the profile is composed**: each unit also declares `governed_by: <capability>` so the right
-  completeness rule and quality gate apply per unit.
+1. [verde] Si es la primera vez en el repo, ejecuta antes `bootstrap`.
+2. [verde] Lee la descripción del proyecto; elige el perfil (`profiles/<name>/profile.md`) o uno compuesto si es híbrido; regístralo en `abm.yaml → active_profile` (lo exige `abm preflight`) y en `docs/project_memory.md`.
+3. [amarillo] Fija la ceremonia en `abm.yaml → ceremony` (prototipo/mvp/producto/enterprise-regulado) según tamaño, riesgo y regulación; explica el porqué en una línea.
+4. [verde] Clasifica el encargo con `./abm methodology classify` (seis dimensiones); vuelca el resultado en `methodology-map.md` (modo por módulo + justificación + nivel de revisión).
+5. [amarillo] Separa preguntas: las bloqueantes (b/c/d/e de AGENTS.md) esperan respuesta; el resto se asume y se registra con `./abm pending add`.
+6. [verde] Redacta `planning/requirements.md` (explícito/implícito/asumido), `planning/scope.md` (dentro/fuera/futuro) y `planning/risks.md`.
+7. [rojo] Explora el stack desde `stacks/README.md` y `stacks/cases/*.md`; presenta 2–3 opciones con trade-offs. La elección es bloqueante (e), salvo ceremonia prototipo o mvp: aplica la recomendada y encola "confirmar stack".
+8. [verde] Produce los design docs que exige el perfil, al nivel de detalle que indica (HIGH/MEDIUM/LIGHT).
+9. [verde] Descompón en FU y DU en `implementation/user_units.md` con criterio de aceptación atado a la regla de completitud del perfil; agrupa en milestones en `implementation/task_tracker.md`.
+10. [verde] Genera `ads.yaml` desde `templates/agentic/ads.yaml` con el nivel de Contrato ADS que fija el perfil (nunca lo baja).
+11. [verde] Monta `knowledge/` (bundles del perfil), genera `knowledge/index.md` y `knowledge/log.md`; actualiza `docs/project_memory.md`.
+12. [amarillo] Publica el plan (perfil, ceremonia, modo por módulo, stack, FU/DU, riesgos). En turbo, "Aprobar plan" entra en la cola y lo reversible sigue; en checkpoint o Enterprise-Regulado, espera aprobación explícita.
 
-## Step 8 — Tooling
-Analyze need for skills/plugins/MCPs from the profile's `tooling_candidates`. Install only those that
-save more context/tokens than they cost. Verify they work. Record selections and one-line rejections
-in `mcps/inventory.md` / `skills/inventory.md`.
+## Salidas
 
-## Step 9 — Knowledge (OKF) + memory
-- Mount the profile's `knowledge_bundles` under `knowledge/`. Generate `knowledge/index.md`
-  (progressive-disclosure entry point) and record the mount in `knowledge/log.md`. Bundles follow
-  the OKF convention in `knowledge/README.md` (frontmatter with required `type`, relative links,
-  `index.md` + `log.md` per bundle). Add YAML frontmatter to design docs.
-- Record significant decisions in `docs/decision_log.md`.
-- Update `docs/project_memory.md`: active_profile, stack chosen, FU/DU counts, key decisions, next step.
+- `docs/project_memory.md`, `methodology-map.md`, `planning/{requirements,scope,risks}.md`.
+- `implementation/{user_units,task_tracker}.md`.
+- `ads.yaml`.
+- `knowledge/index.md`, `knowledge/log.md`.
+- Plan publicado.
 
-## Step 10 — Present for approval
-Show a structured summary: project, profile, stack chosen, FU/DU list grouped by milestone, estimated
-effort, open questions, top risks. **Wait for approval.**
+## Gates
 
-## Quality check before presenting
-- Every requirement maps to an FU or DU
-- Every DU has a completeness definition from the active profile (and `governed_by` if composed)
-- The stack was explored and the user chose it (not defaulted)
-- design_docs match the active profile's list
-- knowledge/index.md exists and links the design docs; knowledge/log.md records the mount
-- No commercial product appears that the user did not choose
+Todo requisito mapea a una FU/DU; el stack fue elegido por el humano o encolado según ceremonia; `ads.yaml` está al nivel del perfil; `knowledge/index.md` enlaza los design docs.
 
-If planning needs multiple sessions: finish the current step fully, update `project_memory.md`,
-resume with `session-start`.
+## Fallback
+
+Sigue el mismo flujo a mano: clasifica con la tabla de dimensiones de `methodology/router.md` y copia `templates/agentic/ads.yaml` para el manifiesto.
+
+## Reporte
+
+```text
+[<fase|FU|DU|WU>-<id>] HECHO | BLOQUEADO
+Acciones: <una línea por acción, con archivo o commit>
+Verificado: `./abm okf validate planning implementation ads.yaml` → <resultado>
+No verificado: <ítem → motivo, o "ninguno">
+Pendientes: <+n nuevos; total n>
+Tokens: <consumo; fuente o "estimado">
+Siguiente: <acción concreta>
+```
+
+## Invocación por agentes
+
+`./abm methodology classify --json`, `./abm pending add --json`; sin orden CLI única para todo el flujo — "lee y ejecuta este playbook".

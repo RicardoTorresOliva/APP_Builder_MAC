@@ -1,0 +1,11 @@
+# Panel de ventas
+
+> Dashboard de ventas con login por roles, registro de ventas y gráficos por mes y vendedor, operable por personas (web) y por agentes (MCP y CLI).
+
+Gobernanza para agentes: `AGENTS.md`. Skill de operación: `skills/operate-panel-ventas/SKILL.md`. Servidor MCP: `python3 ops/mcp_server.py`. CLI: `python3 app/cli.py` (salida JSON). Consumo de tokens: `TOKENS.md`. Mapa completo: `index.md`.
+
+## Empieza aquí
+
+- [AGENTS.md — panel de ventas](/AGENTS.md): Reglas para agentes que operan o modifican el ADS panel-ventas; la gobernanza completa es la de ABM.
+- [Ejemplo golden path — panel de ventas](/README.md): ADS completo y ejecutable (dashboard con auth, base de datos y gráficos) recorrido con ABM de encargo a entrega, con build, tests y Contrato ADS en verde.
+- [Manual de operación — panel de ventas](/docs/manual/operacion.md): Cómo arrancar, sembrar, migrar, respaldar y operar el panel de ventas, para personas y agentes.

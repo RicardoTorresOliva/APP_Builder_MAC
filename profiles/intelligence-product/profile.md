@@ -1,51 +1,44 @@
 ---
-type: asset-profile
+type: Asset Profile
 title: intelligence-product
+description: Híbrido de consultoría: informe argumentado respaldado por un dataset o dashboard validado.
+tags: [perfil, ads]
+status: stable
+generated: { by: claude-code/web, at: 2026-09-27T23:34:39Z }
+ads_contract_level: extendido
 composes: [research-report, data-product]
 ---
 
-# Asset Profile: intelligence-product (composed)
+# Perfil: intelligence-product (compuesto)
 
-The consulting hybrid: an argued **report** backed by a validated **dataset/dashboard**, delivered
-together so each reinforces the other. This profile does **not** restate any field from the profiles
-it composes — it inherits them by reference and supplies only the glue below.
+Informe argumentado **+** dataset o dashboard validado, entregados juntos. Hereda por referencia de `research-report` y `data-product`; aquí solo va el pegamento. Nivel del Contrato ADS: el mayor de los compuestos (`extendido`).
 
-## What is inherited (by reference, not copied)
-- From `research-report`: outline/thesis/source_map/evidence_table design docs; the read-completeness
-  rule; the citation/credibility/no-fabrication quality gate.
-- From `data-product`: data_sources/schema/lineage design docs; the query-completeness rule; the
-  schema/PII/provenance quality gate.
-- `stack_candidates`, `tooling_candidates`, `knowledge_bundles` → union of both.
+## Qué se hereda (por referencia)
 
-## Glue (the only thing this profile declares)
+- De `research-report`: design docs de argumento, completitud de lectura, gate de citas y cero invención.
+- De `data-product`: design docs de datos, completitud de consulta, gate de esquema, datos personales y procedencia.
+- `stack_candidates`, `tooling_candidates`, `knowledge_bundles`: unión de ambos.
 
-### How the parts relate
-- The narrative **cites the dataset**: claims in the report that rest on data must reference a
-  specific, validated view/figure produced by the data side.
-- The dashboard **backs the report**: every headline figure in the report must be reproducible from
-  the data product (no figure exists only in prose).
-- Shared definitions: a metric named in the report uses the same definition as in the data product's
-  `metric-definitions` bundle. One source of truth for numbers.
+## Pegamento
 
-### Per-DU governance (governed_by)
-Each Deliverable Unit declares which capability governs it. Examples:
+- El informe **cita el dataset**: toda afirmación basada en datos referencia una vista o cifra validada.
+- El dashboard **respalda el informe**: toda cifra titular es reproducible desde el producto de datos (Attested Computation OKF).
+- Definiciones compartidas: una métrica nombrada en el informe usa la misma definición que el bundle `metric-definitions`.
+
+## Gobierno por DU (`governed_by`)
+
+```text
+FU-01  "Reunir fuentes + ingerir datos"         governed_by: research-report + data-product
+DU-03  "Dataset: señales de mercado"            governed_by: data-product
+DU-05  "Dashboard: explorador de señales"       governed_by: data-product
+DU-08  "Sección: panorama competitivo"          governed_by: research-report
+DU-11  "Sección: recomendación + tesis"         governed_by: research-report
 ```
-FU-01  "Gather sources + ingest data"          governed_by: research-report + data-product (foundation)
-DU-03  "Dataset: market signals (validated)"   governed_by: data-product
-DU-05  "Dashboard: signal explorer"            governed_by: data-product
-DU-08  "Section: competitive landscape"        governed_by: research-report
-DU-11  "Section: recommendation + thesis"      governed_by: research-report
-```
-The reviewer applies the data-product quality gate to DU-03/05 and the research-report gate to
-DU-08/11 — no duplication, no monolith.
 
 ## deliverable_format
-- One bundle: the report (document) + the dataset + the dashboard + a one-page executive summary
 
-## publication_step      # CATEGORY, not a product
-- Export the report + load the dataset to a data store with access controls + editorial review
+- Un paquete: informe + dataset + dashboard + resumen ejecutivo de una página
 
-## Validation note
-This profile is the v4.1 generalization test case: it exercises the asset-agnostic core over an asset
-*with* code (the data side) **and** one *without* code (the narrative) in a single project — the
-strongest possible proof that APP_Builder generalizes beyond software.
+## publication_step
+
+- Exportar el informe + cargar el dataset con controles de acceso + revisión editorial

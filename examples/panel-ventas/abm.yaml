@@ -1,0 +1,27 @@
+# abm.yaml del ADS panel-ventas: lo lee la CLI de ABM (`python3 ../../scripts/abm.py --root .`).
+# Subconjunto de la configuración de ABM; un ADS creado con `abm new-ads` recibe la versión completa.
+abm_version: 5.0.0
+mode: turbo                 # turbo | checkpoint
+ceremony: producto          # fijada en init-project (ver planning/methodology-map.md)
+active_profile: software-app
+
+okf:
+  version: "0.2"
+  require_fields: [type, title, description, status, generated]
+  stale_required_types: [Compat Matrix, Stack Sheet, Research, Pricing]
+  critical_stale_types: []
+  exclude:
+    - "skills/**/SKILL.md"
+    - "data/**"
+    - "ops/audit/**"
+  index_order: ["(raíz)", planning, design_docs, implementation, docs, knowledge]
+
+tokens:
+  pricing: ../../integrations/observability/pricing.yaml
+
+pending:
+  path: docs/_work/PENDIENTES.md
+
+secrets:
+  exclude: ["data/**"]
+  allow: []

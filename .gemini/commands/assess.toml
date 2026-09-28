@@ -1,0 +1,3 @@
+# GENERADO por abm sync desde commands/assess.md. No editar.
+description = "Inventaría un stack existente y propone el patrón de integración más simple que funcione."
+prompt = "Lee y ejecuta el playbook `commands/assess.md` siguiendo `AGENTS.md`. Argumentos: {{args}}"

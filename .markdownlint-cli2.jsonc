@@ -1,0 +1,16 @@
+// Configuración de markdownlint para ABM (CI). Reglas relajadas donde chocan con OKF o con tablas largas.
+{
+  "config": {
+    "default": true,
+    "MD013": false,          // longitud de línea: tablas y enlaces largos
+    "MD033": false,          // HTML en línea (comentarios de "GENERADO")
+    "MD041": false,          // primera línea: el frontmatter OKF va antes del título
+    "MD024": { "siblings_only": true },
+    "MD025": { "front_matter_title": "" },
+    "MD036": false,          // énfasis como encabezado en fichas
+    "MD060": false,          // estilo de columnas de tabla
+    "MD053": false           // las notas al pie OKF se validan con abm okf validate
+  },
+  "globs": ["**/*.md"],
+  "ignores": ["**/index.md", "node_modules/**", "**/node_modules/**", ".claude/**", ".agents/**", ".codex/**", ".github/**", ".gemini/**", ".devin/**", ".windsurf/**", ".kiro/**", "CLAUDE.md", "docs/_work/PROMPT_MAESTRO_ABM_v3.md"]
+}
